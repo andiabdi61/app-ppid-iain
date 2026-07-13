@@ -8,7 +8,7 @@ Website PPID IAIN Bone yang dibangun menggunakan Laravel 10.
 - Informasi Publik
 - Pengumuman
 - Galeri
-- Dashboard Admin
+- Dashboard Admin.
 
 ## Teknologi
 
