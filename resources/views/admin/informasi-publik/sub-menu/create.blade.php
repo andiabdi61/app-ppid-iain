@@ -1,0 +1,188 @@
+<x-app-layout>
+    <x-slot name="header">
+        <div>
+            <a href="{{ route('admin.informasi-publik.sub-menu.index', $informasi_publik_item) }}" class="inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-hijau-600 font-medium transition mb-2">
+                <i class="fa-solid fa-arrow-left text-xs"></i> Kembali ke Daftar Sub-Menu
+            </a>
+            <h2 class="font-bold text-2xl text-gray-800 leading-tight mt-1 flex items-center gap-2">
+                <i class="fa-solid fa-plus-circle text-hijau-600 text-xl"></i> 
+                Tambah Sub-Menu Baru
+            </h2>
+        </div>
+    </x-slot>
+
+    <div class="py-8">
+        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white text-gray-900">
+                    
+                    {{-- Notifikasi Error --}}
+                    @if ($errors->any())
+                        <div class="bg-red-50 border-l-4 border-red-400 text-red-700 p-4 mb-6 rounded-r-lg" role="alert">
+                            <div class="flex items-center gap-2 font-bold text-sm mb-2">
+                                <i class="fa-solid fa-circle-exclamation"></i> Gagal Menyimpan
+                            </div>
+                            <ul class="list-disc list-inside text-sm space-y-1">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('admin.informasi-publik.sub-menu.store', $informasi_publik_item) }}" method="POST" enctype="multipart/form-data"
+                          x-data="{ jenisTautan: '{{ old('jenis_tautan', 'file') }}' }">
+                        @csrf
+                        
+                        {{-- INFO INDUK --}}
+                        <div class="mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center gap-3">
+                            <i class="fa-solid fa-link text-blue-500"></i>
+                            <div class="text-sm text-blue-800">
+                                Menambahkan sub-menu untuk: <span class="font-bold">{{ $informasi_publik_item->judul }}</span> 
+                                <span class="text-xs bg-white px-2 py-0.5 rounded-full border border-blue-200 ml-1">{{ $informasi_publik_item->category->nama ?? '-' }}</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                            {{-- ======================== KOLOM KIRI ======================== --}}
+                            <div class="space-y-5">
+                                
+                                {{-- Judul Sub-Menu --}}
+                                <div>
+                                    <label for="judul" class="block text-sm font-bold text-gray-700 mb-1">
+                                        Judul Sub-Menu <span class="text-red-500">*</span>
+                                    </label>
+                                    <input type="text" name="judul" id="judul" value="{{ old('judul') }}" 
+                                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-hijau-500 focus:ring-hijau-500" 
+                                           placeholder="Contoh: Laporan Kinerja Triwulan I" required>
+                                </div>
+
+                                {{-- Kategori (Readonly) --}}
+                                <div>
+                                    <label for="category_display" class="block text-sm font-bold text-gray-700 mb-1">Kategori (Mengikuti Induk)</label>
+                                    <input type="text" id="category_display" 
+                                           value="{{ $informasi_publik_item->category->nama ?? '-' }}" 
+                                           class="w-full rounded-lg border-gray-200 bg-gray-50 text-gray-500 shadow-sm cursor-not-allowed" disabled>
+                                </div>
+
+                                {{-- Upload File --}}
+                                <div>
+                                    <label for="file_dokumen" class="block text-sm font-bold text-gray-700 mb-1">
+                                        File Dokumen 
+                                        <span class="text-gray-400 font-normal text-xs">(Opsional)</span>
+                                    </label>
+                                    <input type="file" name="file_dokumen" id="file_dokumen" 
+                                           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 cursor-pointer"
+                                           accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx">
+                                    <p class="text-xs text-gray-400 mt-1">Format: PDF, Word, Excel, PowerPoint (Maks. 10MB).</p>
+                                    @error('file_dokumen')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                {{-- Pengaturan Tautan/Link --}}
+                                <div class="p-4 bg-gray-50 rounded-lg border border-gray-200">
+                                    <label for="jenis_tautan" class="block text-sm font-bold text-gray-700 mb-2">
+                                        Pengaturan Tautan
+                                        <span class="text-gray-400 font-normal text-xs">(Opsional)</span>
+                                    </label>
+                                    <select name="jenis_tautan" id="jenis_tautan" 
+                                            x-model="jenisTautan"
+                                            class="w-full rounded-lg border-gray-300 shadow-sm focus:border-hijau-500 focus:ring-hijau-500 mb-3 text-sm">
+                                        <option value="file">Standar (Buka Halaman Detail)</option>
+                                        <option value="url">Langsung buka URL Eksternal</option>
+                                    </select>
+                                    
+                                    <div x-show="jenisTautan === 'url'" x-transition>
+                                        <input type="url" name="tautan_eksternal" id="tautan_eksternal" 
+                                               value="{{ old('tautan_eksternal') }}" 
+                                               placeholder="https://link-eksternal.com"
+                                               class="w-full rounded-lg border-gray-300 shadow-sm focus:border-hijau-500 focus:ring-hijau-500 text-sm">
+                                        <p class="text-xs text-gray-400 mt-1">Jika diisi, tombol lihat akan mengarah ke link ini.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- ======================== KOLOM KANAN ======================== --}}
+                            <div class="space-y-5">
+
+                                {{-- Tanggal Publikasi --}}
+                                <div>
+                                    <label for="tanggal_publikasi" class="block text-sm font-bold text-gray-700 mb-1">
+                                        Tanggal Publikasi 
+                                        <span class="text-gray-400 font-normal text-xs">(Opsional)</span>
+                                    </label>
+                                    <input type="date" name="tanggal_publikasi" id="tanggal_publikasi" 
+                                           value="{{ old('tanggal_publikasi', now()->format('Y-m-d')) }}" 
+                                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-hijau-500 focus:ring-hijau-500">
+                                </div>
+
+                                {{-- Urutan Tampil --}}
+                                <div>
+                                    <label for="sort_order" class="block text-sm font-bold text-gray-700 mb-1">
+                                        Urutan Tampil 
+                                        <span class="text-gray-400 font-normal text-xs">(Opsional)</span>
+                                    </label>
+                                    <input type="number" name="sort_order" id="sort_order" 
+                                           value="{{ old('sort_order', 0) }}" min="0"
+                                           class="w-full rounded-lg border-gray-300 shadow-sm focus:border-hijau-500 focus:ring-hijau-500">
+                                    <p class="text-xs text-gray-400 mt-1">Angka kecil akan tampil lebih dulu. (0 = default).</p>
+                                </div>
+
+                                {{-- Upload Thumbnail --}}
+                                <div>
+                                    <label for="thumbnail" class="block text-sm font-bold text-gray-700 mb-1">
+                                        Upload Thumbnail 
+                                        <span class="text-gray-400 font-normal text-xs">(Opsional)</span>
+                                    </label>
+                                    <input type="file" name="thumbnail" id="thumbnail" 
+                                           class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100 cursor-pointer"
+                                           accept="image/jpeg,image/png,image/gif,image/svg+xml">
+                                    @error('thumbnail')
+                                        <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                {{-- Status Aktif --}}
+                                <div class="pt-4">
+                                    <label class="flex items-center gap-3 cursor-pointer bg-green-50 p-4 rounded-lg border border-green-200 hover:bg-green-100 transition">
+                                        <input type="hidden" name="is_active" value="0">
+                                        <input type="checkbox" name="is_active" value="1" id="is_active" 
+                                               class="w-5 h-5 rounded border-gray-300 text-hijau-600 focus:ring-hijau-500 cursor-pointer" checked>
+                                        <div>
+                                            <span class="text-sm font-bold text-gray-700 block">Langsung Aktifkan</span>
+                                            <span class="text-xs text-gray-500">Centang jika ingin langsung tampil di website publik.</span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        {{-- ======================== KONTEN (FULL WIDTH) ======================== --}}
+                        <div class="mt-6">
+                            <label for="konten" class="block text-sm font-bold text-gray-700 mb-1">
+                                Konten Detail 
+                                <span class="text-gray-400 font-normal text-xs">(Opsional, muncul di halaman detail)</span>
+                            </label>
+                            <textarea name="konten" id="konten" rows="6" 
+                                      class="w-full rounded-lg border-gray-300 shadow-sm focus:border-hijau-500 focus:ring-hijau-500 transition tinymce-editor">{{ old('konten') }}</textarea>
+                        </div>
+
+                        {{-- ======================== TOMBOL AKSI ======================== --}}
+                        <div class="flex items-center justify-end gap-3 mt-8 pt-6 border-t border-gray-200">
+                            <a href="{{ route('admin.informasi-publik.sub-menu.index', $informasi_publik_item) }}" 
+                               class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition">
+                                Batal
+                            </a>
+                            <button type="submit" 
+                                    class="px-6 py-2.5 bg-hijau-600 text-white rounded-lg text-sm font-bold hover:bg-hijau-700 transition shadow-sm flex items-center gap-2">
+                                <i class="fa-solid fa-floppy-disk"></i> Simpan Sub-Menu
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+* STYLE MIRIP BOOTSTRAP 
+* Agar HTML dari TinyMCE langsung rapi tanpa harus ngubah data admin
+* ============================================ */
+
+/* Sembunyikan elemen Alpine.js sebelum init */
+[x-cloak] {
+    display: none !important;
+}
