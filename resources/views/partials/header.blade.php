@@ -198,7 +198,7 @@
                         Laporan & Statistik
                     </a>
 
-                    <a href="#" 
+                    <a href="{{ route('ppid-pelaksana') }}" 
                        class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-hijau-700 hover:bg-hijau-50 transition">
                         PPID Pelaksana
                     </a>

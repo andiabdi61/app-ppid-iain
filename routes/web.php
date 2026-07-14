@@ -364,4 +364,8 @@ Route::delete('informasi-publik/{informasi_publik_item}/sub-menu/{subMenu}', [Ad
     });
 });
 
+// Halaman PPID Pelaksana
+// Halaman PPID Pelaksana
+Route::view('/ppid-pelaksana', 'ppid.ppid-pelaksana')->name('ppid-pelaksana');
+
 require __DIR__.'/auth.php'; // Memasukkan rute autentikasi dari auth.php
