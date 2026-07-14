@@ -176,6 +176,24 @@
                         <x-input-error :messages="$errors->get('email')" class="mt-1.5" />
                     </div>
 
+                    <!-- Nomor Telepon -->
+                    <div>
+                        <label for="telp" class="block text-sm font-medium text-gray-700 mb-1.5">Nomor Telepon</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fas fa-phone text-gray-400 text-sm"></i>
+                            </div>
+                            <input id="telp" 
+                                type="tel" 
+                                name="telp" 
+                                value="{{ old('telp') }}" 
+                                autocomplete="tel"
+                                class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 text-sm placeholder-gray-400 focus:ring-2 focus:ring-hijau-500 focus:border-hijau-500 outline-none transition @error('telp') border-red-400 focus:ring-red-500 focus:border-red-500 @enderror" 
+                                placeholder="08xxxxxxxxxx">
+                        </div>
+                        <x-input-error :messages="$errors->get('telp')" class="mt-1.5" />
+                    </div>
+
                     <!-- Password -->
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
