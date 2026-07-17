@@ -14,21 +14,19 @@ use Illuminate\Support\Facades\Cache;
 class InformasiPublikController extends Controller
 {
     /**
-     * INDEX (Draft awal, akan kita lengkapi nanti di step view)
+     * INDEX
      */
-       public function index(Request $request)
+    public function index(Request $request)
     {
         Gate::authorize('viewAny', InformasiPublik::class);
         
-        $categories = InformasiPublikCategory::orderBy('nama')->get(); // DITAMBAHKAN UNTUK DROPDOWN FILTER
+        $categories = InformasiPublikCategory::orderBy('nama')->get();
 
-        // Query dengan Join agar bisa mengurutkan berdasarkan Nama Kategori
         $query = InformasiPublik::with('category')
             ->leftJoin('informasi_publik_categories', 'informasi_publik.category_id', '=', 'informasi_publik_categories.id')
             ->whereNull('informasi_publik.parent_id')
             ->select('informasi_publik.*');
 
-        // LOGIC FILTER KATEGORI
         if ($request->filled('filter_category')) {
             $query->where('informasi_publik.category_id', $request->filter_category);
         }
@@ -36,31 +34,28 @@ class InformasiPublikController extends Controller
         $informasiPublik = $query->orderBy('informasi_publik_categories.nama', 'asc')
                                  ->orderBy('informasi_publik.sort_order', 'asc')
                                  ->paginate(20)
-                                 ->appends(request()->query()); // Agar pagination membawa data filter
+                                 ->appends(request()->query());
 
         return view('admin.informasi-publik.index', compact('informasiPublik', 'categories'));
     }
 
     /**
-     * CREATE - Menampilkan form Tambah Judul Utama
+     * CREATE - Judul Utama
      */
     public function create()
     {
         Gate::authorize('create', InformasiPublik::class);
-        
         $categories = InformasiPublikCategory::orderBy('sort_order')->orderBy('nama')->get();
-
         return view('admin.informasi-publik.create', compact('categories'));
     }
 
     /**
-     * STORE - Menyimpan Judul Utama
+     * STORE - Judul Utama
      */
     public function store(Request $request)
     {
         Gate::authorize('create', InformasiPublik::class);
 
-        // Validasi sesuai kebutuhan form Judul Utama
         $validated = $request->validate([
             'judul'             => 'required|string|max:255|unique:informasi_publik,judul',
             'category_id'       => 'required|exists:informasi_publik_categories,id',
@@ -70,14 +65,17 @@ class InformasiPublikController extends Controller
             'sort_order'        => 'nullable|integer|min:0',
             'jenis_tautan'      => 'nullable|in:file,url',
             'tautan_eksternal'  => 'nullable|url',
+            'konten'            => 'nullable|string', // DITAMBAHKAN INI
+            'pejabat'           => 'nullable|string|max:255',          // DITAMBAHKAN
+            'penanggung_jawab'  => 'nullable|string|max:255',          // DITAMBAHKAN
+            'tempat'            => 'nullable|string|max:255',          // DITAMBAHKAN
+            'jangka_waktu'      => 'nullable|string|max:255',          // DITAMBAHKAN
         ]);
 
-        // Inisialisasi variabel file
         $filePath = null;
         $fileNama = null;
         $fileTipe = null;
 
-        // Proses upload file jika admin mengisinya
         if ($request->hasFile('file_dokumen')) {
             $file = $request->file('file_dokumen');
             $filePath = $file->store('informasi_publik/dokumen', 'public');
@@ -85,20 +83,22 @@ class InformasiPublikController extends Controller
             $fileTipe = $file->getClientOriginalExtension();
         }
 
-        // Buat slug yang unik
         $slug = Str::slug($validated['judul']);
         $slugCount = InformasiPublik::where('slug', 'LIKE', "{$slug}%")->count();
         if ($slugCount > 0) {
             $slug .= '-' . ($slugCount + 1);
         }
 
-        // Simpan ke database
         InformasiPublik::create([
             'judul'             => $validated['judul'],
             'slug'              => $slug,
             'category_id'       => $validated['category_id'],
-            'parent_id'         => null, // Wajib null karena ini Judul Utama
-            'konten'            => '',   // Diisi string kosong agar tidak error SQL 1364
+            'parent_id'         => null,
+            'konten'            => $validated['konten'] ?? '', // DIPERBAIKI: Ambil dari form
+            'pejabat'           => $validated['pejabat'] ?? null,          // DITAMBAHKAN
+            'penanggung_jawab'  => $validated['penanggung_jawab'] ?? null, // DITAMBAHKAN
+            'tempat'            => $validated['tempat'] ?? null,            // DITAMBAHKAN
+            'jangka_waktu'      => $validated['jangka_waktu'] ?? null,      // DITAMBAHKAN
             'file_path'         => $filePath,
             'file_nama'         => $fileNama,
             'file_tipe'         => $fileTipe,
@@ -109,30 +109,30 @@ class InformasiPublikController extends Controller
             'tautan_eksternal'  => $validated['tautan_eksternal'] ?? null,
         ]);
 
-        // Hapus cache jika ada
         Cache::forget('informasi_publik_categories');
 
         return redirect()->route('admin.informasi-publik.index')
             ->with('success', 'Judul utama "' . $validated['judul'] . '" berhasil ditambahkan.');
     }
 
-
-        // TAMPILKAN FORM EDIT JUDUL UTAMA
+    /**
+     * EDIT - Judul Utama
+     */
     public function edit(InformasiPublik $informasi_publik_item)
     {
         Gate::authorize('update', $informasi_publik_item);
         
-        // Keamanan: Pastikan yang diedit bukan sub-menu
         if ($informasi_publik_item->parent_id !== null) {
             abort(404, 'Gunakan halaman sub-menu untuk mengedit item ini.');
         }
 
         $categories = InformasiPublikCategory::orderBy('nama')->get();
-
         return view('admin.informasi-publik.edit', compact('informasi_publik_item', 'categories'));
     }
 
-    // PROSES UPDATE JUDUL UTAMA
+    /**
+     * UPDATE - Judul Utama
+     */
     public function update(Request $request, InformasiPublik $informasi_publik_item)
     {
         Gate::authorize('update', $informasi_publik_item);
@@ -150,6 +150,11 @@ class InformasiPublikController extends Controller
             'sort_order'        => 'nullable|integer|min:0',
             'jenis_tautan'      => 'nullable|in:file,url',
             'tautan_eksternal'  => 'nullable|url',
+            'konten'            => 'nullable|string',
+            'pejabat'           => 'nullable|string|max:255',          // DITAMBAHKAN
+            'penanggung_jawab'  => 'nullable|string|max:255',          // DITAMBAHKAN
+            'tempat'            => 'nullable|string|max:255',          // DITAMBAHKAN
+            'jangka_waktu'      => 'nullable|string|max:255',          // DITAMBAHKAN
         ]);
 
         $data = [
@@ -160,9 +165,13 @@ class InformasiPublikController extends Controller
             'sort_order'        => $validated['sort_order'] ?? 0,
             'jenis_tautan'      => $validated['jenis_tautan'] ?? 'file',
             'tautan_eksternal'  => $validated['tautan_eksternal'] ?? null,
+            'konten'            => $validated['konten'] ?? '',
+            'pejabat'           => $validated['pejabat'] ?? null,          // DITAMBAHKAN
+            'penanggung_jawab'  => $validated['penanggung_jawab'] ?? null, // DITAMBAHKAN
+            'tempat'            => $validated['tempat'] ?? null,            // DITAMBAHKAN
+            'jangka_waktu'      => $validated['jangka_waktu'] ?? null,      // DITAMBAHKAN
         ];
 
-        // Update slug jika judul berubah
         if ($informasi_publik_item->judul !== $validated['judul']) {
             $slug = Str::slug($validated['judul']);
             $slugCount = InformasiPublik::where('slug', 'LIKE', "{$slug}%")->where('id', '!=', $informasi_publik_item->id)->count();
@@ -172,7 +181,6 @@ class InformasiPublikController extends Controller
             $data['slug'] = $slug;
         }
 
-        // Handle Upload File Baru
         if ($request->hasFile('file_dokumen')) {
             if ($informasi_publik_item->file_path && Storage::disk('public')->exists($informasi_publik_item->file_path)) {
                 Storage::disk('public')->delete($informasi_publik_item->file_path);
@@ -191,7 +199,9 @@ class InformasiPublikController extends Controller
             ->with('success', 'Judul utama "' . $validated['judul'] . '" berhasil diperbarui.');
     }
 
-    // PROSES HAPUS JUDUL UTAMA (DENGAN PROTEKSI SUB-MENU)
+    /**
+     * DESTROY - Judul Utama
+     */
     public function destroy(InformasiPublik $informasi_publik_item)
     {
         Gate::authorize('delete', $informasi_publik_item);
@@ -200,14 +210,12 @@ class InformasiPublikController extends Controller
             abort(404);
         }
 
-        // PROTEKSI: Cek apakah masih punya sub-menu
         if ($informasi_publik_item->children()->count() > 0) {
             $jmlSub = $informasi_publik_item->children()->count();
             return redirect()->route('admin.informasi-publik.index')
                 ->with('error', 'Gagal menghapus! Judul utama "<strong>' . $informasi_publik_item->judul . '</strong>" masih memiliki ' . $jmlSub . ' sub-menu. Hapus semua sub-menunya terlebih dahulu.');
         }
 
-        // Hapus file jika ada
         if ($informasi_publik_item->file_path && Storage::disk('public')->exists($informasi_publik_item->file_path)) {
             Storage::disk('public')->delete($informasi_publik_item->file_path);
         }
@@ -220,20 +228,18 @@ class InformasiPublikController extends Controller
         return redirect()->route('admin.informasi-publik.index')
             ->with('success', 'Judul utama "' . $judul . '" berhasil dihapus.');
     }
-        // Placeholder halaman Sub-Menu (Akan kita kerjakan selanjutnya)
-     // Halaman Daftar Sub-Menu berdasarkan Parent
-    
-    
-     public function subMenuIndex(InformasiPublik $informasi_publik_item)
+
+    /**
+     * SUB MENU - INDEX
+     */
+    public function subMenuIndex(InformasiPublik $informasi_publik_item)
     {
         Gate::authorize('viewAny', InformasiPublik::class);
         
-        // Pastikan yang diakses adalah Judul Utama, bukan sub-menu lain
         if ($informasi_publik_item->parent_id !== null) {
             abort(404, 'Halaman tidak valid.');
         }
 
-        // Ambil semua sub-menu milik parent ini, urutkan berdasarkan sort_order
         $subMenus = InformasiPublik::where('parent_id', $informasi_publik_item->id)
                                    ->orderBy('sort_order', 'asc')
                                    ->get();
@@ -241,12 +247,13 @@ class InformasiPublikController extends Controller
         return view('admin.informasi-publik.sub-menu.index', compact('informasi_publik_item', 'subMenus'));
     }
 
-        // TAMPILKAN FORM TAMBAH SUB-MENU
+    /**
+     * SUB MENU - CREATE
+     */
     public function subMenuCreate(InformasiPublik $informasi_publik_item)
     {
         Gate::authorize('create', InformasiPublik::class);
         
-        // Keamanan: pastikan yang diakses benar-benar Judul Utama
         if ($informasi_publik_item->parent_id !== null) {
             abort(404, 'Halaman tidak valid.');
         }
@@ -254,7 +261,9 @@ class InformasiPublikController extends Controller
         return view('admin.informasi-publik.sub-menu.create', compact('informasi_publik_item'));
     }
 
-    // PROSES SIMPAN SUB-MENU
+    /**
+     * SUB MENU - STORE
+     */
     public function subMenuStore(Request $request, InformasiPublik $informasi_publik_item)
     {
         Gate::authorize('create', InformasiPublik::class);
@@ -273,6 +282,10 @@ class InformasiPublikController extends Controller
             'sort_order'        => 'nullable|integer|min:0',
             'thumbnail'         => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'konten'            => 'nullable|string',
+            'pejabat'           => 'nullable|string|max:255',          // DITAMBAHKAN
+            'penanggung_jawab'  => 'nullable|string|max:255',          // DITAMBAHKAN
+            'tempat'            => 'nullable|string|max:255',          // DITAMBAHKAN
+            'jangka_waktu'      => 'nullable|string|max:255',          // DITAMBAHKAN
         ]);
 
         $filePath = null;
@@ -280,7 +293,6 @@ class InformasiPublikController extends Controller
         $fileTipe = null;
         $thumbnailPath = null;
 
-        // Proses Upload File Dokumen
         if ($request->hasFile('file_dokumen')) {
             $file = $request->file('file_dokumen');
             $filePath = $file->store('informasi_publik/dokumen', 'public');
@@ -288,26 +300,27 @@ class InformasiPublikController extends Controller
             $fileTipe = $file->getClientOriginalExtension();
         }
 
-        // Proses Upload Thumbnail
         if ($request->hasFile('thumbnail')) {
             $thumb = $request->file('thumbnail');
             $thumbnailPath = $thumb->store('informasi_publik/thumbnails', 'public');
         }
 
-        // Buat slug unik
         $slug = Str::slug($validated['judul']);
         $slugCount = InformasiPublik::where('slug', 'LIKE', "{$slug}%")->count();
         if ($slugCount > 0) {
             $slug .= '-' . ($slugCount + 1);
         }
 
-        // Simpan ke Database
         InformasiPublik::create([
-            'category_id'       => $informasi_publik_item->category_id, // Otomatis ikut induk
-            'parent_id'         => $informasi_publik_item->id,          // Otomatis ikut induk
+            'category_id'       => $informasi_publik_item->category_id,
+            'parent_id'         => $informasi_publik_item->id,
             'judul'             => $validated['judul'],
             'slug'              => $slug,
             'konten'            => $validated['konten'] ?? '',
+            'pejabat'           => $validated['pejabat'] ?? null,          // DITAMBAHKAN
+            'penanggung_jawab'  => $validated['penanggung_jawab'] ?? null, // DITAMBAHKAN
+            'tempat'            => $validated['tempat'] ?? null,            // DITAMBAHKAN
+            'jangka_waktu'      => $validated['jangka_waktu'] ?? null,      // DITAMBAHKAN
             'file_path'         => $filePath,
             'file_nama'         => $fileNama,
             'file_tipe'         => $fileTipe,
@@ -321,18 +334,17 @@ class InformasiPublikController extends Controller
 
         Cache::forget('informasi_publik_categories');
 
-        // Redirect kembali ke halaman daftar sub-menu induknya
         return redirect()->route('admin.informasi-publik.sub-menu.index', $informasi_publik_item)
             ->with('success', 'Sub-menu "' . $validated['judul'] . '" berhasil ditambahkan.');
     }
 
-        // TAMPILKAN FORM EDIT SUB-MENU
+    /**
+     * SUB MENU - EDIT
+     */
     public function subMenuEdit(InformasiPublik $informasi_publik_item, InformasiPublik $subMenu)
     {
         Gate::authorize('update', $subMenu);
         
-        // KEAMANAN: Pastikan sub-menu yang diedit benar-benar anak dari induk ini
-        // (Mencegah admin utak-atik URL untuk edit sub-menu milik induk lain)
         if ($subMenu->parent_id !== $informasi_publik_item->id) {
             abort(404, 'Sub-menu tidak ditemukan dalam induk ini.');
         }
@@ -340,7 +352,9 @@ class InformasiPublikController extends Controller
         return view('admin.informasi-publik.sub-menu.edit', compact('informasi_publik_item', 'subMenu'));
     }
 
-    // PROSES UPDATE SUB-MENU
+    /**
+     * SUB MENU - UPDATE
+     */
     public function subMenuUpdate(Request $request, InformasiPublik $informasi_publik_item, InformasiPublik $subMenu)
     {
         Gate::authorize('update', $subMenu);
@@ -359,6 +373,10 @@ class InformasiPublikController extends Controller
             'sort_order'        => 'nullable|integer|min:0',
             'thumbnail'         => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'konten'            => 'nullable|string',
+            'pejabat'           => 'nullable|string|max:255',          // DITAMBAHKAN
+            'penanggung_jawab'  => 'nullable|string|max:255',          // DITAMBAHKAN
+            'tempat'            => 'nullable|string|max:255',          // DITAMBAHKAN
+            'jangka_waktu'      => 'nullable|string|max:255',          // DITAMBAHKAN
         ]);
 
         $data = [
@@ -369,9 +387,12 @@ class InformasiPublikController extends Controller
             'jenis_tautan'      => $validated['jenis_tautan'] ?? 'file',
             'tautan_eksternal'  => $validated['tautan_eksternal'] ?? null,
             'konten'            => $validated['konten'] ?? '',
+            'pejabat'           => $validated['pejabat'] ?? null,          // DITAMBAHKAN
+            'penanggung_jawab'  => $validated['penanggung_jawab'] ?? null, // DITAMBAHKAN
+            'tempat'            => $validated['tempat'] ?? null,            // DITAMBAHKAN
+            'jangka_waktu'      => $validated['jangka_waktu'] ?? null,      // DITAMBAHKAN
         ];
 
-        // Update slug jika judul berubah
         if ($subMenu->judul !== $validated['judul']) {
             $slug = Str::slug($validated['judul']);
             $slugCount = InformasiPublik::where('slug', 'LIKE', "{$slug}%")->where('id', '!=', $subMenu->id)->count();
@@ -381,7 +402,6 @@ class InformasiPublikController extends Controller
             $data['slug'] = $slug;
         }
 
-        // Hapus & Upload File Baru (jika admin ganti file)
         if ($request->hasFile('file_dokumen')) {
             if ($subMenu->file_path && Storage::disk('public')->exists($subMenu->file_path)) {
                 Storage::disk('public')->delete($subMenu->file_path);
@@ -392,7 +412,6 @@ class InformasiPublikController extends Controller
             $data['file_tipe'] = $file->getClientOriginalExtension();
         }
 
-        // Hapus & Upload Thumbnail Baru (jika admin ganti thumbnail)
         if ($request->hasFile('thumbnail')) {
             if ($subMenu->thumbnail && Storage::disk('public')->exists($subMenu->thumbnail)) {
                 Storage::disk('public')->delete($subMenu->thumbnail);
@@ -409,36 +428,30 @@ class InformasiPublikController extends Controller
             ->with('success', 'Sub-menu "' . $validated['judul'] . '" berhasil diperbarui.');
     }
 
-        // PROSES HAPUS SUB-MENU
+    /**
+     * SUB MENU - DESTROY
+     */
     public function subMenuDestroy(InformasiPublik $informasi_publik_item, InformasiPublik $subMenu)
     {
         Gate::authorize('delete', $subMenu);
         
-        // KEAMANAN: Pastikan sub-menu yang dihapus benar-benar anak dari induk ini
         if ($subMenu->parent_id !== $informasi_publik_item->id) {
             abort(404, 'Sub-menu tidak ditemukan dalam induk ini.');
         }
 
-        // Hapus File Dokumen dari storage jika ada
         if ($subMenu->file_path && Storage::disk('public')->exists($subMenu->file_path)) {
             Storage::disk('public')->delete($subMenu->file_path);
         }
 
-        // Hapus Thumbnail dari storage jika ada
         if ($subMenu->thumbnail && Storage::disk('public')->exists($subMenu->thumbnail)) {
             Storage::disk('public')->delete($subMenu->thumbnail);
         }
 
-        // Simpan nama judul dulu untuk pesan sukses
         $judulSubMenu = $subMenu->judul;
-
-        // Hapus datanya dari database
         $subMenu->delete();
 
-        // Hapus cache
         Cache::forget('informasi_publik_categories');
 
-        // Redirect kembali ke daftar sub-menu induknya
         return redirect()->route('admin.informasi-publik.sub-menu.index', $informasi_publik_item)
             ->with('success', 'Sub-menu "' . $judulSubMenu . '" berhasil dihapus.');
     }

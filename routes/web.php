@@ -58,6 +58,14 @@ use Illuminate\Support\Facades\Route;
 // Rute Halaman Beranda
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
+// Rute Ganti Bahasa (Locale)
+Route::get('/lang/{locale}', function ($locale) {
+    if (in_array($locale, ['id', 'en', 'ar'])) {
+        session(['locale' => $locale]);
+    }
+    return redirect()->back();
+})->name('lang.switch');
+
 // --- Rute MODUL PUBLIK ---
 // Route::get('/kinerja', [KinerjaPublikController::class, 'index'])->name('kinerja.publik');
 // Modul Tentang Kami
@@ -211,6 +219,10 @@ Route::middleware('auth')->group(function () {
 
     // --- Rute ADMIN / BACKEND (CRUD) ---
     Route::prefix('admin')->name('admin.')->group(function () {
+        
+        // LETAKKAN ROUTE TRANSLATE DI SINI (PALING ATAS DALAM GRUP ADMIN)
+        Route::post('/translate-library', [\App\Http\Controllers\TranslateController::class, 'translate'])->name('translate.library');
+
         // Dashboard Admin Utama (Jika diperlukan, tapi sudah ditangani oleh rute /dashboard di atas)
         // Route::get('/', function () { return view('admin.dashboard'); })->name('dashboard');
 
@@ -362,6 +374,7 @@ Route::delete('informasi-publik/{informasi_publik_item}/sub-menu/{subMenu}', [Ad
         Route::get('kinerja', [KinerjaController::class, 'index'])->name('kinerja.index');
         Route::post('kinerja', [KinerjaController::class, 'storeOrUpdate'])->name('kinerja.storeOrUpdate');
     });
+
 });
 
 // Halaman PPID Pelaksana

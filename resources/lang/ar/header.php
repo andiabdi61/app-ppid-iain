@@ -1,0 +1,37 @@
+<?php
+return [
+    'home' => 'الرئيسية',
+    'about' => 'من نحن',
+    'ppid_profile' => 'ملف PPID',
+    'visi_misi' => 'الرؤية والرسالة',
+    'tugas_fungsi' => 'المهام والوظائف',
+    'profil_pejabat' => 'ملف المسؤولين',
+    'struktur_organisasi' => 'الهيكل التنظيمي',
+    
+    'info_pub' => 'المعلومات العامة',
+    'dip' => 'قائمة المعلومات العامة',
+    'periodic' => 'المعلومات الدورية',
+    'immediate' => 'المعلومات الفورية',
+    'available' => 'المعلومات المتاحة',
+    'excluded' => 'المعلومات المستثناة',
+    'goods_services' => 'السلع والخدمات',
+    'publications' => 'الوثائق',
+    
+    'news' => 'الأخبار',
+    'services' => 'الخدمات',
+    'info_service' => 'خدمات المعلومات',
+    'request_flow' => 'إجراءات طلب المعلومات',
+    'request_form' => 'استمارة طلب المعلومات',
+    'objection' => 'الاعتراض',
+    'objection_flow' => 'إجراءات تقديم الاعتراض',
+    'objection_form' => 'استمارة تقديم الاعتراض',
+    
+    'report' => 'التقارير والإحصائيات',
+    'ppid_pelaksana' => 'PPID التنفيذي',
+    'dashboard' => 'لوحة التحكم الخاصة بي',
+    'edit_profile' => 'تعديل الملف الشخصي',
+    'logout' => 'تسجيل الخروج',
+    'login' => 'تسجيل الدخول',
+    'register' => 'إنشاء حساب',
+    'select_lang' => 'اختر اللغة',
+];

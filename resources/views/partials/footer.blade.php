@@ -23,8 +23,8 @@
                     @endif
                 </div>
 
-                <p class="text-hijau-100/70 mb-8 font-light leading-relaxed max-w-sm">
-                    Pejabat Pengelola Informasi dan Dokumentasi yang menyediakan akses informasi publik secara cepat, tepat, dan akuntabel.
+                <p class="text-hijau-100/70 mb-8 font-light leading-relaxed max-w-sm" @if(app()->getLocale() === 'ar') dir="rtl"@endif>
+                    {{ __('footer.desc') }}
                 </p>
 
                 {{-- Social Media Icons --}}
@@ -55,42 +55,30 @@
                 
                 {{-- List 1: Tautan Cepat --}}
                 <div>
-                    <h4 class="text-sm font-bold uppercase tracking-wider text-hijau-400 mb-6">Tautan Cepat</h4>
+                    <h4 class="text-sm font-bold uppercase tracking-wider text-hijau-400 mb-6">{{ __('footer.quick_links') }}</h4>
                     <ul class="space-y-4">
                         <li>
                             <a href="{{ route('informasi-publik.index') }}" class="group flex items-center gap-2 text-sm text-hijau-100/70 hover:text-white transition-colors duration-300">
                                 <span class="w-0 group-hover:w-3 h-0.5 bg-hijau-400 transition-all duration-300"></span>
-                                Informasi Publik
+                                {{ __('footer.info_pub') }}
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('publikasi.index') }}" class="group flex items-center gap-2 text-sm text-hijau-100/70 hover:text-white transition-colors duration-300">
                                 <span class="w-0 group-hover:w-3 h-0.5 bg-hijau-400 transition-all duration-300"></span>
-                                Publikasi & Dokumen
+                                {{ __('footer.pub_docs') }}
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('berita.index') }}" class="group flex items-center gap-2 text-sm text-hijau-100/70 hover:text-white transition-colors duration-300">
                                 <span class="w-0 group-hover:w-3 h-0.5 bg-hijau-400 transition-all duration-300"></span>
-                                Berita Terbaru
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('galeri.index') }}" class="group flex items-center gap-2 text-sm text-hijau-100/70 hover:text-white transition-colors duration-300">
-                                <span class="w-0 group-hover:w-3 h-0.5 bg-hijau-400 transition-all duration-300"></span>
-                                Galeri
+                                {{ __('footer.latest_news') }}
                             </a>
                         </li>
                         <li>
                             <a href="{{ url('/#services') }}" class="group flex items-center gap-2 text-sm text-hijau-100/70 hover:text-white transition-colors duration-300">
                                 <span class="w-0 group-hover:w-3 h-0.5 bg-hijau-400 transition-all duration-300"></span>
-                                Layanan & Pengaduan
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('kontak.index') }}" class="group flex items-center gap-2 text-sm text-hijau-100/70 hover:text-white transition-colors duration-300">
-                                <span class="w-0 group-hover:w-3 h-0.5 bg-hijau-400 transition-all duration-300"></span>
-                                Kontak Umum
+                                {{ __('footer.services') }}
                             </a>
                         </li>
                     </ul>
@@ -98,30 +86,30 @@
                 
                 {{-- List 2: Informasi Penting --}}
                 <div>
-                    <h4 class="text-sm font-bold uppercase tracking-wider text-hijau-400 mb-6">Informasi</h4>
+                    <h4 class="text-sm font-bold uppercase tracking-wider text-hijau-400 mb-6">{{ __('footer.info') }}</h4>
                     <ul class="space-y-4">
                         <li>
-                            <a href="{{ route('static-pages.peta-situs') }}" class="group flex items-center gap-2 text-sm text-hijau-100/70 hover:text-white transition-colors duration-300">
+                            <a href="{{ route('kontak.index') }}" class="group flex items-center gap-2 text-sm text-hijau-100/70 hover:text-white transition-colors duration-300">
                                 <span class="w-0 group-hover:w-3 h-0.5 bg-hijau-400 transition-all duration-300"></span>
-                                Peta Situs
+                                {{ __('footer.contact_us') }}
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('static-pages.show', 'kebijakan-privasi') }}" class="group flex items-center gap-2 text-sm text-hijau-100/70 hover:text-white transition-colors duration-300">
                                 <span class="w-0 group-hover:w-3 h-0.5 bg-hijau-400 transition-all duration-300"></span>
-                                Kebijakan Privasi
+                                {{ __('footer.privacy') }}
                             </a>
                         </li>
                         <li>
                             <a href="{{ route('static-pages.show', 'disclaimer') }}" class="group flex items-center gap-2 text-sm text-hijau-100/70 hover:text-white transition-colors duration-300">
                                 <span class="w-0 group-hover:w-3 h-0.5 bg-hijau-400 transition-all duration-300"></span>
-                                Disclaimer
+                                {{ __('footer.disclaimer') }}
                             </a>
                         </li>
                         <li>
-                            <a href="{{ route('static-pages.show', 'aksesibilitas') }}" class="group flex items-center gap-2 text-sm text-hijau-100/70 hover:text-white transition-colors duration-300">
+                            <a href="{{ route('galeri.index') }}" class="group flex items-center gap-2 text-sm text-hijau-100/70 hover:text-white transition-colors duration-300">
                                 <span class="w-0 group-hover:w-3 h-0.5 bg-hijau-400 transition-all duration-300"></span>
-                                Halaman Aksesibilitas
+                                {{ __('footer.gallery') }}
                             </a>
                         </li>
                     </ul>
@@ -132,7 +120,7 @@
             {{-- KOLOM KANAN: Informasi Kontak --}}
             {{-- ============================================ --}}
             <div class="lg:col-span-3">
-                <h4 class="text-sm font-bold uppercase tracking-wider text-hijau-400 mb-6">Kontak Kami</h4>
+                <h4 class="text-sm font-bold uppercase tracking-wider text-hijau-400 mb-6">{{ __('footer.contact') }}</h4>
                 <div class="flex flex-col gap-5">
                     
                     {{-- Alamat --}}
@@ -140,7 +128,7 @@
                         <div class="w-9 h-9 rounded-lg bg-hijau-800/50 border border-hijau-700/50 flex items-center justify-center shrink-0 group-hover:bg-hijau-700 transition-colors duration-300">
                             <i class="fas fa-map-marker-alt text-sm text-hijau-400 group-hover:text-white transition-colors duration-300"></i>
                         </div>
-                        <p class="text-sm text-hijau-100/70 leading-relaxed pt-1.5">
+                        <p class="text-sm text-hijau-100/70 leading-relaxed pt-1.5" @if(app()->getLocale() === 'ar') dir="rtl"@endif>
                             {{ $settings['alamat_kantor'] ?? 'Alamat belum diatur' }}
                         </p>
                     </div>
@@ -174,9 +162,9 @@
         {{-- COPYRIGHT --}}
         {{-- ============================================ --}}
         <div class="border-t border-hijau-800/50 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-hijau-200/40 gap-2">
-            <p>&copy; {{ date('Y') }} {{ config('app.name', 'PPID IAIN BONE') }}. Hak Cipta Dilindungi.</p>
+            <p>&copy; {{ date('Y') }} {{ config('app.name', 'PPID IAIN BONE') }}. {{ __('footer.copyright')}}</p>
             <p class="flex items-center gap-1.5">
-                Dikembangkan dengan <i class="fas fa-heart text-red-500/70 text-[10px]"></i> oleh Tim IT PPID IAIN Bone
+                {{ __('footer.dev_with_love') }}  <i class="fas fa-heart text-red-500/70 text-[10px]"></i>{{ __('footer.dev_team') }}
             </p>
         </div>
     </div>

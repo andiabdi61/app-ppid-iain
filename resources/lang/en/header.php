@@ -1,0 +1,37 @@
+<?php
+return [
+    'home' => 'Home',
+    'about' => 'About Us',
+    'ppid_profile' => 'PPID Profile',
+    'visi_misi' => 'Vision & Mission',
+    'tugas_fungsi' => 'Tasks & Functions',
+    'profil_pejabat' => 'Officials Profile',
+    'struktur_organisasi' => 'Organizational Structure',
+    
+    'info_pub' => 'Public Information',
+    'dip' => 'Public Information List',
+    'periodic' => 'Periodic Information',
+    'immediate' => 'Immediate Information',
+    'available' => 'Available Information',
+    'excluded' => 'Excluded Information',
+    'goods_services' => 'Goods & Services',
+    'publications' => 'Documents',
+    
+    'news' => 'News',
+    'services' => 'Services',
+    'info_service' => 'Information Services',
+    'request_flow' => 'Information Request Flow',
+    'request_form' => 'Information Request Form',
+    'objection' => 'Objection',
+    'objection_flow' => 'Objection Flow',
+    'objection_form' => 'Objection Form',
+    
+    'report' => 'Reports & Statistics',
+    'ppid_pelaksana' => 'Implementing PPID',
+    'dashboard' => 'My Dashboard',
+    'edit_profile' => 'Edit Profile',
+    'logout' => 'Logout',
+    'login' => 'Login',
+    'register' => 'Register',
+    'select_lang' => 'Select Language',
+];

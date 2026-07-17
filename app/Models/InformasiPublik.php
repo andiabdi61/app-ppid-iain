@@ -23,6 +23,10 @@ class InformasiPublik extends Model
         'judul',
         'slug',
         'konten',
+        'pejabat',           // ← DITAMBAHKAN
+        'penanggung_jawab',  // ← DITAMBAHKAN
+        'tempat',            // ← DITAMBAHKAN
+        'jangka_waktu',      // ← DITAMBAHKAN
         'file_path',
         'file_nama',
         'file_tipe',

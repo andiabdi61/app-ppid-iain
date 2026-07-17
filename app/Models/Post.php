@@ -72,11 +72,17 @@ class Post extends Model implements HasMedia
 
     protected $fillable = [
         'title',
+        'title_en',
+        'title_ar',
         'meta_title',
         'meta_description',
         'slug',
         'excerpt',
+        'excerpt_en',
+        'excerpt_ar',
         'content_html',
+        'content_html_en',
+        'content_html_ar',
         'category_id',
         'author_id',
         'status',
@@ -92,7 +98,11 @@ class Post extends Model implements HasMedia
      */
     protected $htmlFieldsToClean = [
         'content_html',
+        'content_html_en',
+        'content_html_ar',
         'excerpt', // Sebaiknya excerpt juga dibersihkan
+        'excerpt_en',
+        'excerpt_ar',
     ];
 
     /**
@@ -224,4 +234,48 @@ protected function universalPreviewUrl(): Attribute
             });
     }
 
+    public function getTitleAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->title_en)) {
+            return $this->title_en;
+        }
+        if ($locale === 'ar' && !empty($this->title_ar)) {
+            return $this->title_ar;
+        }
+        return $value;
+    }
+
+    public function getExcerptAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->excerpt_en)) {
+            return $this->excerpt_en;
+        }
+        if ($locale === 'ar' && !empty($this->excerpt_ar)) {
+            return $this->excerpt_ar;
+        }
+        return $value;
+    }
+
+    public function getContentHtmlAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->content_html_en)) {
+            return $this->content_html_en;
+        }
+        if ($locale === 'ar' && !empty($this->content_html_ar)) {
+            return $this->content_html_ar;
+        }
+        return $value;
+    }
 }

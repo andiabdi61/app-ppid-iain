@@ -59,8 +59,12 @@ class DocController extends Controller
 
         $request->validate([
             'judul' => 'required|string|max:255|unique:dokumen,judul',
+            'judul_en' => 'nullable|string|max:255',
+            'judul_ar' => 'nullable|string|max:255',
             'category_id' => 'required|exists:dokumen_categories,id',
             'deskripsi' => 'nullable|string',
+            'deskripsi_en' => 'nullable|string',
+            'deskripsi_ar' => 'nullable|string',
             'file_dokumen' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:5120',
             'tanggal_publikasi' => 'nullable|date',
             'is_active' => 'required|boolean',
@@ -80,8 +84,12 @@ class DocController extends Controller
 
         Dokumen::create([
             'judul' => $request->judul,
+            'judul_en' => $request->judul_en,
+            'judul_ar' => $request->judul_ar,
             'slug' => Str::slug($request->judul),
             'deskripsi' => $request->deskripsi,
+            'deskripsi_en' => $request->deskripsi_en,
+            'deskripsi_ar' => $request->deskripsi_ar,
             'file_path' => $filePath,
             'file_nama' => $fileNama,
             'file_tipe' => $fileTipe,
@@ -112,8 +120,12 @@ class DocController extends Controller
 
         $request->validate([
             'judul' => 'required|string|max:255|unique:dokumen,judul,' . $dokuman->id,
+            'judul_en' => 'nullable|string|max:255',
+            'judul_ar' => 'nullable|string|max:255',
             'category_id' => 'required|exists:dokumen_categories,id',
             'deskripsi' => 'nullable|string',
+            'deskripsi_en' => 'nullable|string',
+            'deskripsi_ar' => 'nullable|string',
             'file_dokumen' => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:5120',
             'tanggal_publikasi' => 'nullable|date',
             'is_active' => 'required|boolean',
@@ -136,8 +148,12 @@ class DocController extends Controller
 
         $dokuman->update([
             'judul' => $request->judul,
+            'judul_en' => $request->judul_en,
+            'judul_ar' => $request->judul_ar,
             'slug' => Str::slug($request->judul),
             'deskripsi' => $request->deskripsi,
+            'deskripsi_en' => $request->deskripsi_en,
+            'deskripsi_ar' => $request->deskripsi_ar,
             'file_path' => $filePath,
             'file_nama' => $fileNama,
             'file_tipe' => $fileTipe,

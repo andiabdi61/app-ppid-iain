@@ -52,8 +52,12 @@ class Dokumen extends Model
     protected $fillable = [
         'category_id',
         'judul',
+        'judul_en',
+        'judul_ar',
         'slug',
         'deskripsi',
+        'deskripsi_en',
+        'deskripsi_ar',
         'file_path',
         'file_nama',
         'file_tipe',
@@ -91,5 +95,35 @@ class Dokumen extends Model
                 }
                 return "Dokumen \"{$subjectName}\" telah di-{$eventName}";
             });
+    }
+
+    public function getJudulAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->judul_en)) {
+            return $this->judul_en;
+        }
+        if ($locale === 'ar' && !empty($this->judul_ar)) {
+            return $this->judul_ar;
+        }
+        return $value;
+    }
+
+    public function getDeskripsiAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->deskripsi_en)) {
+            return $this->deskripsi_en;
+        }
+        if ($locale === 'ar' && !empty($this->deskripsi_ar)) {
+            return $this->deskripsi_ar;
+        }
+        return $value;
     }
 }

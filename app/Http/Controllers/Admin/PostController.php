@@ -58,19 +58,31 @@ class PostController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255|unique:posts,title',
+            'title_en' => 'nullable|string|max:255',
+            'title_ar' => 'nullable|string|max:255',
             'category_id' => 'required|exists:categories,id',
+            'excerpt_en' => 'nullable|string',
+            'excerpt_ar' => 'nullable|string',
             'content_html' => 'required|string',
+            'content_html_en' => 'nullable|string',
+            'content_html_ar' => 'nullable|string',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'status' => 'required|in:published,draft',
         ]);
 
         $post = Post::create([
             'title' => $request->title,
+            'title_en' => $request->title_en,
+            'title_ar' => $request->title_ar,
             'meta_title' => $request->meta_title ?: $request->title,
             'meta_description' => $request->meta_description ?: Str::limit(strip_tags($request->content_html), 160),
             'slug' => Str::slug($request->title),
             'excerpt' => $request->excerpt,
+            'excerpt_en' => $request->excerpt_en,
+            'excerpt_ar' => $request->excerpt_ar,
             'content_html' => $request->content_html,
+            'content_html_en' => $request->content_html_en,
+            'content_html_ar' => $request->content_html_ar,
             'category_id' => $request->category_id,
             'author_id' => auth()->id(),
             'status' => $request->status,
@@ -99,19 +111,31 @@ class PostController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255|unique:posts,title,' . $post->id,
+            'title_en' => 'nullable|string|max:255',
+            'title_ar' => 'nullable|string|max:255',
             'category_id' => 'required|exists:categories,id',
+            'excerpt_en' => 'nullable|string',
+            'excerpt_ar' => 'nullable|string',
             'content_html' => 'required|string',
+            'content_html_en' => 'nullable|string',
+            'content_html_ar' => 'nullable|string',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'status' => 'required|in:published,draft',
         ]);
 
         $post->update([
             'title' => $request->title,
+            'title_en' => $request->title_en,
+            'title_ar' => $request->title_ar,
             'meta_title' => $request->meta_title ?: $request->title,
             'meta_description' => $request->meta_description ?: Str::limit(strip_tags($request->content_html), 160),
             'slug' => Str::slug($request->title),
             'excerpt' => $request->excerpt,
+            'excerpt_en' => $request->excerpt_en,
+            'excerpt_ar' => $request->excerpt_ar,
             'content_html' => $request->content_html,
+            'content_html_en' => $request->content_html_en,
+            'content_html_ar' => $request->content_html_ar,
             'category_id' => $request->category_id,
             'status' => $request->status,
         ]);

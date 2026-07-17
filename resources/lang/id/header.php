@@ -1,0 +1,37 @@
+<?php
+return [
+    'home' => 'Beranda',
+    'about' => 'Tentang Kami',
+    'ppid_profile' => 'Profil PPID',
+    'visi_misi' => 'Visi & Misi',
+    'tugas_fungsi' => 'Tugas & Fungsi',
+    'profil_pejabat' => 'Profil Pejabat',
+    'struktur_organisasi' => 'Struktur Organisasi',
+    
+    'info_pub' => 'Informasi Publik',
+    'dip' => 'Daftar Informasi Publik',
+    'periodic' => 'Informasi Berkala',
+    'immediate' => 'Informasi Serta Merta',
+    'available' => 'Informasi Setiap Saat',
+    'excluded' => 'Informasi Dikecualikan',
+    'goods_services' => 'Barang dan Jasa',
+    'publications' => 'Dokumen',
+    
+    'news' => 'Berita',
+    'services' => 'Layanan',
+    'info_service' => 'Layanan Informasi',
+    'request_flow' => 'Alur Permohonan Informasi',
+    'request_form' => 'Formulir Permohonan Informasi',
+    'objection' => 'Pengajuan Keberatan',
+    'objection_flow' => 'Alur Pengajuan Keberatan',
+    'objection_form' => 'Formulir Pengajuan Keberatan',
+    
+    'report' => 'Laporan & Statistik',
+    'ppid_pelaksana' => 'PPID Pelaksana',
+    'dashboard' => 'Dasbor Saya',
+    'edit_profile' => 'Edit Profil',
+    'logout' => 'Keluar',
+    'login' => 'Masuk',
+    'register' => 'Daftar',
+    'select_lang' => 'Pilih Bahasa / Language',
+];
