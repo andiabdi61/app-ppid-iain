@@ -28,6 +28,9 @@
                         </div>
                     @endif
 
+                    {{-- Panel Auto-Translate --}}
+                    @include('admin.informasi-publik.partials._translate-panel')
+
                     <form action="{{ route('admin.informasi-publik.update', $informasi_publik_item) }}" method="POST" enctype="multipart/form-data"
                           x-data="{ jenisTautan: '{{ old('jenis_tautan', $informasi_publik_item->jenis_tautan ?? 'file') }}' }">
                         @csrf
@@ -167,6 +170,9 @@
                                       class="w-full rounded-lg border-gray-300 shadow-sm focus:border-hijau-500 focus:ring-hijau-500 transition tinymce-editor">{{ old('konten', $informasi_publik_item->konten) }}</textarea>
                         </div>
 
+                        {{-- ======================== FIELD TERJEMAHAN ======================== --}}
+                        @include('admin.informasi-publik.partials._translate-fields', ['item' => $informasi_publik_item])
+
                         {{-- ======================== TOMBOL AKSI ======================== --}}
                         <div class="flex items-center justify-end gap-3 mt-6 pt-6 border-t border-gray-200">
                             <a href="{{ route('admin.informasi-publik.index') }}" class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-200 transition">Batal</a>
@@ -179,4 +185,7 @@
             </div>
         </div>
     </div>
+
+    {{-- Script Auto-Translate --}}
+    @include('admin.informasi-publik.partials._translate-script')
 </x-app-layout>

@@ -14,6 +14,51 @@ use Illuminate\Support\Facades\Cache;
 class InformasiPublikController extends Controller
 {
     /**
+     * Daftar field terjemahan yang digunakan di semua method.
+     */
+    private const TRANSLATION_FIELDS = [
+        'judul_en', 'judul_ar',
+        'konten_en', 'konten_ar',
+        'pejabat_en', 'pejabat_ar',
+        'penanggung_jawab_en', 'penanggung_jawab_ar',
+        'tempat_en', 'tempat_ar',
+        'jangka_waktu_en', 'jangka_waktu_ar',
+    ];
+
+    /**
+     * Aturan validasi terjemahan.
+     */
+    private function translationRules(): array
+    {
+        return [
+            'judul_en'             => 'nullable|string|max:255',
+            'judul_ar'             => 'nullable|string|max:255',
+            'konten_en'            => 'nullable|string',
+            'konten_ar'            => 'nullable|string',
+            'pejabat_en'           => 'nullable|string|max:255',
+            'pejabat_ar'           => 'nullable|string|max:255',
+            'penanggung_jawab_en'  => 'nullable|string|max:255',
+            'penanggung_jawab_ar'  => 'nullable|string|max:255',
+            'tempat_en'            => 'nullable|string|max:255',
+            'tempat_ar'            => 'nullable|string|max:255',
+            'jangka_waktu_en'      => 'nullable|string|max:255',
+            'jangka_waktu_ar'      => 'nullable|string|max:255',
+        ];
+    }
+
+    /**
+     * Ambil data terjemahan dari request (semua nullable).
+     */
+    private function translationData(array $validated): array
+    {
+        $data = [];
+        foreach (self::TRANSLATION_FIELDS as $field) {
+            $data[$field] = $validated[$field] ?? null;
+        }
+        return $data;
+    }
+
+    /**
      * INDEX
      */
     public function index(Request $request)
@@ -56,7 +101,7 @@ class InformasiPublikController extends Controller
     {
         Gate::authorize('create', InformasiPublik::class);
 
-        $validated = $request->validate([
+        $validated = $request->validate(array_merge([
             'judul'             => 'required|string|max:255|unique:informasi_publik,judul',
             'category_id'       => 'required|exists:informasi_publik_categories,id',
             'file_dokumen'      => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',
@@ -65,12 +110,12 @@ class InformasiPublikController extends Controller
             'sort_order'        => 'nullable|integer|min:0',
             'jenis_tautan'      => 'nullable|in:file,url',
             'tautan_eksternal'  => 'nullable|url',
-            'konten'            => 'nullable|string', // DITAMBAHKAN INI
-            'pejabat'           => 'nullable|string|max:255',          // DITAMBAHKAN
-            'penanggung_jawab'  => 'nullable|string|max:255',          // DITAMBAHKAN
-            'tempat'            => 'nullable|string|max:255',          // DITAMBAHKAN
-            'jangka_waktu'      => 'nullable|string|max:255',          // DITAMBAHKAN
-        ]);
+            'konten'            => 'nullable|string',
+            'pejabat'           => 'nullable|string|max:255',
+            'penanggung_jawab'  => 'nullable|string|max:255',
+            'tempat'            => 'nullable|string|max:255',
+            'jangka_waktu'      => 'nullable|string|max:255',
+        ], $this->translationRules()));
 
         $filePath = null;
         $fileNama = null;
@@ -89,16 +134,16 @@ class InformasiPublikController extends Controller
             $slug .= '-' . ($slugCount + 1);
         }
 
-        InformasiPublik::create([
+        InformasiPublik::create(array_merge([
             'judul'             => $validated['judul'],
             'slug'              => $slug,
             'category_id'       => $validated['category_id'],
             'parent_id'         => null,
-            'konten'            => $validated['konten'] ?? '', // DIPERBAIKI: Ambil dari form
-            'pejabat'           => $validated['pejabat'] ?? null,          // DITAMBAHKAN
-            'penanggung_jawab'  => $validated['penanggung_jawab'] ?? null, // DITAMBAHKAN
-            'tempat'            => $validated['tempat'] ?? null,            // DITAMBAHKAN
-            'jangka_waktu'      => $validated['jangka_waktu'] ?? null,      // DITAMBAHKAN
+            'konten'            => $validated['konten'] ?? '',
+            'pejabat'           => $validated['pejabat'] ?? null,
+            'penanggung_jawab'  => $validated['penanggung_jawab'] ?? null,
+            'tempat'            => $validated['tempat'] ?? null,
+            'jangka_waktu'      => $validated['jangka_waktu'] ?? null,
             'file_path'         => $filePath,
             'file_nama'         => $fileNama,
             'file_tipe'         => $fileTipe,
@@ -107,7 +152,7 @@ class InformasiPublikController extends Controller
             'sort_order'        => $validated['sort_order'] ?? 0,
             'jenis_tautan'      => $validated['jenis_tautan'] ?? 'file',
             'tautan_eksternal'  => $validated['tautan_eksternal'] ?? null,
-        ]);
+        ], $this->translationData($validated)));
 
         Cache::forget('informasi_publik_categories');
 
@@ -141,7 +186,7 @@ class InformasiPublikController extends Controller
             abort(404);
         }
 
-        $validated = $request->validate([
+        $validated = $request->validate(array_merge([
             'judul'             => 'required|string|max:255|unique:informasi_publik,judul,' . $informasi_publik_item->id,
             'category_id'       => 'required|exists:informasi_publik_categories,id',
             'file_dokumen'      => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',
@@ -151,13 +196,13 @@ class InformasiPublikController extends Controller
             'jenis_tautan'      => 'nullable|in:file,url',
             'tautan_eksternal'  => 'nullable|url',
             'konten'            => 'nullable|string',
-            'pejabat'           => 'nullable|string|max:255',          // DITAMBAHKAN
-            'penanggung_jawab'  => 'nullable|string|max:255',          // DITAMBAHKAN
-            'tempat'            => 'nullable|string|max:255',          // DITAMBAHKAN
-            'jangka_waktu'      => 'nullable|string|max:255',          // DITAMBAHKAN
-        ]);
+            'pejabat'           => 'nullable|string|max:255',
+            'penanggung_jawab'  => 'nullable|string|max:255',
+            'tempat'            => 'nullable|string|max:255',
+            'jangka_waktu'      => 'nullable|string|max:255',
+        ], $this->translationRules()));
 
-        $data = [
+        $data = array_merge([
             'judul'             => $validated['judul'],
             'category_id'       => $validated['category_id'],
             'tanggal_publikasi' => $validated['tanggal_publikasi'] ?: now(),
@@ -166,11 +211,11 @@ class InformasiPublikController extends Controller
             'jenis_tautan'      => $validated['jenis_tautan'] ?? 'file',
             'tautan_eksternal'  => $validated['tautan_eksternal'] ?? null,
             'konten'            => $validated['konten'] ?? '',
-            'pejabat'           => $validated['pejabat'] ?? null,          // DITAMBAHKAN
-            'penanggung_jawab'  => $validated['penanggung_jawab'] ?? null, // DITAMBAHKAN
-            'tempat'            => $validated['tempat'] ?? null,            // DITAMBAHKAN
-            'jangka_waktu'      => $validated['jangka_waktu'] ?? null,      // DITAMBAHKAN
-        ];
+            'pejabat'           => $validated['pejabat'] ?? null,
+            'penanggung_jawab'  => $validated['penanggung_jawab'] ?? null,
+            'tempat'            => $validated['tempat'] ?? null,
+            'jangka_waktu'      => $validated['jangka_waktu'] ?? null,
+        ], $this->translationData($validated));
 
         if ($informasi_publik_item->judul !== $validated['judul']) {
             $slug = Str::slug($validated['judul']);
@@ -272,7 +317,7 @@ class InformasiPublikController extends Controller
             abort(404);
         }
 
-        $validated = $request->validate([
+        $validated = $request->validate(array_merge([
             'judul'             => 'required|string|max:255',
             'file_dokumen'      => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',
             'jenis_tautan'      => 'nullable|in:file,url',
@@ -282,11 +327,11 @@ class InformasiPublikController extends Controller
             'sort_order'        => 'nullable|integer|min:0',
             'thumbnail'         => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'konten'            => 'nullable|string',
-            'pejabat'           => 'nullable|string|max:255',          // DITAMBAHKAN
-            'penanggung_jawab'  => 'nullable|string|max:255',          // DITAMBAHKAN
-            'tempat'            => 'nullable|string|max:255',          // DITAMBAHKAN
-            'jangka_waktu'      => 'nullable|string|max:255',          // DITAMBAHKAN
-        ]);
+            'pejabat'           => 'nullable|string|max:255',
+            'penanggung_jawab'  => 'nullable|string|max:255',
+            'tempat'            => 'nullable|string|max:255',
+            'jangka_waktu'      => 'nullable|string|max:255',
+        ], $this->translationRules()));
 
         $filePath = null;
         $fileNama = null;
@@ -311,16 +356,16 @@ class InformasiPublikController extends Controller
             $slug .= '-' . ($slugCount + 1);
         }
 
-        InformasiPublik::create([
+        InformasiPublik::create(array_merge([
             'category_id'       => $informasi_publik_item->category_id,
             'parent_id'         => $informasi_publik_item->id,
             'judul'             => $validated['judul'],
             'slug'              => $slug,
             'konten'            => $validated['konten'] ?? '',
-            'pejabat'           => $validated['pejabat'] ?? null,          // DITAMBAHKAN
-            'penanggung_jawab'  => $validated['penanggung_jawab'] ?? null, // DITAMBAHKAN
-            'tempat'            => $validated['tempat'] ?? null,            // DITAMBAHKAN
-            'jangka_waktu'      => $validated['jangka_waktu'] ?? null,      // DITAMBAHKAN
+            'pejabat'           => $validated['pejabat'] ?? null,
+            'penanggung_jawab'  => $validated['penanggung_jawab'] ?? null,
+            'tempat'            => $validated['tempat'] ?? null,
+            'jangka_waktu'      => $validated['jangka_waktu'] ?? null,
             'file_path'         => $filePath,
             'file_nama'         => $fileNama,
             'file_tipe'         => $fileTipe,
@@ -330,7 +375,7 @@ class InformasiPublikController extends Controller
             'sort_order'        => $validated['sort_order'] ?? 0,
             'jenis_tautan'      => $validated['jenis_tautan'] ?? 'file',
             'tautan_eksternal'  => $validated['tautan_eksternal'] ?? null,
-        ]);
+        ], $this->translationData($validated)));
 
         Cache::forget('informasi_publik_categories');
 
@@ -363,7 +408,7 @@ class InformasiPublikController extends Controller
             abort(404);
         }
 
-        $validated = $request->validate([
+        $validated = $request->validate(array_merge([
             'judul'             => 'required|string|max:255|unique:informasi_publik,judul,' . $subMenu->id,
             'file_dokumen'      => 'nullable|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx|max:10240',
             'jenis_tautan'      => 'nullable|in:file,url',
@@ -373,13 +418,13 @@ class InformasiPublikController extends Controller
             'sort_order'        => 'nullable|integer|min:0',
             'thumbnail'         => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
             'konten'            => 'nullable|string',
-            'pejabat'           => 'nullable|string|max:255',          // DITAMBAHKAN
-            'penanggung_jawab'  => 'nullable|string|max:255',          // DITAMBAHKAN
-            'tempat'            => 'nullable|string|max:255',          // DITAMBAHKAN
-            'jangka_waktu'      => 'nullable|string|max:255',          // DITAMBAHKAN
-        ]);
+            'pejabat'           => 'nullable|string|max:255',
+            'penanggung_jawab'  => 'nullable|string|max:255',
+            'tempat'            => 'nullable|string|max:255',
+            'jangka_waktu'      => 'nullable|string|max:255',
+        ], $this->translationRules()));
 
-        $data = [
+        $data = array_merge([
             'judul'             => $validated['judul'],
             'tanggal_publikasi' => $validated['tanggal_publikasi'] ?? now(),
             'is_active'         => $request->boolean('is_active', true),
@@ -387,11 +432,11 @@ class InformasiPublikController extends Controller
             'jenis_tautan'      => $validated['jenis_tautan'] ?? 'file',
             'tautan_eksternal'  => $validated['tautan_eksternal'] ?? null,
             'konten'            => $validated['konten'] ?? '',
-            'pejabat'           => $validated['pejabat'] ?? null,          // DITAMBAHKAN
-            'penanggung_jawab'  => $validated['penanggung_jawab'] ?? null, // DITAMBAHKAN
-            'tempat'            => $validated['tempat'] ?? null,            // DITAMBAHKAN
-            'jangka_waktu'      => $validated['jangka_waktu'] ?? null,      // DITAMBAHKAN
-        ];
+            'pejabat'           => $validated['pejabat'] ?? null,
+            'penanggung_jawab'  => $validated['penanggung_jawab'] ?? null,
+            'tempat'            => $validated['tempat'] ?? null,
+            'jangka_waktu'      => $validated['jangka_waktu'] ?? null,
+        ], $this->translationData($validated));
 
         if ($subMenu->judul !== $validated['judul']) {
             $slug = Str::slug($validated['judul']);

@@ -19,14 +19,26 @@ class InformasiPublik extends Model
 
     protected $fillable = [
         'category_id',
-        'parent_id',        // ← DITAMBAHKAN
+        'parent_id',
         'judul',
+        'judul_en',
+        'judul_ar',
         'slug',
         'konten',
-        'pejabat',           // ← DITAMBAHKAN
-        'penanggung_jawab',  // ← DITAMBAHKAN
-        'tempat',            // ← DITAMBAHKAN
-        'jangka_waktu',      // ← DITAMBAHKAN
+        'konten_en',
+        'konten_ar',
+        'pejabat',
+        'pejabat_en',
+        'pejabat_ar',
+        'penanggung_jawab',
+        'penanggung_jawab_en',
+        'penanggung_jawab_ar',
+        'tempat',
+        'tempat_en',
+        'tempat_ar',
+        'jangka_waktu',
+        'jangka_waktu_en',
+        'jangka_waktu_ar',
         'file_path',
         'file_nama',
         'file_tipe',
@@ -34,9 +46,9 @@ class InformasiPublik extends Model
         'tanggal_publikasi',
         'hits',
         'is_active',
-        'sort_order',       // ← DITAMBAHKAN
-        'jenis_tautan',     // ← DITAMBAHKAN (file / url)
-        'tautan_eksternal', // ← DITAMBAHKAN
+        'sort_order',
+        'jenis_tautan',
+        'tautan_eksternal',
     ];
 
     protected $casts = [
@@ -59,6 +71,8 @@ class InformasiPublik extends Model
     
     protected $htmlFieldsToClean = [
         'konten',
+        'konten_en',
+        'konten_ar',
     ];
 
     // Relasi ke Kategori
@@ -67,13 +81,13 @@ class InformasiPublik extends Model
         return $this->belongsTo(InformasiPublikCategory::class, 'category_id');
     }
 
-    // ← DITAMBAHKAN: Relasi ke Parent (Judul Utama)
+    // Relasi ke Parent (Judul Utama)
     public function parent()
     {
         return $this->belongsTo(InformasiPublik::class, 'parent_id');
     }
 
-    // ← DITAMBAHKAN: Relasi ke Children (Sub-item a, b, c...)
+    // Relasi ke Children (Sub-item a, b, c...)
     public function children()
     {
         return $this->hasMany(InformasiPublik::class, 'parent_id')->orderBy('sort_order');
@@ -111,5 +125,97 @@ class InformasiPublik extends Model
                 }
                 return "Item Info Publik \"{$subjectName}\" telah di-{$eventName}";
             });
+    }
+
+    // ======================== LOCALE-AWARE ACCESSORS ========================
+
+    public function getJudulAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->judul_en)) {
+            return $this->judul_en;
+        }
+        if ($locale === 'ar' && !empty($this->judul_ar)) {
+            return $this->judul_ar;
+        }
+        return $value;
+    }
+
+    public function getKontenAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->konten_en)) {
+            return $this->konten_en;
+        }
+        if ($locale === 'ar' && !empty($this->konten_ar)) {
+            return $this->konten_ar;
+        }
+        return $value;
+    }
+
+    public function getPejabatAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->pejabat_en)) {
+            return $this->pejabat_en;
+        }
+        if ($locale === 'ar' && !empty($this->pejabat_ar)) {
+            return $this->pejabat_ar;
+        }
+        return $value;
+    }
+
+    public function getPenanggungJawabAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->penanggung_jawab_en)) {
+            return $this->penanggung_jawab_en;
+        }
+        if ($locale === 'ar' && !empty($this->penanggung_jawab_ar)) {
+            return $this->penanggung_jawab_ar;
+        }
+        return $value;
+    }
+
+    public function getTempatAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->tempat_en)) {
+            return $this->tempat_en;
+        }
+        if ($locale === 'ar' && !empty($this->tempat_ar)) {
+            return $this->tempat_ar;
+        }
+        return $value;
+    }
+
+    public function getJangkaWaktuAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->jangka_waktu_en)) {
+            return $this->jangka_waktu_en;
+        }
+        if ($locale === 'ar' && !empty($this->jangka_waktu_ar)) {
+            return $this->jangka_waktu_ar;
+        }
+        return $value;
     }
 }
