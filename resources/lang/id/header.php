@@ -10,9 +10,9 @@ return [
     
     'info_pub' => 'Informasi Publik',
     'dip' => 'Daftar Informasi Publik',
-    'periodic' => 'Informasi Berkala',
-    'immediate' => 'Informasi Serta Merta',
-    'available' => 'Informasi Setiap Saat',
+    'periodic' => 'Informasi Wajib Berkala',
+    'immediate' => 'Informasi Wajib Serta Merta',
+    'available' => 'Informasi Wajib Setiap Saat',
     'excluded' => 'Informasi Dikecualikan',
     'goods_services' => 'Barang dan Jasa',
     'publications' => 'Dokumen',

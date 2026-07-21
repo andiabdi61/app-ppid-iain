@@ -31,13 +31,21 @@ class InformasiPublikCategoryController extends Controller
 
         $request->validate([
             'nama' => 'required|string|max:100|unique:informasi_publik_categories,nama',
+            'nama_en' => 'nullable|string|max:100',
+            'nama_ar' => 'nullable|string|max:100',
             'deskripsi' => 'nullable|string',
+            'deskripsi_en' => 'nullable|string',
+            'deskripsi_ar' => 'nullable|string',
         ]);
 
         $category = InformasiPublikCategory::create([
             'nama' => $request->nama,
+            'nama_en' => $request->nama_en,
+            'nama_ar' => $request->nama_ar,
             'slug' => Str::slug($request->nama),
             'deskripsi' => $request->deskripsi,
+            'deskripsi_en' => $request->deskripsi_en,
+            'deskripsi_ar' => $request->deskripsi_ar,
         ]);
 
         Cache::forget('informasi_publik_categories'); // ← DITAMBAHKAN
@@ -57,13 +65,21 @@ class InformasiPublikCategoryController extends Controller
 
         $request->validate([
             'nama' => 'required|string|max:100|unique:informasi_publik_categories,nama,' . $informasi_publik_category->id,
+            'nama_en' => 'nullable|string|max:100',
+            'nama_ar' => 'nullable|string|max:100',
             'deskripsi' => 'nullable|string',
+            'deskripsi_en' => 'nullable|string',
+            'deskripsi_ar' => 'nullable|string',
         ]);
 
         $informasi_publik_category->update([
             'nama' => $request->nama,
+            'nama_en' => $request->nama_en,
+            'nama_ar' => $request->nama_ar,
             'slug' => Str::slug($request->nama),
             'deskripsi' => $request->deskripsi,
+            'deskripsi_en' => $request->deskripsi_en,
+            'deskripsi_ar' => $request->deskripsi_ar,
         ]);
 
         Cache::forget('informasi_publik_categories'); // ← DITAMBAHKAN

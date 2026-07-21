@@ -41,8 +41,12 @@ class InformasiPublikCategory extends Model
 
     protected $fillable = [
         'nama',
+        'nama_en',
+        'nama_ar',
         'slug',
         'deskripsi',
+        'deskripsi_en',
+        'deskripsi_ar',
     ];
 
     // Definisi relasi: Satu kategori bisa memiliki banyak informasi publik
@@ -58,5 +62,35 @@ class InformasiPublikCategory extends Model
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
             ->setDescriptionForEvent(fn(string $eventName) => "Kategori Info Publik \"{$this->nama}\" telah di-{$eventName}");
+    }
+
+    public function getNamaAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->nama_en)) {
+            return $this->nama_en;
+        }
+        if ($locale === 'ar' && !empty($this->nama_ar)) {
+            return $this->nama_ar;
+        }
+        return $value;
+    }
+
+    public function getDeskripsiAttribute($value)
+    {
+        if (request()->is('admin/*') || request()->is('api/admin/*')) {
+            return $value;
+        }
+        $locale = app()->getLocale();
+        if ($locale === 'en' && !empty($this->deskripsi_en)) {
+            return $this->deskripsi_en;
+        }
+        if ($locale === 'ar' && !empty($this->deskripsi_ar)) {
+            return $this->deskripsi_ar;
+        }
+        return $value;
     }
 }
