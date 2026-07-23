@@ -143,24 +143,28 @@
                                                         @if($item->konten)
                                                             <p class="text-xs text-gray-500 mt-1.5 line-clamp-2">{{ strip_tags($item->konten) }}</p>
                                                         @endif
-                                                        <div class="hidden lg:grid grid-cols-3 gap-4 mt-3 text-xs">
-                                                            <div>
-                                                                <span class="text-gray-400 font-medium">Pejabat: </span>
-                                                                <span class="text-gray-600">{{ $item->pejabat ?: '-' }}</span>
-                                                            </div>
-                                                            <div>
-                                                                <span class="text-gray-400 font-medium">Format: </span>
-                                                                @if($item->file_tipe)
-                                                                    <span class="text-gray-600 font-bold uppercase">{{ $item->file_tipe }}</span>
-                                                                @else
-                                                                    <span class="text-gray-600">-</span>
-                                                                @endif
-                                                            </div>
-                                                            <div>
-                                                                <span class="text-gray-400 font-medium">Jangka Waktu: </span>
-                                                                <span class="text-gray-600">{{ $item->jangka_waktu ?: '-' }}</span>
-                                                            </div>
-                                                        </div>
+                            @if($item->pejabat || $item->file_tipe || $item->jangka_waktu)
+                            <div class="hidden lg:grid grid-cols-3 gap-4 mt-3 text-xs">
+                                @if($item->pejabat)
+                                <div>
+                                    <span class="text-gray-400 font-medium">Pejabat: </span>
+                                    <span class="text-gray-600">{{ $item->pejabat }}</span>
+                                </div>
+                                @endif
+                                @if($item->file_tipe)
+                                <div>
+                                    <span class="text-gray-400 font-medium">Format: </span>
+                                    <span class="text-gray-600 font-bold uppercase">{{ $item->file_tipe }}</span>
+                                </div>
+                                @endif
+                                @if($item->jangka_waktu)
+                                <div>
+                                    <span class="text-gray-400 font-medium">Jangka Waktu: </span>
+                                    <span class="text-gray-600">{{ $item->jangka_waktu }}</span>
+                                </div>
+                                @endif
+                            </div>
+                            @endif
                                                     </div>
                                                 </div>
                                                 <div class="flex items-center gap-2 shrink-0">

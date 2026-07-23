@@ -31,6 +31,8 @@
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Kategori</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tipe Tampilan</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">URL Halaman Khusus</th>
                                     <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Dokumen</th>
                                     <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                 </tr>
@@ -46,6 +48,31 @@
                                         <p class="text-sm text-gray-600 max-w-xs truncate" title="{{ $category->deskripsi }}">
                                             {{ $category->deskripsi ?: '-' }}
                                         </p>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
+                                        @php
+                                            $displayType = $category->display_type ?? 'direct';
+                                            $badgeClass = $displayType === 'dedicated' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800';
+                                            $label = $displayType === 'dedicated' ? 'Halaman Khusus' : 'Tampil Langsung';
+                                        @endphp
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full {{ $badgeClass }}">
+                                            {{ $label }}
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                        @if($category->display_type === 'dedicated')
+                                            <div class="flex items-center gap-1">
+                                                <input type="text" value="{{ route('publikasi.index', ['kategori' => $category->slug]) }}" 
+                                                       class="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded border w-48 lg:w-64 truncate" 
+                                                       id="url-{{ $category->id }}" readonly>
+                                                <button onclick="copyUrl('{{ $category->id }}')" 
+                                                        class="text-blue-600 hover:text-blue-800 text-sm p-1" title="Salin URL">
+                                                    <i class="bi bi-clipboard"></i>
+                                                </button>
+                                            </div>
+                                        @else
+                                            <span class="text-xs text-gray-400">—</span>
+                                        @endif
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                         {{ $category->dokumen_count }}
@@ -65,7 +92,7 @@
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
+                                    <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
                                         Tidak ada kategori dokumen yang ditemukan.
                                     </td>
                                 </tr>
@@ -81,4 +108,19 @@
             </div>
         </div>
     </div>
+<script>
+function copyUrl(id) {
+    var input = document.getElementById('url-' + id);
+    input.select();
+    input.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(input.value).then(function() {
+        var btn = input.nextElementSibling;
+        var originalHtml = btn.innerHTML;
+        btn.innerHTML = '<i class="bi bi-check-lg text-green-600"></i>';
+        setTimeout(function() {
+            btn.innerHTML = originalHtml;
+        }, 2000);
+    });
+}
+</script>
 </x-app-layout>

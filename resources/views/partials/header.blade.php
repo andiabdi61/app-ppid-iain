@@ -117,9 +117,9 @@
                             
                             <div class="my-1 border-t border-gray-200"></div>
                             
-                            <a href="{{ route('informasi-publik.index', ['kategori' => 'informasi-berkala']) }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.periodic') }}</a>
-                            <a href="{{ route('informasi-publik.index', ['kategori' => 'informasi-serta-merta']) }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.immediate') }}</a>
-                            <a href="{{ route('informasi-publik.index', ['kategori' => 'informasi-setiap-saat']) }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.available') }}</a>
+                            <a href="{{ route('informasi-publik.index', ['kategori' => 'informasi-publik-wajib-berkala']) }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.periodic') }}</a>
+                            <a href="{{ route('informasi-publik.index', ['kategori' => 'informasi-wajib-diumumkan-serta-merta']) }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.immediate') }}</a>
+                            <a href="{{ route('informasi-publik.index', ['kategori' => 'informasi-wajib-tersedia-setiap-saat']) }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.available') }}</a>
                             <a href="{{ route('informasi-publik.index', ['kategori' => 'informasi-dikecualikan']) }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.excluded') }}</a>
                             <a href="{{ route('informasi-publik.index', ['kategori' => 'barang-dan-jasa']) }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.goods_services') }}</a>
                             

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\DokumenCategory\DisplayType;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -14,6 +15,7 @@ use App\Models\Traits\HasFrontendBadge;
  * @property string $nama
  * @property string $slug
  * @property string|null $deskripsi
+ * @property string $display_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
@@ -38,7 +40,21 @@ class DokumenCategory extends Model
     use HasFactory, LogsActivity, HasColoredBadge, HasFrontendBadge;
 
     protected $table = 'dokumen_categories';
-    protected $fillable = ['nama', 'slug', 'deskripsi'];
+    protected $fillable = ['nama', 'slug', 'deskripsi', 'display_type'];
+
+    protected $casts = [
+        'display_type' => DisplayType::class,
+    ];
+
+    public function scopeDirectDisplay($query)
+    {
+        return $query->where('display_type', DisplayType::Direct);
+    }
+
+    public function scopeDedicatedDisplay($query)
+    {
+        return $query->where('display_type', DisplayType::Dedicated);
+    }
 
     public function dokumen()
     {
@@ -48,7 +64,7 @@ class DokumenCategory extends Model
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
-            ->logOnly(['nama', 'deskripsi'])
+            ->logOnly(['nama', 'deskripsi', 'display_type'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
             ->setDescriptionForEvent(fn(string $eventName) => "Kategori Dokumen \"{$this->nama}\" telah di-{$eventName}");

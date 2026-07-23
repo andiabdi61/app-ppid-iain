@@ -30,6 +30,21 @@
                             <label for="deskripsi" class="block text-sm font-medium text-gray-700">Deskripsi Kategori (Opsional)</label>
                             <textarea name="deskripsi" id="deskripsi" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">{{ old('deskripsi', $category->deskripsi) }}</textarea>
                         </div>
+                        <div class="mb-4">
+                            <label for="display_type" class="block text-sm font-medium text-gray-700">Tipe Tampilan</label>
+                            <select name="display_type" id="display_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+                                @foreach (\App\Enums\DokumenCategory\DisplayType::cases() as $type)
+                                    <option value="{{ $type->value }}" {{ old('display_type', $category->display_type ?? 'direct') == $type->value ? 'selected' : '' }}>
+                                        {{ $type->label() }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <p class="mt-1 text-xs text-gray-500">
+                                @foreach (\App\Enums\DokumenCategory\DisplayType::cases() as $type)
+                                    <span class="block">{{ $type->label() }}: {{ $type->description() }}</span>
+                                @endforeach
+                            </p>
+                        </div>
 
                         <div class="flex items-center justify-end mt-4">
                             <a href="{{ route('admin.dokumen-categories.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-300 border border-transparent rounded-md font-semibold text-xs text-gray-700 uppercase tracking-widest hover:bg-gray-400 active:bg-gray-500 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 mr-2">Batal</a>

@@ -5,59 +5,16 @@
 @section('content')
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 md:pt-8 pb-12">
-    
-    {{-- BREADCRUMB & JUDUL --}}
-    <nav aria-label="breadcrumb">
-        <ol class="flex items-center gap-2 text-sm text-gray-500 mb-4 overflow-hidden whitespace-nowrap">
-            <li><a href="{{ url('/') }}" class="hover:text-hijau-700 transition">Beranda</a></li>
-            <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
-            <li class="text-hijau-800 font-medium">Publikasi & Dokumen</li>
-        </ol>
-    </nav>
-    
-    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Publikasi & Dokumen</h1>
-    <p class="text-gray-600 mb-8">Akses dokumen perencanaan, regulasi, dan laporan kinerja IAIN Bone.</p>
 
-    {{-- ============================================ --}}
-    {{-- FORM PENCARIAN (MOBILE FRIENDLY) --}}
-    {{-- ============================================ --}}
-    <div class="max-w-4xl mx-auto mb-10">
-        <form action="{{ route('publikasi.index') }}" method="GET">
-            {{-- Baris 1: Input & Tombol Cari (Selalu sejajar) --}}
-            <div class="flex gap-2 mb-2">
-                <input type="text" name="q" 
-                       class="flex-1 px-4 py-3 text-sm border border-gray-300 focus:ring-2 focus:ring-hijau-500 focus:border-hijau-500 outline-none rounded-xl placeholder-gray-400 transition" 
-                       placeholder="Cari nama dokumen..." 
-                       value="{{ request('q') }}">
-                <button type="submit" class="px-5 py-3 bg-hijau-600 hover:bg-hijau-700 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 justify-center shrink-0">
-                    <i class="bi bi-search"></i> <span class="hidden sm:inline">Cari</span>
-                </button>
-            </div>
-            
-            {{-- Baris 2: Filter & Reset --}}
-            <div class="flex gap-2">
-                <select name="kategori" 
-                        class="flex-1 px-4 py-2.5 text-sm border border-gray-300 focus:ring-2 focus:ring-hijau-500 focus:border-hijau-500 outline-none rounded-xl text-gray-600 transition">
-                    <option value="all">Semua Kategori</option>
-                    @foreach($categories as $cat)
-                        <option value="{{ $cat->slug }}" {{ request('kategori') == $cat->slug ? 'selected' : '' }}>
-                            {{ $cat->nama }}
-                        </option>
-                    @endforeach
-                </select>
+    @if($category)
+        <div class="mb-6">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-1">{{ $category->nama }}</h1>
+            @if($category->deskripsi)
+                <p class="text-gray-600">{{ $category->deskripsi }}</p>
+            @endif
+        </div>
+    @endif
 
-                @if(request('q') || request('kategori') != 'all')
-                    <a href="{{ route('publikasi.index') }}" class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-medium transition flex items-center gap-1 justify-center shrink-0 border border-gray-300">
-                        <i class="bi bi-x-lg text-xs"></i> Reset
-                    </a>
-                @endif
-            </div>
-        </form>
-    </div>
-
-    {{-- ============================================ --}}
-    {{-- GRID DOKUMEN --}}
-    {{-- ============================================ --}}
     {{-- ============================================ --}}
     {{-- LIST DOKUMEN --}}
     {{-- ============================================ --}}
@@ -93,13 +50,11 @@
 
             {{-- Tombol Aksi Kanan --}}
             <div class="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                {{-- Tombol Lihat: Hanya muncul di Desktop (HP sudah bisa klik judulnya) --}}
                 <a href="{{ route('publikasi.show', $doc->slug) }}" 
                    class="hidden sm:flex items-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-medium border border-gray-300 rounded-lg text-gray-600 hover:bg-hijau-50 hover:text-hijau-700 hover:border-hijau-500 transition">
                     <i class="bi bi-eye text-xs"></i> <span class="hidden md:inline">Lihat</span>
                 </a>
                 
-                {{-- Tombol Unduh: Selalu muncul, tapi lebih kecil di HP --}}
                 @if($doc->file_path)
                     <a href="{{ asset('storage/' . $doc->file_path) }}" target="_blank" 
                        class="flex items-center gap-1 px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs font-medium bg-hijau-600 hover:bg-hijau-700 text-white rounded-lg transition shrink-0">
@@ -115,17 +70,15 @@
                     <i class="bi bi-journal-x text-3xl text-gray-400"></i>
                 </div>
                 <h4 class="text-xl font-bold text-gray-700 mb-2">Dokumen Tidak Ditemukan</h4>
-                <p class="text-gray-500 mb-6">Maaf, tidak ada dokumen yang cocok dengan pencarian Anda.</p>
-                <a href="{{ route('publikasi.index') }}" class="text-hijau-600 hover:text-hijau-700 font-medium text-sm">Kembali ke Semua Publikasi</a>
+                <p class="text-gray-500 mb-6">Maaf, belum ada dokumen yang tersedia.</p>
+                <a href="{{ url('/') }}" class="text-hijau-600 hover:text-hijau-700 font-medium text-sm">Kembali ke Beranda</a>
             </div>
         @endforelse
     </div>
 
-    {{-- ============================================ --}}
-    {{-- PAGINASI (PANGGIL FILE CUSTOM) --}}
-    {{-- ============================================ --}}
+    {{-- PAGINASI --}}
     @if ($dokumen->hasPages())
-        {{ $dokumen->withQueryString()->links('vendor.pagination.tailwind-list') }}
+        {{ $dokumen->links('vendor.pagination.tailwind-list') }}
     @endif
 
     {{-- TOMBOL NAVIGASI BAWAH --}}

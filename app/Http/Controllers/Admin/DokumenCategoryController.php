@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\DokumenCategory\DisplayType;
 use App\Models\DokumenCategory;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -41,6 +42,7 @@ class DokumenCategoryController extends Controller
         $request->validate([
             'nama' => 'required|string|max:100|unique:dokumen_categories,nama',
             'deskripsi' => 'nullable|string',
+            'display_type' => 'required|string|in:' . implode(',', array_column(DisplayType::cases(), 'value')),
         ], [
             'nama.unique' => 'Nama kategori dokumen sudah ada.',
         ]);
@@ -49,6 +51,7 @@ class DokumenCategoryController extends Controller
             'nama' => $request->nama,
             'slug' => Str::slug($request->nama),
             'deskripsi' => $request->deskripsi,
+            'display_type' => $request->display_type,
         ]);
 
         return redirect()->route('admin.dokumen-categories.index')->with('success', 'Kategori dokumen berhasil ditambahkan!');
@@ -74,6 +77,7 @@ class DokumenCategoryController extends Controller
         $request->validate([
             'nama' => 'required|string|max:100|unique:dokumen_categories,nama,' . $category_dokumen->id,
             'deskripsi' => 'nullable|string',
+            'display_type' => 'required|string|in:' . implode(',', array_column(DisplayType::cases(), 'value')),
         ], [
             'nama.unique' => 'Nama kategori dokumen sudah ada.',
         ]);
@@ -82,6 +86,7 @@ class DokumenCategoryController extends Controller
             'nama' => $request->nama,
             'slug' => Str::slug($request->nama),
             'deskripsi' => $request->deskripsi,
+            'display_type' => $request->display_type,
         ]);
 
         return redirect()->route('admin.dokumen-categories.index')->with('success', 'Kategori dokumen berhasil diperbarui!');

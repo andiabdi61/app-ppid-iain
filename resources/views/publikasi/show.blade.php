@@ -4,125 +4,220 @@
 
 @section('content')
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 md:pt-8 pb-12">
-    
-    {{-- ============================================ --}}
-    {{-- BREADCRUMB & JUDUL --}}
-    {{-- ============================================ --}}
-    <nav aria-label="breadcrumb">
-        <ol class="flex items-center gap-2 text-sm text-gray-500 mb-4 overflow-hidden whitespace-nowrap">
-            <li><a href="{{ url('/') }}" class="hover:text-hijau-700 transition">Beranda</a></li>
-            <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
-            <li><a href="{{ route('publikasi.index') }}" class="hover:text-hijau-700 transition">Publikasi</a></li>
-            @if($dokumen->category)
-                <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
-                <li><a href="{{ route('publikasi.index', ['kategori' => $dokumen->category->slug]) }}" class="hover:text-hijau-700 transition">{{ $dokumen->category->nama }}</a></li>
-            @endif
-            <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
-            <li class="text-hijau-800 font-medium truncate max-w-[200px]">{{ Str::limit($dokumen->judul, 30) }}</li>
-        </ol>
-    </nav>
-    
-    <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-8 leading-tight">{{ $dokumen->judul }}</h1>
+{{-- ============================================ --}}
+{{-- HERO SECTION --}}
+{{-- ============================================ --}}
+<x-page-hero 
+    title="{{ $dokumen->judul }}" 
+    icon="doc"
+    :breadcrumbs="[
+        ['label' => 'Beranda', 'url' => url('/')],
+        ['label' => 'Publikasi', 'url' => route('publikasi.index')],
+        ['label' => $dokumen->category->nama ?? 'Kategori', 'url' => route('publikasi.index', ['kategori' => $dokumen->category->slug ?? ''])],
+        ['label' => Str::limit($dokumen->judul, 30)]
+    ]" 
+/>
 
-    {{-- ============================================ --}}
-    {{-- KONTEN 2 KOLOM --}}
-    {{-- ============================================ --}}
-    <div class="flex flex-col lg:flex-row gap-8">
+{{-- ============================================ --}}
+{{-- MAIN CONTENT (2 Kolom) --}}
+{{-- ============================================ --}}
+<section class="bg-gray-50 min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
         
-        {{-- KOLOM KIRI: ISI KONTEN --}}
-                {{-- KOLOM KIRI: ISI KONTEN --}}
-        <div class="w-full lg:w-2/3 min-w-0">
-            @if($dokumen->deskripsi)
-                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6 md:p-8 text-gray-700 text-sm leading-relaxed [&_p]:mb-4 [&_ul]:list-disc [&_ul]:pl-6 [&_ol]:list-decimal [&_ol]:pl-6 [&_li]:mb-2">
-                    {!! nl2br(e($dokumen->deskripsi)) !!}
-                </div>
-            @else
-                {{-- TAMPILAN JIKA DESKRIPSI KOSONG --}}
-                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-10 md:p-16 text-center">
-                    <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                        <i class="bi bi-file-earmark-text text-4xl text-gray-300"></i>
-                    </div>
-                    <h3 class="text-lg font-bold text-gray-700 mb-2">Tidak Ada Deskripsi</h3>
-                    <p class="text-sm text-gray-500 max-w-md mx-auto">Dokumen ini tidak dilengkapi dengan deskripsi isi. Silakan unduh file langsung untuk melihat isinya.</p>
-                </div>
-            @endif
-        </div>
-
-        {{-- KOLOM KANAN: SIDEBAR DETAIL & UNDUH --}}
-        <div class="w-full lg:w-1/3">
-            <div class="lg:sticky lg:top-24 space-y-6">
-                
-                {{-- Kartu Detail Dokumen --}}
-                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
-                    <div class="px-5 py-4 border-b border-gray-100 bg-gray-50">
-                        <h4 class="text-sm font-bold text-gray-800 flex items-center gap-2">
-                            <i class="bi bi-info-circle-fill text-hijau-700"></i> Detail Dokumen
-                        </h4>
-                    </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+            
+            {{-- ========================================== --}}
+            {{-- KOLOM KIRI: PREVIEW DOKUMEN --}}
+            {{-- ========================================== --}}
+            <div class="lg:col-span-2 order-2 lg:order-1">
+                <div class="bg-white rounded-2xl shadow-sm overflow-hidden border border-slate-100 flex flex-col" style="height: 80vh; min-height: 500px;">
                     
-                    <div class="p-5 space-y-4 text-sm">
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Kategori</span>
-                            @if($dokumen->category)
-                                <span class="inline-block px-2.5 py-0.5 rounded-full text-xs font-medium {{ $dokumen->category->frontend_badge_class ?? 'bg-hijau-100 text-hijau-800' }}">
-                                    {{ $dokumen->category->nama }}
-                                </span>
-                            @else
-                                <span class="text-gray-400">-</span>
-                            @endif
-                        </div>
-                        
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Dipublikasi</span>
-                            <span class="font-medium text-gray-800">{{ $dokumen->tanggal_publikasi ? $dokumen->tanggal_publikasi->translatedFormat('d F Y') : '-' }}</span>
-                        </div>
-                        
-                        <div class="flex justify-between">
-                            <span class="text-gray-500">Dilihat</span>
-                            <span class="font-medium text-gray-800">{{ $dokumen->hits }} kali</span>
+                    @php
+                        $fileExists = $dokumen->file_path && Storage::disk('public')->exists($dokumen->file_path);
+                        $fileExtension = strtolower(pathinfo($dokumen->file_path, PATHINFO_EXTENSION));
+                        $canPreview = in_array($fileExtension, ['pdf', 'jpg', 'jpeg', 'png', 'gif', 'webp', 'txt']);
+                    @endphp
+
+                    @if($fileExists && $canPreview)
+                        {{-- HEADER PREVIEW --}}
+                        <div class="px-4 md:px-6 py-3 bg-slate-50 border-b border-slate-200 flex items-center justify-between shrink-0">
+                            <div class="flex items-center gap-2 text-slate-500 text-sm font-medium">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                </svg>
+                                Preview Dokumen
+                            </div>
+                            <a href="{{ asset('storage/' . $dokumen->file_path) }}" target="_blank" 
+                               class="text-xs text-hijau-600 hover:text-hijau-700 font-semibold flex items-center gap-1 hover:underline">
+                                Buka di Tab Baru
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+                            </a>
                         </div>
 
-                        @if($dokumen->file_path && Storage::disk('public')->exists($dokumen->file_path))
-                            <div class="border-t border-gray-100 pt-4 space-y-4">
-                                <div class="flex justify-between">
-                                    <span class="text-gray-500">Format File</span>
-                                    <span class="font-medium text-gray-800 uppercase">{{ $dokumen->file_tipe }}</span>
+                        {{-- AREA IFRAME PREVIEW --}}
+                        <div class="flex-1 w-full bg-gray-100 relative">
+                            <iframe 
+                                src="{{ asset('storage/' . $dokumen->file_path) }}" 
+                                class="w-full h-full border-0"
+                                loading="lazy"
+                                title="Preview {{ $dokumen->judul }}">
+                                Browser Anda tidak mendukung iframe.
+                            </iframe>
+                        </div>
+
+                    @else
+                        {{-- FALLBACK: JIKA TIDAK ADA FILE ATAU TIDAK BISA DI-PREVIEW --}}
+                        <div class="flex-1 flex items-center justify-center p-10 text-center">
+                            <div>
+                                <div class="w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                                    <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
                                 </div>
-                                <div class="flex justify-between">
-                                    <span class="text-gray-500">Ukuran File</span>
-                                    <span class="font-medium text-gray-800">{{ number_format(Storage::disk('public')->size($dokumen->file_path) / 1024, 1) }} KB</span>
+                                <h3 class="text-lg font-bold text-slate-700 mb-2">Preview Tidak Tersedia</h3>
+                                <p class="text-slate-500 text-sm max-w-sm mx-auto mb-6">File ini tidak dapat ditampilkan langsung di browser. Silakan unduh dokumen melalui tombol di samping, atau baca deskripsi singkatnya di bawah.</p>
+                                
+                                @if($dokumen->file_path)
+                                    <a href="{{ asset('storage/' . $dokumen->file_path) }}" target="_blank" class="inline-flex items-center gap-2 bg-hijau-600 text-white px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-hijau-700 transition-colors">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                        </svg>
+                                        Unduh Dokumen
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    @endif
+
+                </div>
+            </div>
+
+            {{-- ========================================== --}}
+            {{-- KOLOM KANAN: Detail, Download & Keterangan --}}
+            {{-- ========================================== --}}
+            <div class="lg:col-span-1 order-1 lg:order-2">
+                <div class="lg:sticky lg:top-24 space-y-4 max-h-[90vh] lg:overflow-y-auto pr-1">
+                    
+                    {{-- Widget Detail Informasi --}}
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+                        <div class="px-5 py-4 border-b border-slate-100 bg-slate-50/50">
+                            <h3 class="font-bold text-slate-800 flex items-center gap-2">
+                                <svg class="w-5 h-5 text-hijau-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Detail Informasi
+                            </h3>
+                        </div>
+                        
+                        <div class="p-5 space-y-4">
+                            <div>
+                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Kategori</p>
+                                @if($dokumen->category)
+                                    <span class="inline-block bg-hijau-50 text-hijau-700 text-sm font-medium px-3 py-1 rounded-full">
+                                        {{ $dokumen->category->nama }}
+                                    </span>
+                                @else
+                                    <span class="text-sm text-slate-500">Tanpa Kategori</span>
+                                @endif
+                            </div>
+                            
+                            <div class="border-t border-slate-100"></div>
+                            
+                            <div>
+                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Dipublikasi</p>
+                                <p class="text-sm text-slate-700 font-medium">{{ $dokumen->tanggal_publikasi ? $dokumen->tanggal_publikasi->translatedFormat('d F Y') : '-' }}</p>
+                            </div>
+                            
+                            <div class="border-t border-slate-100"></div>
+                            
+                            <div>
+                                <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Dilihat</p>
+                                <p class="text-sm text-slate-700 font-medium">{{ $dokumen->hits }} kali</p>
+                            </div>
+
+                            @if($fileExists)
+                            <div class="border-t border-slate-100"></div>
+                            <div class="flex gap-4">
+                                <div>
+                                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Format</p>
+                                    <p class="text-sm text-slate-700 font-bold uppercase">{{ $fileExtension }}</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Ukuran</p>
+                                    <p class="text-sm text-slate-700 font-bold">{{ number_format(Storage::disk('public')->size($dokumen->file_path) / 1024, 1) }} KB</p>
                                 </div>
                             </div>
+                            @endif
+                        </div>
+
+                        @if($dokumen->file_path)
+                        <div class="p-4 border-t border-slate-100 bg-slate-50/30 space-y-2">
+                            <a href="{{ asset('storage/' . $dokumen->file_path) }}" target="_blank" 
+                               class="flex items-center justify-center gap-2 w-full bg-hijau-600 hover:bg-hijau-700 text-white font-semibold py-3 rounded-xl transition-colors duration-200 shadow-sm hover:shadow-md">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                </svg>
+                                Unduh Dokumen
+                            </a>
+                            <p class="text-[10px] text-slate-400 text-center">Simpan file ke perangkat Anda</p>
+                        </div>
                         @endif
                     </div>
+
+                    {{-- ========================================== --}}
+                    {{-- KETERANGAN (dari field deskripsi) --}}
+                    {{-- ========================================== --}}
+                    @if($dokumen->deskripsi)
+                    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5">
+                        <h3 class="font-bold text-slate-800 flex items-center gap-2 mb-4">
+                            <svg class="w-5 h-5 text-hijau-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                            </svg>
+                            Keterangan
+                        </h3>
+                        
+                        <div class="text-sm text-slate-600 leading-relaxed">
+                            {!! nl2br(e($dokumen->deskripsi)) !!}
+                        </div>
+                    </div>
+                    @endif
+
+                    {{-- Tombol Kembali (Mobile) --}}
+                    <div class="lg:hidden">
+                        <a href="{{ route('publikasi.index') }}" 
+                           class="flex items-center justify-center gap-2 w-full bg-white text-slate-700 border border-slate-200 font-medium py-3 rounded-xl transition-colors hover:bg-gray-50 shadow-sm text-sm">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                            </svg>
+                            Kembali ke Daftar Publikasi
+                        </a>
+                    </div>
+
                 </div>
-
-                {{-- Tombol Unduh --}}
-                @if($dokumen->file_path)
-                    <a href="{{ asset('storage/' . $dokumen->file_path) }}" target="_blank" 
-                       class="flex items-center justify-center gap-2 bg-hijau-600 hover:bg-hijau-700 text-white px-6 py-4 rounded-xl font-bold text-base transition shadow-md hover:shadow-lg w-full">
-                        <i class="bi bi-download text-xl"></i> Unduh Dokumen
-                    </a>
-                @endif
-
             </div>
+
+        </div>
+
+        {{-- Tombol Aksi (Hanya Desktop) --}}
+        <div class="hidden lg:flex flex-col sm:flex-row items-center justify-center gap-3 mt-10 pt-8 border-t border-slate-200">
+            <button onclick="history.back()" 
+                    class="flex items-center gap-2 px-6 py-3 bg-white text-slate-700 rounded-xl font-medium hover:bg-gray-100 transition-colors duration-300 shadow-sm border border-slate-200">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+                Kembali
+            </button>
+            <a href="{{ url('/') }}" 
+               class="flex items-center gap-2 px-6 py-3 bg-hijau-600 text-white rounded-xl font-medium hover:bg-hijau-700 shadow-lg shadow-hijau-600/30 hover:shadow-hijau-600/50 transition-all duration-300">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0a1 1 0 01-1-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 01-1 1"/>
+                </svg>
+                Kembali ke Beranda
+            </a>
         </div>
 
     </div>
-
-    {{-- ============================================ --}}
-    {{-- TOMBOL NAVIGASI BAWAH --}}
-    {{-- ============================================ --}}
-    <div class="flex flex-col sm:flex-row gap-4 justify-center mt-12">
-        <button onclick="history.back()" class="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg font-semibold transition text-center">
-            <i class="bi bi-arrow-left me-2"></i> Kembali
-        </button>
-        <a href="{{ url('/') }}" class="px-6 py-3 bg-hijau-600 hover:bg-hijau-700 text-white rounded-lg font-semibold transition text-center">
-            Kembali ke Beranda
-        </a>
-    </div>
-
-</div>
+</section>
 
 @endsection
