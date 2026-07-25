@@ -7,27 +7,27 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
         <link rel="icon" type="image/png" href="{{ asset('storage/' . $settings['app_favicon']) }}">
+
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
-        
-        <!-- Bootstrap CSS -->
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap Icons CSS -->
+
+        <!-- Bootstrap Icons (hanya ikon, bukan framework CSS) -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        
+
+        <!-- TinyMCE Editor -->
         <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
 
-        <!-- Scripts -->
-        @vite(['resources/sass/admin_app.scss', 'resources/js/admin_app.js'])
+        <!-- Tailwind CSS via Vite -->
+        @vite(['resources/css/app.css', 'resources/js/admin_app.js'])
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
+    <body class="font-sans antialiased bg-gray-100 text-gray-800">
+        <div class="min-h-screen">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
             @if (isset($header))
-                <header class="bg-white shadow">
+                <header class="bg-white shadow-sm border-b border-gray-200">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -40,10 +40,7 @@
             </main>
         </div>
 
-        <!-- Bootstrap JavaScript Bundle -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        
-        <!-- Script yang didorong dari view akan muncul di sini -->
+        <!-- Script dari view akan muncul di sini -->
         @stack('scripts')
     </body>
 </html>
