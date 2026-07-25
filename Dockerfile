@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install -y \
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Set working directory
-WORKDIR /var/www/pascasarjana/pasca
+WORKDIR /var/www/ppid/app-ppid-iain
 
 # Expose port PHP-FPM
 EXPOSE 9000
