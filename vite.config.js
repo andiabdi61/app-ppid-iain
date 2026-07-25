@@ -24,6 +24,8 @@ export default defineConfig({
             input: [
                 "resources/css/app.css", // <-- UBIH INI (Tailwind untuk Publik)
                 "resources/js/app.js", // Biarkan ini tetap
+                "resources/sass/admin_app.scss",
+                "resources/js/admin_app.js",
             ],
             refresh: true,
         }),
