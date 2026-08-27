@@ -163,6 +163,12 @@
                             </div>
 
                             <div>
+                                <label for="published_at" class="block text-sm font-medium text-gray-700 mb-1">Tanggal Publikasi</label>
+                                <input type="datetime-local" name="published_at" id="published_at" value="{{ old('published_at', $post->published_at ? $post->published_at->format('Y-m-d\TH:i') : '') }}" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
+                                <p class="mt-1 text-xs text-gray-500">Kosongkan untuk menggunakan tanggal saat ini.</p>
+                            </div>
+
+                            <div>
                                 <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status Publikasi</label>
                                 <select name="status" id="status" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                                     <option value="draft" {{ old('status', $post->status) == 'draft' ? 'selected' : '' }}>Draft (Simpan dulu)</option>

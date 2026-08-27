@@ -27,7 +27,7 @@
         {{-- Meta (Tanggal & Penulis) --}}
         <div class="flex items-center gap-3 text-xs text-gray-400 mb-3">
             <span class="flex items-center gap-1">
-                <i class="bi bi-calendar3"></i> {{ $post->created_at ? $post->created_at->translatedFormat('d M Y') : '-' }}
+                <i class="bi bi-calendar3"></i> {{ ($post->published_at ?? $post->created_at) ? ($post->published_at ?? $post->created_at)->translatedFormat('d M Y') : '-' }}
             </span>
             <span class="flex items-center gap-1">
                 <i class="bi bi-person-fill"></i> {{ $post->author->name ?? 'Admin' }}

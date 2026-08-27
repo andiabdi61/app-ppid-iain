@@ -68,6 +68,7 @@ class PostController extends Controller
             'content_html_ar' => 'nullable|string',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'status' => 'required|in:published,draft',
+            'published_at' => 'nullable|date',
         ]);
 
         $post = Post::create([
@@ -86,6 +87,7 @@ class PostController extends Controller
             'category_id' => $request->category_id,
             'author_id' => auth()->id(),
             'status' => $request->status,
+            'published_at' => $request->published_at,
         ]);
         
         if ($request->hasFile('featured_image')) {
@@ -121,6 +123,7 @@ class PostController extends Controller
             'content_html_ar' => 'nullable|string',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
             'status' => 'required|in:published,draft',
+            'published_at' => 'nullable|date',
         ]);
 
         $post->update([
@@ -138,6 +141,7 @@ class PostController extends Controller
             'content_html_ar' => $request->content_html_ar,
             'category_id' => $request->category_id,
             'status' => $request->status,
+            'published_at' => $request->published_at,
         ]);
         
         if ($request->hasFile('featured_image')) {

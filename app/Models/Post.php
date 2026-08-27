@@ -31,6 +31,7 @@ use Laravel\Scout\Searchable;
  * @property string $status
  * @property int $hits
  * @property int $share_count
+ * @property \Illuminate\Support\Carbon|null $published_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
@@ -89,6 +90,11 @@ class Post extends Model implements HasMedia
         'hits',
         'share_count',
         'featured_image_url',
+        'published_at',
+    ];
+
+    protected $casts = [
+        'published_at' => 'datetime',
     ];
 
     /**

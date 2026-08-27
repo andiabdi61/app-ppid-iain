@@ -35,7 +35,7 @@
                     <i class="bi bi-person-fill text-hijau-600"></i> {{ $post->author->name ?? 'Admin' }}
                 </span>
                 <span class="flex items-center gap-1.5">
-                    <i class="bi bi-calendar3 text-hijau-600"></i> {{ $post->created_at ? $post->created_at->translatedFormat('d F Y') : '-' }}
+                    <i class="bi bi-calendar3 text-hijau-600"></i> {{ ($post->published_at ?? $post->created_at) ? ($post->published_at ?? $post->created_at)->translatedFormat('d F Y') : '-' }}
                 </span>
                 <span class="flex items-center gap-1.5">
                     <i class="bi bi-eye-fill text-hijau-600"></i> {{ $post->hits }} kali
