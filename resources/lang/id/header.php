@@ -2,7 +2,7 @@
 return [
     'home' => 'Beranda',
     'about' => 'Tentang Kami',
-    'ppid_profile' => 'Profil PPID',
+    'ppid_profile' => 'Profil',
     'visi_misi' => 'Visi & Misi',
     'tugas_fungsi' => 'Tugas & Fungsi',
     'profil_pejabat' => 'Profil Pejabat',
@@ -16,6 +16,7 @@ return [
     'excluded' => 'Informasi Dikecualikan',
     'goods_services' => 'Barang dan Jasa',
     'publications' => 'Dokumen',
+    'informasi' => 'Informasi',
     
     'news' => 'Berita',
     'services' => 'Layanan',
@@ -24,6 +25,7 @@ return [
     'request_form' => 'Formulir Permohonan Informasi',
     'objection' => 'Pengajuan Keberatan',
     'objection_flow' => 'Alur Pengajuan Keberatan',
+    'sop' => 'SOP Layanan',
     'objection_form' => 'Formulir Pengajuan Keberatan',
     
     'report' => 'Laporan & Statistik',

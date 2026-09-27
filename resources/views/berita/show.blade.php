@@ -13,7 +13,9 @@
         <ol class="flex items-center gap-2 text-sm text-gray-500 mb-4 overflow-hidden whitespace-nowrap">
             <li><a href="{{ url('/') }}" class="hover:text-hijau-700 transition">Beranda</a></li>
             <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
-            <li><a href="{{ route('berita.index') }}" class="hover:text-hijau-700 transition">Berita</a></li>
+            <li>Informasi Publik</li>
+            <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
+            <li><a href="{{ route('berita.index') }}" class="hover:text-hijau-700 transition">Informasi</a></li>
             @if($post->category)
                 <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
                 <li><a href="{{ route('berita.index', ['kategori' => $post->category->slug]) }}" class="hover:text-hijau-700 transition">{{ $post->category->name }}</a></li>
@@ -59,10 +61,27 @@
         {{-- ============================================ --}}
         <div class="prose prose-sm sm:prose-base max-w-none text-gray-700 
                     prose-headings:font-bold prose-headings:text-gray-900 
-                    prose-a:text-hijau-700 prose-a:no-underline  
+                    prose-a:text-hijau-700 prose-a:no-underline hover:prose-a:underline  
                     prose-img:rounded-xl prose-img:shadow-md mb-10">
             {!! $post->content_html !!}
         </div>
+
+        {{-- ============================================ --}}
+        {{-- LAMPIRAN DOKUMEN --}}
+        {{-- ============================================ --}}
+        @if($post->attachment_url)
+            <a href="{{ $post->attachment_url }}" target="_blank"
+               class="flex items-center gap-3 p-4 mb-10 bg-red-50 border border-red-100 rounded-xl hover:bg-red-100 transition-colors group">
+                <div class="w-10 h-10 rounded-lg bg-red-500 text-white flex items-center justify-center shrink-0">
+                    <i class="bi bi-file-earmark-pdf text-xl"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-800 truncate">{{ $post->attachment_name }}</p>
+                    <p class="text-xs text-gray-500">Klik untuk membuka atau mengunduh lampiran</p>
+                </div>
+                <i class="bi bi-download text-red-500 group-hover:translate-y-0.5 transition-transform"></i>
+            </a>
+        @endif
 
         {{-- ============================================ --}}
         <!-- TOMBOL SHARE -->

@@ -30,7 +30,7 @@ class PostController extends Controller
     {
         // Pastikan hanya berita yang sudah 'published' yang bisa diakses
         if ($post->status !== 'published') {
-            return response()->json(['message' => 'Berita tidak ditemukan.'], 404);
+            return response()->json(['message' => 'Informasi tidak ditemukan.'], 404);
         }
 
         // Tambahkan logika increment hits

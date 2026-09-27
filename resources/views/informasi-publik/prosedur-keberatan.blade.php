@@ -10,8 +10,7 @@
     icon="target"
     :breadcrumbs="[
         ['label' => 'Beranda', 'url' => url('/')],
-        ['label' => 'Informasi Publik', 'url' => route('informasi-publik.index')],
-        ['label' => 'Alur Pengajuan Keberatan']
+        ['label' => 'Layanan']
     ]"
 />
 
@@ -44,10 +43,11 @@
                 <div class="absolute left-5 md:left-1/2 md:-translate-x-px top-0 bottom-0 w-0.5 bg-gray-200"></div>
 
                 {{-- LANGKAH 1 --}}
-                <div class="relative flex flex-col md:flex-row md:items-center mb-8 group">
+                <div class="relative flex flex-col md:flex-row md:items-center mb-5 group">
                     <div class="ml-12 md:ml-0 md:w-1/2 md:pr-10 md:text-right">
                         <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm group-hover:shadow-md group-hover:border-hijau-200 transition-all duration-300">
-                            <p class="text-sm text-gray-700 leading-relaxed">Pemohon keberatan mengisi formulir pengajuan keberatan secara online atau datang langsung ke Kantor PPID.</p>
+                            <p class="text-sm font-bold text-hijau-800 mb-1">Pemohon Mengajukan Permohonan Informasi</p>
+                            <p class="text-sm text-gray-700 leading-snug">Pemohon mengajukan permohonan informasi ke PPID melalui berbagai layanan (loket, surat, email, atau online).</p>
                         </div>
                     </div>
                     <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-hijau-600 border-4 border-white shadow-sm flex items-center justify-center">
@@ -57,10 +57,11 @@
                 </div>
 
                 {{-- LANGKAH 2 --}}
-                <div class="relative flex flex-col md:flex-row-reverse md:items-center mb-8 group">
+                <div class="relative flex flex-col md:flex-row-reverse md:items-center mb-5 group">
                     <div class="ml-12 md:ml-0 md:w-1/2 md:pl-10">
                         <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm group-hover:shadow-md group-hover:border-hijau-200 transition-all duration-300">
-                            <p class="text-sm text-gray-700 leading-relaxed">Melengkapi nomor registrasi permohonan informasi sebelumnya dan alasan keberatan yang jelas.</p>
+                            <p class="text-sm font-bold text-hijau-800 mb-1">Petugas Menerima dan Memeriksa Permohonan</p>
+                            <p class="text-sm text-gray-700 leading-snug">Petugas Layanan Informasi melakukan pemeriksaan awal atas permohonan yang diajukan oleh Pemohon.</p>
                         </div>
                     </div>
                     <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-hijau-600 border-4 border-white shadow-sm flex items-center justify-center">
@@ -70,53 +71,99 @@
                 </div>
 
                 {{-- LANGKAH 3 --}}
-                <div class="relative flex flex-col md:flex-row md:items-center mb-8 group">
+                <div class="relative flex flex-col md:flex-row md:items-center mb-5 group">
                     <div class="ml-12 md:ml-0 md:w-1/2 md:pr-10 md:text-right">
-                        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm group-hover:shadow-md group-hover:border-hijau-200 transition-all duration-300">
-                            <p class="text-sm text-gray-700 leading-relaxed">Petugas PPID menerima dan memverifikasi pengajuan keberatan.</p>
+                        <div class="bg-white rounded-xl border border-amber-200 bg-amber-50/40 p-4 shadow-sm group-hover:shadow-md transition-all duration-300">
+                            <p class="text-sm font-bold text-amber-700 mb-1">Pemeriksaan Kelengkapan Permohonan</p>
+                            <p class="text-sm text-gray-700 leading-snug">Jika berkas permohonan belum memenuhi syarat, petugas akan memberikan catatan atas kekurangan berkas yang harus dilengkapi/diperbaiki.</p>
                         </div>
                     </div>
-                    <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-hijau-600 border-4 border-white shadow-sm flex items-center justify-center">
+                    <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-amber-500 border-4 border-white shadow-sm flex items-center justify-center">
                         <span class="text-[9px] font-bold text-white">3</span>
                     </div>
                     <div class="hidden md:block md:w-1/2 md:pl-10"></div>
                 </div>
 
-                {{-- LANGKAH 4 (Highlight) --}}
-                <div class="relative flex flex-col md:flex-row-reverse md:items-center mb-8 group">
+                {{-- LANGKAH 4 --}}
+                <div class="relative flex flex-col md:flex-row-reverse md:items-center mb-5 group">
                     <div class="ml-12 md:ml-0 md:w-1/2 md:pl-10">
-                        <div class="bg-hijau-50/50 rounded-xl border border-hijau-200 p-4 shadow-sm group-hover:shadow-md transition-all duration-300">
-                            <p class="text-sm text-gray-700 leading-relaxed">PPID akan memberikan tanggapan atas keberatan paling lambat <strong class="text-hijau-700">30 hari kerja</strong> sejak permohonan keberatan diterima.</p>
+                        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm group-hover:shadow-md group-hover:border-hijau-200 transition-all duration-300">
+                            <p class="text-sm font-bold text-hijau-800 mb-1">Pencatatan Permohonan yang Memenuhi Syarat</p>
+                            <p class="text-sm text-gray-700 leading-snug">Permohonan yang telah memenuhi syarat dicatatkan dalam register permohonan informasi dan diteruskan kepada PPID.</p>
                         </div>
                     </div>
-                    <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-hijau-600 border-4 border-white shadow-sm flex items-center justify-center ring-4 ring-hijau-100">
+                    <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-hijau-600 border-4 border-white shadow-sm flex items-center justify-center">
                         <span class="text-[9px] font-bold text-white">4</span>
                     </div>
                     <div class="hidden md:block md:w-1/2 md:pr-10"></div>
                 </div>
 
-                {{-- LANGKAH 5 (Dua kondisi) --}}
-                <div class="relative flex flex-col md:flex-row md:items-center group">
+                {{-- LANGKAH 5 --}}
+                <div class="relative flex flex-col md:flex-row md:items-center mb-5 group">
                     <div class="ml-12 md:ml-0 md:w-1/2 md:pr-10 md:text-right">
-                        <div class="space-y-3">
-                            {{-- Kondisi Diterima --}}
-                            <div class="bg-white rounded-xl border border-green-200 p-4 shadow-sm group-hover:shadow-md transition-all duration-300">
-                                <div class="flex items-start gap-2">
-                                    <i class="bi bi-check-circle-fill text-green-500 mt-0.5 shrink-0"></i>
-                                    <p class="text-sm text-gray-700 leading-relaxed">Jika keberatan <strong class="text-green-700">diterima</strong>, informasi akan diberikan.</p>
-                                </div>
-                            </div>
-                            {{-- Kondisi Ditolak --}}
-                            <div class="bg-white rounded-xl border border-red-200 p-4 shadow-sm group-hover:shadow-md transition-all duration-300">
-                                <div class="flex items-start gap-2">
-                                    <i class="bi bi-x-circle-fill text-red-500 mt-0.5 shrink-0"></i>
-                                    <p class="text-sm text-gray-700 leading-relaxed">Jika <strong class="text-red-700">ditolak</strong>, pemohon berhak mengajukan sengketa informasi ke <strong class="text-red-700">Komisi Informasi</strong>.</p>
-                                </div>
-                            </div>
+                        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm group-hover:shadow-md group-hover:border-hijau-200 transition-all duration-300">
+                            <p class="text-sm font-bold text-hijau-800 mb-1">Pengelolaan Permohonan oleh PPID</p>
+                            <p class="text-sm text-gray-700 leading-snug">PPID menganalisis berkas permohonan dengan mengacu pada Daftar Informasi Publik (DIP) dan Daftar Informasi yang Dikecualikan (DIK) untuk menentukan jenis informasi.</p>
                         </div>
                     </div>
-                    <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-gray-800 border-4 border-white shadow-sm flex items-center justify-center">
+                    <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-hijau-600 border-4 border-white shadow-sm flex items-center justify-center">
                         <span class="text-[9px] font-bold text-white">5</span>
+                    </div>
+                    <div class="hidden md:block md:w-1/2 md:pl-10"></div>
+                </div>
+
+                {{-- LANGKAH 6 --}}
+                <div class="relative flex flex-col md:flex-row-reverse md:items-center mb-5 group">
+                    <div class="ml-12 md:ml-0 md:w-1/2 md:pl-10">
+                        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm group-hover:shadow-md group-hover:border-hijau-200 transition-all duration-300">
+                            <p class="text-sm font-bold text-hijau-800 mb-1">Penentuan Status Informasi</p>
+                            <p class="text-sm text-gray-700 leading-snug">Jika informasi termasuk yang dikecualikan, PPID berkoordinasi dengan PPID Unit terkait untuk menyiapkan informasi yang dapat diberikan kepada pemohon.</p>
+                        </div>
+                    </div>
+                    <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-hijau-600 border-4 border-white shadow-sm flex items-center justify-center">
+                        <span class="text-[9px] font-bold text-white">6</span>
+                    </div>
+                    <div class="hidden md:block md:w-1/2 md:pr-10"></div>
+                </div>
+
+                {{-- LANGKAH 7 --}}
+                <div class="relative flex flex-col md:flex-row md:items-center mb-5 group">
+                    <div class="ml-12 md:ml-0 md:w-1/2 md:pr-10 md:text-right">
+                        <div class="bg-white rounded-xl border border-hijau-200 bg-hijau-50/50 p-4 shadow-sm group-hover:shadow-md transition-all duration-300">
+                            <p class="text-sm font-bold text-hijau-800 mb-1">Penyusunan Jawaban oleh PPID</p>
+                            <p class="text-sm text-gray-700 leading-snug">PPID memiliki waktu maksimal 10 hari kerja untuk memberikan jawaban. Jika diperlukan, dapat diperpanjang maksimal 7 hari kerja dengan pemberitahuan tertulis kepada pemohon.</p>
+                        </div>
+                    </div>
+                    <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-hijau-600 border-4 border-white shadow-sm flex items-center justify-center ring-4 ring-hijau-100">
+                        <span class="text-[9px] font-bold text-white">7</span>
+                    </div>
+                    <div class="hidden md:block md:w-1/2 md:pl-10"></div>
+                </div>
+
+                {{-- LANGKAH 8 --}}
+                <div class="relative flex flex-col md:flex-row-reverse md:items-center mb-5 group">
+                    <div class="ml-12 md:ml-0 md:w-1/2 md:pl-10">
+                        <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm group-hover:shadow-md group-hover:border-hijau-200 transition-all duration-300">
+                            <p class="text-sm font-bold text-hijau-800 mb-1">Penyampaian Jawaban kepada Pemohon</p>
+                            <p class="text-sm text-gray-700 leading-snug">PPID menyampaikan surat jawaban berikut informasi yang diminta kepada Pemohon melalui Petugas Layanan Informasi.</p>
+                        </div>
+                    </div>
+                    <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-hijau-600 border-4 border-white shadow-sm flex items-center justify-center">
+                        <span class="text-[9px] font-bold text-white">8</span>
+                    </div>
+                    <div class="hidden md:block md:w-1/2 md:pr-10"></div>
+                </div>
+
+                {{-- LANGKAH 9 --}}
+                <div class="relative flex flex-col md:flex-row md:items-center group">
+                    <div class="ml-12 md:ml-0 md:w-1/2 md:pr-10 md:text-right">
+                        <div class="bg-white rounded-xl border border-hijau-200 bg-hijau-50/50 p-4 shadow-sm group-hover:shadow-md transition-all duration-300">
+                            <p class="text-sm font-bold text-hijau-800 mb-1">Penyampaian Jawaban oleh Petugas Layanan Informasi</p>
+                            <p class="text-sm text-gray-700 leading-snug">Petugas Layanan Informasi mencatatkan surat jawaban dalam register, menyampaikan informasi kepada pemohon dan mengarsipkan dokumen sebagai arsip Pengelolaan Dokumen.</p>
+                        </div>
+                    </div>
+                    <div class="absolute left-3 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-hijau-600 border-4 border-white shadow-sm flex items-center justify-center">
+                        <span class="text-[9px] font-bold text-white">9</span>
                     </div>
                     <div class="hidden md:block md:w-1/2 md:pl-10"></div>
                 </div>

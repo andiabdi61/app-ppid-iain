@@ -67,6 +67,7 @@ class PostController extends Controller
             'content_html_en' => 'nullable|string',
             'content_html_ar' => 'nullable|string',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+            'attachment' => 'nullable|mimes:pdf|max:10240',
             'status' => 'required|in:published,draft',
             'published_at' => 'nullable|date',
         ]);
@@ -94,7 +95,11 @@ class PostController extends Controller
             $post->addMediaFromRequest('featured_image')->toMediaCollection('featured_image');
         }
 
-        return redirect()->route('admin.posts.index')->with('success', 'Berita "' . Str::limit($post->title, 50) . '" berhasil ditambahkan!');
+        if ($request->hasFile('attachment')) {
+            $post->addMediaFromRequest('attachment')->toMediaCollection('attachment');
+        }
+
+        return redirect()->route('admin.posts.index')->with('success', 'Informasi "' . Str::limit($post->title, 50) . '" berhasil ditambahkan!');
     }
 
     public function edit(Post $post)
@@ -122,6 +127,8 @@ class PostController extends Controller
             'content_html_en' => 'nullable|string',
             'content_html_ar' => 'nullable|string',
             'featured_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:5120',
+            'attachment' => 'nullable|mimes:pdf|max:10240',
+            'remove_attachment' => 'nullable|boolean',
             'status' => 'required|in:published,draft',
             'published_at' => 'nullable|date',
         ]);
@@ -149,8 +156,15 @@ class PostController extends Controller
             $post->addMediaFromRequest('featured_image')->toMediaCollection('featured_image');
         }
 
+        if ($request->hasFile('attachment')) {
+            $post->clearMediaCollection('attachment');
+            $post->addMediaFromRequest('attachment')->toMediaCollection('attachment');
+        } elseif ($request->boolean('remove_attachment')) {
+            $post->clearMediaCollection('attachment');
+        }
+
         Cache::forget('post:' . $post->slug);
-        return redirect()->route('admin.posts.index')->with('success', 'Berita "' . Str::limit($post->title, 50) . '" berhasil diperbarui!');
+        return redirect()->route('admin.posts.index')->with('success', 'Informasi "' . Str::limit($post->title, 50) . '" berhasil diperbarui!');
     }
     
     public function destroy(Post $post)
@@ -159,8 +173,9 @@ class PostController extends Controller
         Gate::authorize('delete', $post);
 
         $post->clearMediaCollection('featured_image');
+        $post->clearMediaCollection('attachment');
         Cache::forget('post:' . $post->slug);
         $post->delete();
-        return redirect()->route('admin.posts.index')->with('success', 'Berita "' . Str::limit($post->title, 50) . '" berhasil dihapus!');
+        return redirect()->route('admin.posts.index')->with('success', 'Informasi "' . Str::limit($post->title, 50) . '" berhasil dihapus!');
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.public_app')
 
-@section('title', 'Profil PPID')
+@section('title', 'Profil')
 
 @section('content')
 
@@ -8,12 +8,11 @@
 {{-- HERO DINAMIS --}}
 {{-- ============================================ --}}
 <x-page-hero 
-    title="Pusat Informasi PPID" 
+    title="Profil" 
     icon="building"
     :breadcrumbs="[
         ['label' => 'Beranda', 'url' => url('/')],
-        ['label' => 'Informasi Publik', 'url' => route('informasi-publik.index')],
-        ['label' => 'Profil PPID']
+        ['label' => 'Tentang Kami']
     ]" 
 />
 
@@ -59,20 +58,15 @@
                      x-transition:leave-end="opacity-0 -translate-y-2"
                      class="absolute left-0 right-0 top-full mt-2 bg-white rounded-xl shadow-lg border border-slate-100 p-2 z-50 space-y-1">
                     
-                    <a href="#visi-misi" 
-                       @click.prevent="open = false; document.getElementById('visi-misi').scrollIntoView({ behavior: 'smooth', block: 'start' })"
+                    <a href="#gambaran-singkat" 
+                       @click.prevent="open = false; document.getElementById('gambaran-singkat').scrollIntoView({ behavior: 'smooth', block: 'start' })"
                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-hijau-50 hover:text-hijau-700 transition-colors">
-                        <i class="bi bi-bullseye text-slate-400"></i> Visi, Misi & Maklumat
+                        <i class="bi bi-info-circle text-slate-400"></i> Gambaran Singkat
                     </a>
                     <a href="#struktur" 
                        @click.prevent="open = false; document.getElementById('struktur').scrollIntoView({ behavior: 'smooth', block: 'start' })"
                        class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-hijau-50 hover:text-hijau-700 transition-colors">
                         <i class="bi bi-diagram-3-fill text-slate-400"></i> Struktur Organisasi
-                    </a>
-                    <a href="#tugas-fungsi" 
-                       @click.prevent="open = false; document.getElementById('tugas-fungsi').scrollIntoView({ behavior: 'smooth', block: 'start' })"
-                       class="flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-hijau-50 hover:text-hijau-700 transition-colors">
-                        <i class="bi bi-journal-richtext text-slate-400"></i> Tugas & Fungsi
                     </a>
                     <a href="#dasar-hukum" 
                        @click.prevent="open = false; document.getElementById('dasar-hukum').scrollIntoView({ behavior: 'smooth', block: 'start' })"
@@ -89,12 +83,12 @@
                 <div class="lg:sticky lg:top-24">
                     <nav class="bg-white rounded-2xl shadow-sm border border-slate-100 p-3 flex flex-col gap-1.5">
                         
-                        <a href="#visi-misi" 
-                           @click.prevent="document.getElementById('visi-misi').scrollIntoView({ behavior: 'smooth', block: 'start' })"
-                           :class="activeSection === 'visi-misi' ? 'bg-hijau-50 text-hijau-700 border-l-4 border-hijau-600' : 'border-l-4 border-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
+                        <a href="#gambaran-singkat" 
+                           @click.prevent="document.getElementById('gambaran-singkat').scrollIntoView({ behavior: 'smooth', block: 'start' })"
+                           :class="activeSection === 'gambaran-singkat' ? 'bg-hijau-50 text-hijau-700 border-l-4 border-hijau-600' : 'border-l-4 border-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
                            class="flex items-center gap-3 px-4 py-3 rounded-r-lg text-sm font-medium transition-all duration-200">
-                            <i class="bi bi-bullseye text-base"></i>
-                            <span>Visi, Misi & Maklumat</span>
+                            <i class="bi bi-info-circle text-base"></i>
+                            <span>Gambaran Singkat</span>
                         </a>
 
                         <a href="#struktur" 
@@ -104,15 +98,6 @@
                             <i class="bi bi-diagram-3-fill text-base"></i>
                             <span>Struktur Organisasi</span>
                         </a>
-
-                        <a href="#tugas-fungsi" 
-                           @click.prevent="document.getElementById('tugas-fungsi').scrollIntoView({ behavior: 'smooth', block: 'start' })"
-                           :class="activeSection === 'tugas-fungsi' ? 'bg-hijau-50 text-hijau-700 border-l-4 border-hijau-600' : 'border-l-4 border-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
-                           class="flex items-center gap-3 px-4 py-3 rounded-r-lg text-sm font-medium transition-all duration-200">
-                            <i class="bi bi-journal-richtext text-base"></i>
-                            <span>Tugas & Fungsi</span>
-                        </a>
-
                         <a href="#dasar-hukum" 
                            @click.prevent="document.getElementById('dasar-hukum').scrollIntoView({ behavior: 'smooth', block: 'start' })"
                            :class="activeSection === 'dasar-hukum' ? 'bg-hijau-50 text-hijau-700 border-l-4 border-hijau-600' : 'border-l-4 border-transparent text-slate-600 hover:bg-slate-50 hover:text-slate-900'"
@@ -130,30 +115,26 @@
             {{-- ========================================== --}}
             <div class="flex-1 min-w-0 space-y-4 md:space-y-6">
                 
-                {{-- Bagian 1: Visi, Misi & Maklumat --}}
-                <section id="visi-misi" class="ppid-section bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-100 p-4 md:p-8 scroll-mt-20 lg:scroll-mt-24">
+                {{-- Bagian 1: Gambaran Singkat --}}
+                <section id="gambaran-singkat" class="ppid-section bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-100 p-4 md:p-8 scroll-mt-20 lg:scroll-mt-24">
                     <h2 class="text-lg md:text-2xl font-bold text-slate-800 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
                         <div class="w-1 h-5 md:h-8 bg-hijau-600 rounded-full shrink-0"></div>
-                        Visi, Misi & Maklumat
+                        Gambaran Singkat Pembentukan PPID
                     </h2>
-                    
-                    <h3 class="text-sm md:text-base font-bold text-hijau-700 mb-2">Visi</h3>
-                    <blockquote class="border-l-4 border-hijau-500 bg-hijau-50/50 pl-4 md:pl-5 py-3 md:py-4 mb-4 md:mb-6 italic text-slate-700 text-sm md:text-base rounded-r-lg">
-                        "Terwujudnya Pelayanan Informasi Publik yang Transparan, Akuntabel, dan Inklusif demi Terpenuhinya Hak Masyarakat atas Informasi."
-                    </blockquote>
-                    
-                    <h3 class="text-sm md:text-base font-bold text-hijau-700 mb-2 md:mb-3">Misi</h3>
-                    <div class="prose prose-xs md:prose-sm max-w-none text-slate-600 list-decimal pl-4 md:pl-5 mb-4 md:mb-6 text-sm md:text-base">
-                        <li>Meningkatkan kualitas pengelolaan dan pelayanan informasi publik.</li>
-                        <li>Menyediakan informasi publik secara cepat, tepat, dan akurat.</li>
-                        <li>Membangun sistem dokumentasi yang tertib dan modern.</li>
-                        <li>Meningkatkan kapasitas dan kompetensi petugas PPID.</li>
+
+                    <div class="space-y-3 md:space-y-4 text-slate-600 text-sm md:text-base leading-normal text-justify">
+                        <p>Pembentukan PPID IAIN Bone merupakan langkah penting dalam mewujudkan tata kelola Perguruan Tinggi yang baik dan transparan. Dengan adanya PPID, masyarakat dapat lebih mudah mengakses informasi tentang IAIN Bone, sehingga dapat meningkatkan kepercayaan publik terhadap universitas.</p>
+                        <p>Tujuan utama pembentukan PPID IAIN Bone adalah untuk memastikan pengelolaan informasi dan dokumentasi di lingkungan universitas berjalan dengan baik dan sesuai dengan peraturan perundang-undangan yang berlaku. Selain itu, PPID juga berperan penting dalam memenuhi hak warga negara untuk memperoleh informasi publik.</p>
+                        <p>Pembentukan PPID IAIN Bone memiliki landasan hukum yang kuat, yaitu:</p>
                     </div>
 
-                    <h3 class="text-sm md:text-base font-bold text-hijau-700 mb-2">Maklumat Pelayanan</h3>
-                    <div class="bg-slate-50 border border-slate-200 p-3 md:p-4 rounded-lg md:rounded-xl">
-                        <p class="italic text-slate-600 text-xs md:text-sm mb-0">"Dengan ini kami menyatakan sanggup menyelenggarakan pelayanan informasi publik sesuai standar operasional prosedur yang telah ditetapkan..."</p>
-                    </div>
+                    <ul class="mt-3 md:mt-4 space-y-2 list-disc list-outside pl-5 text-slate-600 text-sm md:text-base leading-normal marker:text-hijau-600">
+                        <li>Undang-Undang Nomor 14 Tahun 2008 tentang Keterbukaan Informasi Publik.</li>
+                        <li>Undang-Undang Nomor 25 Tahun 2009 tentang Pelayanan Publik.</li>
+                        <li>Peraturan Pemerintah Nomor 61 Tahun 2010 tentang Pelaksanaan UU No. 14 Tahun 2008.</li>
+                        <li>Keputusan Rektor IAIN Bone Nomor 59 Tahun 2025 Tentang Perubahan atas keputusan Rektor Institut Agama Islam Negeri Bone Nomor 280 Tahun 2024 Tentang Pejabat Pengelola Informasi dan Dokumentasi pada Institut Agama Islam Negeri Bone.</li>
+                        <li>Keputusan Rektor IAIN Bone Nomor 191 Tahun 2025 Tentang Daftar Informasi Publik di Lingkungan Institut Agama Islam Negeri Bone.</li>
+                    </ul>
                 </section>
 
                 {{-- Bagian 2: Struktur Organisasi --}}
@@ -169,9 +150,9 @@
                     @endphp
 
                     {{-- Gambar Dibatasi Tinggi Maksimal --}}
-                    <div class="mb-4 md:mb-6 bg-slate-50 rounded-lg md:rounded-xl p-2 md:p-4 border border-slate-100 flex justify-center max-h-[250px] md:max-h-[500px]">
+                    <div class="mb-4 md:mb-6 bg-slate-50 rounded-lg md:rounded-xl p-2 md:p-4 border border-slate-100 flex justify-center">
                         @if(file_exists(public_path($strukturImagePath)))
-                            <img src="{{ asset($strukturImagePath) }}" alt="Bagan Struktur Organisasi PPID" class="max-w-full h-full object-contain rounded-lg">
+                            <img src="{{ asset($strukturImagePath) }}" alt="Bagan Struktur Organisasi PPID" class="w-full h-auto object-contain rounded-lg">
                         @else
                             <img src="{{ $placeholderUrl }}" alt="Bagan Struktur Organisasi PPID tidak tersedia" class="max-w-full h-full object-contain rounded-lg opacity-75">
                         @endif
@@ -200,29 +181,7 @@
                     </div>
                 </section>
                 
-                {{-- Bagian 3: Tugas & Fungsi --}}
-                <section id="tugas-fungsi" class="ppid-section bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-100 p-4 md:p-8 scroll-mt-20 lg:scroll-mt-24">
-                    <h2 class="text-lg md:text-2xl font-bold text-slate-800 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
-                        <div class="w-1 h-5 md:h-8 bg-hijau-600 rounded-full shrink-0"></div>
-                        Tugas & Fungsi PPID
-                    </h2>
-                    
-                    <h3 class="text-sm md:text-base font-bold text-hijau-700 mb-2">Tugas Pokok PPID</h3>
-                    <p class="text-slate-600 text-sm mb-4 md:mb-6">Melaksanakan tugas dan fungsi sebagai Pejabat Pengelola Informasi dan Dokumentasi di lingkungan IAIN Bone sesuai dengan peraturan perundang-undangan yang berlaku.</p>
-
-                    <h3 class="text-sm md:text-base font-bold text-hijau-700 mb-2 md:mb-3">Fungsi PPID</h3>
-                    <div class="prose prose-xs md:prose-sm max-w-none text-slate-600 list-decimal pl-4 md:pl-5 text-sm md:text-base">
-                        <li>Penyimpanan, pendokumentasian, penyediaan, dan pelayanan informasi publik.</li>
-                        <li>Pengelolaan sistem informasi dan dokumentasi yang mudah diakses.</li>
-                        <li>Penetapan standar operasional prosedur (SOP) pelayanan informasi.</li>
-                        <li>Melakukan pengujian konsekuensi atas informasi yang dikecualikan.</li>
-                        <li>Melakukan klasifikasi informasi publik.</li>
-                        <li>Mengelola pengajuan keberatan dan proses sengketa informasi.</li>
-                        <li>Menyusun laporan layanan informasi publik secara berkala.</li>
-                    </div>
-                </section>
-
-                {{-- Bagian 4: Dasar Hukum --}}
+                {{-- Bagian 3: Dasar Hukum --}}
                 <section id="dasar-hukum" class="ppid-section bg-white rounded-xl md:rounded-2xl shadow-sm border border-slate-100 p-4 md:p-8 scroll-mt-20 lg:scroll-mt-24">
                     <h2 class="text-lg md:text-2xl font-bold text-slate-800 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
                         <div class="w-1 h-5 md:h-8 bg-hijau-600 rounded-full shrink-0"></div>

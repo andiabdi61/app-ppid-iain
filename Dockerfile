@@ -27,6 +27,9 @@ RUN apt-get update && apt-get install -y \
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Naikkan batas upload file (default PHP cuma 2M)
+COPY docker/php/uploads.ini /usr/local/etc/php/conf.d/uploads.ini
+
 # Set working directory
 WORKDIR /var/www/ppid/app-ppid-iain
 

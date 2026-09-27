@@ -12,7 +12,7 @@
     icon="doc"
     :breadcrumbs="[
         ['label' => 'Beranda', 'url' => url('/')],
-        ['label' => 'Informasi Publik', 'url' => route('informasi-publik.index')],
+        ['label' => 'Informasi Publik'],
         ['label' => $informasi->category->nama ?? 'Kategori', 'url' => route('informasi-publik.index', ['kategori' => $informasi->category->slug ?? ''])],
         ['label' => Str::limit($informasi->judul, 30)]
     ]" 

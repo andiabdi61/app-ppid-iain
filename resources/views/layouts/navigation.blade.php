@@ -61,11 +61,11 @@
                             <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
                         </button>
                         <div x-show="open" x-transition (samakan seperti di atas) class="absolute left-0 top-full mt-1 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
-                            <p class="px-4 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Berita</p>
+                            <p class="px-4 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Informasi</p>
                             @if(Auth::user()->role === 'super_admin')
-                            <a href="{{ route('admin.categories.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Kategori Berita</a>
+                            <a href="{{ route('admin.categories.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Kategori Informasi</a>
                             @endif
-                            <a href="{{ route('admin.posts.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Berita</a>
+                            <a href="{{ route('admin.posts.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Informasi</a>
                             <a href="{{ route('admin.comments.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Moderasi Komentar</a>
                             
                             @if(Auth::user()->role === 'super_admin')
@@ -73,6 +73,7 @@
                             <p class="px-4 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Lainnya</p>
                             <a href="{{ route('admin.dokumen-categories.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Kategori Dokumen</a>
                             <a href="{{ route('admin.dokumen.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Dokumen</a>
+                            <a href="{{ route('admin.sop-layanan.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">SOP Layanan</a>
                             <a href="{{ route('admin.albums.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Album Foto</a>
                             <a href="{{ route('admin.videos.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Video</a>
                             @endif
@@ -205,13 +206,14 @@
             <div class="pt-2 border-t border-gray-100">
                 <p class="px-3 py-1 text-xs font-bold text-gray-400 uppercase">Media Center</p>
                 @if(Auth::user()->role === 'super_admin')
-                <a href="{{ route('admin.categories.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Kategori Berita</a>
+                <a href="{{ route('admin.categories.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Kategori Informasi</a>
                 @endif
-                <a href="{{ route('admin.posts.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Berita</a>
+                <a href="{{ route('admin.posts.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Informasi</a>
                 <a href="{{ route('admin.comments.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Moderasi Komentar</a>
                 @if(Auth::user()->role === 'super_admin')
                 <a href="{{ route('admin.dokumen-categories.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Kategori Dokumen</a>
                 <a href="{{ route('admin.dokumen.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Dokumen</a>
+                <a href="{{ route('admin.sop-layanan.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">SOP Layanan</a>
                 <a href="{{ route('admin.albums.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Album Foto</a>
                 <a href="{{ route('admin.videos.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Video</a>
                 @endif

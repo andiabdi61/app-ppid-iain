@@ -61,7 +61,7 @@ class SearchController extends Controller
             $pejabats = Pejabat::whereIn('id', $pejabatIds)->get();
 
             // Menggabungkan semua hasil
-            $results->push(['label' => 'Berita', 'items' => $posts]);
+            $results->push(['label' => 'Informasi', 'items' => $posts]);
             $results->push(['label' => 'Publikasi & Dokumen', 'items' => $dokumen]);
             $results->push(['label' => 'Informasi Publik', 'items' => $informasiPublik]);
             $results->push(['label' => 'Bidang Sektoral', 'items' => $bidangs]);

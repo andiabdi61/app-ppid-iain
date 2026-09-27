@@ -42,16 +42,37 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
                 <div>
                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Filter Kategori</label>
-                    <div class="flex flex-wrap gap-1.5 md:gap-2">
-                        <a href="{{ route('informasi-publik.index') }}" class="inline-flex items-center gap-1 px-3 py-1.5 md:px-3.5 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-all duration-200 {{ !request('kategori') || request('kategori') == 'all' ? 'bg-hijau-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100' }}">
-                            Semua
-                        </a>
-                        @foreach($categories as $cat)
-                            <a href="{{ route('informasi-publik.index', ['kategori' => $cat->slug]) }}" class="inline-flex items-center gap-1.5 px-3 py-1.5 md:px-3.5 md:py-2 rounded-lg text-xs md:text-sm font-medium transition-all duration-200 {{ request('kategori') == $cat->slug ? 'bg-hijau-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 border border-gray-200 hover:bg-gray-100' }}">
-                                <span class="w-1.5 h-1.5 rounded-full {{ request('kategori') == $cat->slug ? 'bg-white' : 'bg-gray-400' }}"></span>
-                                {{ $cat->nama }}
-                            </a>
-                        @endforeach
+                    @php
+                        $activeCategory = $categories->firstWhere('slug', request('kategori'));
+                        $itemClass = 'block px-3 py-2 text-sm hover:bg-hijau-50 hover:text-hijau-700 transition';
+                    @endphp
+                    <div class="relative" x-data="{ open: false }" @click.away="open = false">
+                        <button type="button" @click="open = !open"
+                                class="w-full flex items-center justify-between gap-3 px-4 py-2.5 text-sm bg-white border border-gray-200 rounded-xl text-gray-700 hover:border-hijau-300 transition"
+                                :class="{ 'border-hijau-400 ring-1 ring-hijau-200': open }">
+                            <span class="flex items-center gap-2 min-w-0">
+                                <i class="bi bi-funnel text-gray-400"></i>
+                                <span class="truncate">{{ $activeCategory->nama ?? 'Semua Kategori' }}</span>
+                            </span>
+                            <svg class="w-4 h-4 shrink-0 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+
+                        <div x-show="open" x-cloak
+                             x-transition:enter="transition ease-out duration-200"
+                             x-transition:enter-start="opacity-0 scale-95"
+                             x-transition:enter-end="opacity-100 scale-100"
+                             x-transition:leave="transition ease-in duration-150"
+                             x-transition:leave-start="opacity-100 scale-100"
+                             x-transition:leave-end="opacity-0 scale-95"
+                             class="absolute left-0 right-0 top-full mt-1 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-30">
+                            <a href="{{ route('informasi-publik.index') }}"
+                               class="{{ $itemClass }} {{ $activeCategory ? 'text-gray-700' : 'text-hijau-700 bg-hijau-50' }}">Semua Kategori</a>
+                            <div class="my-1 border-t border-gray-200"></div>
+                            @foreach($categories as $cat)
+                                <a href="{{ route('informasi-publik.index', ['kategori' => $cat->slug]) }}"
+                                   class="{{ $itemClass }} {{ $activeCategory && $activeCategory->id === $cat->id ? 'text-hijau-700 bg-hijau-50' : 'text-gray-700' }}">{{ $cat->nama }}</a>
+                            @endforeach
+                        </div>
                     </div>
                 </div>
 
@@ -80,7 +101,7 @@
         {{-- ============================================ --}}
         @if(isset($groupedInformasi))
             @forelse($groupedInformasi as $category)
-                <div x-data="{ isOpen: false }" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-8 mb-6 overflow-hidden">
+                <div x-data="{ isOpen: true }" class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 md:p-8 mb-6 overflow-hidden">
                     
                     {{-- ===== HEADER KATEGORI + DESKRIPSI ===== --}}
                     <div x-on:click="isOpen = !isOpen" class="cursor-pointer flex items-start justify-between gap-4 pb-4 border-b border-gray-100 mb-8">
@@ -134,7 +155,7 @@
 
                                     @if($item->children->isNotEmpty())
                                         {{-- CARD DENGAN SUB MENU --}}
-                                        <div x-data="{ isOpen: false }" class="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
+                                        <div x-data="{ isOpen: true }" class="border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow duration-200">
                                             <div x-on:click="isOpen = !isOpen" class="flex items-center justify-between gap-4 p-5 cursor-pointer bg-gray-50/70 hover:bg-gray-50 transition-colors duration-200">
                                                 <div class="flex items-start gap-4 flex-1 min-w-0">
                                                     <span class="shrink-0 w-8 h-8 rounded-full bg-hijau-600 text-white flex items-center justify-center text-sm font-bold mt-0.5">{{ $loop->iteration }}</span>

@@ -150,10 +150,11 @@ class Post extends Model implements HasMedia
           ->fit(Fit::Max, 1200, 1200) // <-- KUNCI: Menjaga rasio aspek asli
           ->format('webp')
           ->quality(85)
-          ->nonQueued();
-        $this->addMediaConversion('preview')->fit(Fit::Crop, 800, 500)->quality(85)->sharpen(10)->withResponsiveImages()->nonQueued();
-        $this->addMediaConversion('thumb')->fit(Fit::Crop, 400, 250)->quality(80)->sharpen(10)->nonQueued();
-        $this->addMediaConversion('webp')->format('webp')->nonQueued();
+          ->nonQueued()
+          ->performOnCollections('featured_image');
+        $this->addMediaConversion('preview')->fit(Fit::Crop, 800, 500)->quality(85)->sharpen(10)->withResponsiveImages()->nonQueued()->performOnCollections('featured_image');
+        $this->addMediaConversion('thumb')->fit(Fit::Crop, 400, 250)->quality(80)->sharpen(10)->nonQueued()->performOnCollections('featured_image');
+        $this->addMediaConversion('webp')->format('webp')->nonQueued()->performOnCollections('featured_image');
     }
 
     // --- ACCESSOR YANG DIPERBAIKI DENGAN LOGIKA ANTI-GAGAL ---
@@ -211,6 +212,32 @@ protected function universalPreviewUrl(): Attribute
     );
 }
 
+protected function attachmentUrl(): Attribute
+{
+    return Attribute::make(
+        get: function () {
+            if ($this->hasMedia('attachment')) {
+                return $this->getFirstMedia('attachment')->getUrl();
+            }
+
+            return null;
+        }
+    );
+}
+
+protected function attachmentName(): Attribute
+{
+    return Attribute::make(
+        get: function () {
+            if ($this->hasMedia('attachment')) {
+                return $this->getFirstMedia('attachment')->file_name;
+            }
+
+            return null;
+        }
+    );
+}
+
     public static function getPathGenerator(): ModulePathGenerator
     {
         return new ModulePathGenerator();
@@ -230,13 +257,13 @@ protected function universalPreviewUrl(): Attribute
                     $changes = $this->getChanges();
                     // Deskripsi kustom jika gambar diubah
                     if (isset($changes['media']) || isset($changes['featured_image_url'])) {
-                        return "Gambar unggulan untuk Berita \"{$title}\" telah diperbarui";
+                        return "Gambar unggulan untuk Informasi \"{$title}\" telah diperbarui";
                     }
                     unset($changes['updated_at']);
                     $changedFields = implode(', ', array_keys($changes));
-                    return "Berita \"{$title}\" telah diperbarui (kolom: {$changedFields})";
+                    return "Informasi \"{$title}\" telah diperbarui (kolom: {$changedFields})";
                 }
-                return "Berita \"{$title}\" telah di-{$eventName}";
+                return "Informasi \"{$title}\" telah di-{$eventName}";
             });
     }
 

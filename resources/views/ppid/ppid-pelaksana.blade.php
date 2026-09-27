@@ -9,8 +9,7 @@
     title="PPID Pelaksana" 
     icon="users"
     :breadcrumbs="[
-        ['label' => 'Beranda', 'url' => url('/')],
-        ['label' => 'PPID Pelaksana']
+        ['label' => 'Beranda', 'url' => url('/')]
     ]" 
 />
 

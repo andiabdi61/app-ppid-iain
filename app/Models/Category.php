@@ -51,6 +51,6 @@ class Category extends Model
             ->logOnly(['name'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(fn(string $eventName) => "Kategori Berita \"{$this->name}\" telah di-{$eventName}");
+            ->setDescriptionForEvent(fn(string $eventName) => "Kategori Informasi \"{$this->name}\" telah di-{$eventName}");
     }
 }

@@ -4,53 +4,85 @@
 
 @section('content')
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 md:pt-8 pb-12">
-    
-    {{-- ============================================ --}}
-    {{-- BREADCRUMB & JUDUL --}}
-    {{-- ============================================ --}}
-    <nav aria-label="breadcrumb">
-        <ol class="flex items-center gap-2 text-sm text-gray-500 mb-4 overflow-hidden whitespace-nowrap">
-            <li><a href="{{ url('/') }}" class="hover:text-hijau-700 transition">Beranda</a></li>
-            <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
-            <li class="text-hijau-800 font-medium">Berita</li>
-        </ol>
-    </nav>
-    
-    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-3">{{ $title }}</h1>
-    <p class="text-gray-600 mb-8">Temukan informasi dan perkembangan terbaru dari PPID IAIN Bone.</p>
+{{-- ============================================ --}}
+{{-- HERO SECTION --}}
+{{-- ============================================ --}}
+<x-page-hero 
+    :title="$title" 
+    icon="doc"
+    :breadcrumbs="[
+        ['label' => 'Beranda', 'url' => url('/')],
+        ['label' => 'Informasi Publik']
+    ]" 
+/>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 md:pt-10 pb-12">
+
+    <p class="text-gray-600 mb-8 text-center">Temukan informasi dan perkembangan terbaru dari PPID IAIN Bone.</p>
 
     {{-- ============================================ --}}
     {{-- FORM PENCARIAN (MOBILE FRIENDLY) --}}
     {{-- ============================================ --}}
-    <div class="max-w-4xl mx-auto mb-10">
-        <form action="{{ route('berita.index') }}" method="GET">
-            {{-- Baris 1: Input & Tombol Cari --}}
-            <div class="flex gap-2 mb-2">
-                <input type="text" name="q" 
-                       class="flex-1 px-4 py-3 text-sm border border-gray-300 focus:ring-2 focus:ring-hijau-500 focus:border-hijau-500 outline-none rounded-xl placeholder-gray-400 transition" 
-                       placeholder="Ketik kata kunci berita..." 
-                       value="{{ request('q') }}">
-                <button type="submit" class="px-5 py-3 bg-hijau-600 hover:bg-hijau-700 text-white rounded-xl text-sm font-medium transition flex items-center gap-2 justify-center shrink-0">
-                    <i class="bi bi-search"></i> <span class="hidden sm:inline">Cari</span>
-                </button>
-            </div>
-            
-            {{-- Baris 2: Filter Kategori & Reset --}}
-            <div class="flex gap-2">
-                <select name="kategori" 
-                        class="flex-1 px-4 py-2.5 text-sm border border-gray-300 focus:ring-2 focus:ring-hijau-500 focus:border-hijau-500 outline-none rounded-xl text-gray-600 transition">
-                    <option value="all">Semua Kategori</option>
-                    @foreach($categories as $cat)
-                        <option value="{{ $cat->slug }}" {{ request('kategori') == $cat->slug ? 'selected' : '' }}>{{ $cat->name }}</option>
-                    @endforeach
-                </select>
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6 mb-8">
+        @php
+            $activeCategory = $categories->firstWhere('slug', request('kategori'));
+            $itemClass = 'block w-full text-left px-3 py-2 text-sm hover:bg-hijau-50 hover:text-hijau-700 transition';
+        @endphp
+        <form action="{{ route('berita.index') }}" method="GET"
+              x-data="{ open: false, kategori: @js(request('kategori', 'all')) }"
+              class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <input type="hidden" name="kategori" :value="kategori">
 
-                @if(request('q') || request('kategori') != 'all')
-                    <a href="{{ route('berita.index') }}" class="px-4 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl text-sm font-medium transition flex items-center gap-1 justify-center shrink-0 border border-gray-300">
-                        <i class="bi bi-x-lg text-xs"></i> Reset
-                    </a>
-                @endif
+            {{-- Filter Kategori --}}
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Filter Kategori</label>
+                <div class="relative" @click.away="open = false">
+                    <button type="button" @click="open = !open"
+                            class="w-full flex items-center justify-between gap-3 px-4 py-2.5 text-sm bg-white border border-gray-200 rounded-xl text-gray-700 hover:border-hijau-300 transition"
+                            :class="{ 'border-hijau-400 ring-1 ring-hijau-200': open }">
+                        <span class="flex items-center gap-2 min-w-0">
+                            <i class="bi bi-funnel text-gray-400"></i>
+                            <span class="truncate">{{ $activeCategory->name ?? 'Semua Kategori' }}</span>
+                        </span>
+                        <svg class="w-4 h-4 shrink-0 transition-transform duration-200" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                    </button>
+
+                    <div x-show="open" x-cloak
+                         x-transition:enter="transition ease-out duration-200"
+                         x-transition:enter-start="opacity-0 scale-95"
+                         x-transition:enter-end="opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-150"
+                         x-transition:leave-start="opacity-100 scale-100"
+                         x-transition:leave-end="opacity-0 scale-95"
+                         class="absolute left-0 right-0 top-full mt-1 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-30">
+                        <button type="button" @click="kategori = 'all'; $nextTick(() => $root.submit())"
+                                class="{{ $itemClass }} {{ $activeCategory ? 'text-gray-700' : 'text-hijau-700 bg-hijau-50' }}">Semua Kategori</button>
+                        <div class="my-1 border-t border-gray-200"></div>
+                        @foreach($categories as $cat)
+                            <button type="button" @click="kategori = @js($cat->slug); $nextTick(() => $root.submit())"
+                                    class="{{ $itemClass }} {{ $activeCategory && $activeCategory->id === $cat->id ? 'text-hijau-700 bg-hijau-50' : 'text-gray-700' }}">{{ $cat->name }}</button>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
+
+            {{-- Cari Informasi --}}
+            <div>
+                <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">Cari Informasi</label>
+                <div class="flex gap-2">
+                    <div class="flex-1 flex items-center bg-gray-50 border border-gray-200 rounded-lg px-3 focus-within:ring-2 focus-within:ring-hijau-500 focus-within:border-hijau-500 transition">
+                        <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        <input type="text" name="q" value="{{ request('q') }}" placeholder="Ketik kata kunci..." class="w-full py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none border-0 bg-transparent focus:ring-0">
+                    </div>
+                    <button type="submit" class="bg-hijau-600 hover:bg-hijau-700 text-white px-4 py-2.5 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                    </button>
+                    @if(request('q') || (request('kategori') && request('kategori') != 'all'))
+                        <a href="{{ route('berita.index') }}" class="bg-gray-100 hover:bg-gray-200 text-gray-500 px-3 py-2.5 rounded-lg transition-colors duration-200 flex items-center justify-center shrink-0" title="Reset filter">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </a>
+                    @endif
+                </div>
             </div>
         </form>
     </div>
@@ -68,9 +100,9 @@
                 <div class="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                     <i class="bi bi-journal-x text-3xl text-gray-400"></i>
                 </div>
-                <h4 class="text-xl font-bold text-gray-700 mb-2">Berita Tidak Ditemukan</h4>
-                <p class="text-gray-500 mb-6">Maaf, tidak ada berita yang cocok dengan kriteria pencarian Anda.</p>
-                <a href="{{ route('berita.index') }}" class="text-hijau-600 hover:text-hijau-700 font-medium text-sm">Kembali ke Semua Berita</a>
+                <h4 class="text-xl font-bold text-gray-700 mb-2">Informasi Tidak Ditemukan</h4>
+                <p class="text-gray-500 mb-6">Maaf, tidak ada informasi yang cocok dengan kriteria pencarian Anda.</p>
+                <a href="{{ route('berita.index') }}" class="text-hijau-600 hover:text-hijau-700 font-medium text-sm">Kembali ke Semua Informasi</a>
             </div>
         @endforelse
     </div>

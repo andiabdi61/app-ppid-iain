@@ -18,7 +18,7 @@
             <h2>Pesan Baru dari Formulir Kontak Website</h2>
         </div>
         <div class="content">
-            <p>Anda menerima pesan baru dari formulir kontak di website {{ config('app.name') }}:</p>
+            <p>Anda menerima pesan baru dari formulir kontak di website {{ $settings['app_name'] ?? 'PPID IAIN Bone' }}:</p>
             <ul>
                 <li><strong>Nama:</strong> {{ $nama_pengirim }}</li>
                 <li><strong>Email:</strong> {{ $email_pengirim }}</li>
@@ -31,7 +31,7 @@
             <p style="white-space: pre-wrap; border: 1px solid #eee; padding: 10px; background-color: #f9f9f9;">{{ $pesan }}</p>
         </div>
         <div class="footer">
-            <p>Pesan ini dikirim secara otomatis dari formulir kontak website {{ config('app.name') }}.</p>
+            <p>Pesan ini dikirim secara otomatis dari formulir kontak website {{ $settings['app_name'] ?? 'PPID IAIN Bone' }}.</p>
         </div>
     </div>
 </body>

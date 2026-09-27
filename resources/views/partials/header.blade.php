@@ -87,7 +87,9 @@
                             <a href="{{ route('informasi-publik.profil-ppid.index') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.ppid_profile') }}</a>
                             <a href="{{ route('tentang-kami.visi-misi') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.visi_misi') }}</a>
                             <a href="{{ route('tentang-kami.tugas-fungsi') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.tugas_fungsi') }}</a>
+                            @if(config('fitur.profil_pejabat'))
                             <a href="{{ route('tentang-kami.profil-pejabat') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.profil_pejabat') }}</a>
+                            @endif
                             <a href="{{ route('tentang-kami.struktur-organisasi') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.struktur_organisasi') }}</a>
                         </div>
                     </div>
@@ -125,7 +127,9 @@
                             
                             <div class="my-1 border-t border-gray-200"></div>
                             
-                            <a href="{{ route('publikasi.index') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.publications') }}</a>
+                            {{-- Disembunyikan sementara --}}
+                            {{-- <a href="{{ route('publikasi.index') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.publications') }}</a> --}}
+                            <a href="{{ route('berita.index') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.informasi') }}</a>
                         </div>
                     </div>
 
@@ -154,7 +158,7 @@
                             <a href="{{ route('galeri.index') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">Galeri</a>
                         </div>
                     </div> --}}
-                    <a href="{{ route('berita.index') }}"  
+                    <a href="https://iain-bone.ac.id/berita" target="_blank" rel="noopener noreferrer"
                        class="px-3 py-2 rounded-lg text-sm font-medium text-gray-700 hover:text-hijau-700 hover:bg-hijau-50 transition">
                         {{ __('header.news') }}
                     </a>
@@ -190,6 +194,10 @@
                             
                             <a href="{{ route('informasi-publik.keberatan.prosedur') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.objection_flow') }}</a>
                             <a href="{{ route('informasi-publik.keberatan.form') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.objection_form') }}</a>
+
+                            <div class="my-1 border-t border-gray-200"></div>
+
+                            <a href="{{ route('informasi-publik.sop') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.sop') }}</a>
                         </div>
                     </div>
 

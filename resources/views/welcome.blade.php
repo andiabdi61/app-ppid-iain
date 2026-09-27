@@ -110,12 +110,15 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 md:gap-4">
                 @php
                     $menuItems = [
-                        ['icon' => 'fa-handshake', 'title' => __('messages.visi_misi'), 'url' => '/tentang-kami/visi-misi'],
-                        ['icon' => 'fa-tasks', 'title' => __('messages.tugas_fungsi'), 'url' => '/tentang-kami/tugas-fungsi'],
-                        ['icon' => 'fa-crown', 'title' => __('messages.profil_pejabat'), 'url' => '/tentang-kami/profil-pejabat'],
-                        ['icon' => 'fa-sitemap', 'title' => __('messages.struktur_organisasi'), 'url' => '/tentang-kami/struktur-organisasi'],
+                        ['icon' => 'fa-handshake', 'title' => __('messages.visi_misi'), 'url' => route('tentang-kami.visi-misi')],
+                        ['icon' => 'fa-tasks', 'title' => __('messages.tugas_fungsi'), 'url' => route('tentang-kami.tugas-fungsi')],
+                        ['icon' => 'fa-crown', 'title' => __('messages.profil_pejabat'), 'url' => route('tentang-kami.profil-pejabat')],
+                        ['icon' => 'fa-sitemap', 'title' => __('messages.struktur_organisasi'), 'url' => route('tentang-kami.struktur-organisasi')],
                         ['icon' => 'fa-puzzle-piece', 'title' => __('messages.profil_bidang'), 'url' => route('bidang-sektoral.index')],
                     ];
+                    if (! config('fitur.profil_pejabat')) {
+                        $menuItems = array_values(array_filter($menuItems, fn ($item) => $item['icon'] !== 'fa-crown'));
+                    }
                 @endphp
                 @foreach($menuItems as $item)
                     <a href="{{ $item['url'] }}" class="group p-4 md:p-5 border border-gray-200 rounded-2xl hover:border-hijau-500 hover:shadow-sm transition-all duration-300 flex flex-col items-center text-center">

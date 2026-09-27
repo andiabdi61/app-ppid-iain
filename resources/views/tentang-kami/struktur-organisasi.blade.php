@@ -15,18 +15,14 @@
     {{-- ============================================ --}}
     {{-- HERO SECTION & BREADCRUMB --}}
     {{-- ============================================ --}}
-    <div class="bg-putih-100 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <nav aria-label="breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500 mb-3">
-                    <li><a href="{{ url('/') }}" class="hover:text-hijau-700 transition">Beranda</a></li>
-                    <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
-                    <li class="text-hijau-800 font-medium">Struktur Organisasi</li>
-                </ol>
-            </nav>
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Struktur Organisasi</h1>
-        </div>
-    </div>
+<x-page-hero 
+        title="Struktur Organisasi" 
+        icon="building"
+        :breadcrumbs="[
+            ['label' => 'Beranda', 'url' => url('/')],
+            ['label' => 'Tentang Kami']
+        ]" 
+    />
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         
@@ -39,6 +35,21 @@
                 berdasarkan regulasi internal kampus.
             </p>
         </div>
+
+        {{-- ============================================ --}}
+        {{-- BAGAN STRUKTUR ORGANISASI (GAMBAR) --}}
+        {{-- ============================================ --}}
+        @if(file_exists(public_path('images/struktur_ppid.png')))
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-3 md:p-5 mb-12 max-w-5xl mx-auto">
+                <img src="{{ asset('images/struktur_ppid.png') }}" alt="Bagan Struktur Organisasi PPID IAIN Bone" class="w-full h-auto rounded-xl" loading="lazy">
+                <div class="mt-4 text-center">
+                    <a href="{{ asset('images/struktur_ppid.png') }}" download="Struktur-Organisasi-PPID-IAIN-Bone.png"
+                       class="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-semibold bg-hijau-600 text-white hover:bg-hijau-700 transition">
+                        <i class="bi bi-download"></i> Unduh Struktur
+                    </a>
+                </div>
+            </div>
+        @endif
 
         {{-- ============================================ --}}
         {{-- KEPALA (PIMPINAN TERTINGGI) --}}

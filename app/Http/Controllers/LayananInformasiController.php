@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SopLayanan;
 use App\Models\PermohonanInformasi;
 use App\Models\PengajuanKeberatan;
 use Illuminate\Http\Request;
@@ -16,6 +17,18 @@ class LayananInformasiController extends Controller
     public function showProsedurPermohonan()
     {
         return view('informasi-publik.prosedur-permohonan');
+    }
+
+    public function showSop()
+    {
+        $sopList = SopLayanan::orderBy('judul')->get();
+
+        return view('informasi-publik.sop', compact('sopList'));
+    }
+
+    public function showSopDetail(SopLayanan $sopLayanan)
+    {
+        return view('informasi-publik.sop-detail', ['sop' => $sopLayanan]);
     }
 
     public function showFormPermohonan()

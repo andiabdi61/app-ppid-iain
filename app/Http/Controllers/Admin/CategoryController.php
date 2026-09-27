@@ -48,7 +48,7 @@ class CategoryController extends Controller
             'slug' => Str::slug($request->name),
         ]);
 
-        return redirect()->route('admin.categories.index')->with('success', 'Kategori berita berhasil ditambahkan!');
+        return redirect()->route('admin.categories.index')->with('success', 'Kategori informasi berhasil ditambahkan!');
     }
 
     /**
@@ -79,7 +79,7 @@ class CategoryController extends Controller
             'slug' => Str::slug($request->name),
         ]);
 
-        return redirect()->route('admin.categories.index')->with('success', 'Kategori berita berhasil diperbarui!');
+        return redirect()->route('admin.categories.index')->with('success', 'Kategori informasi berhasil diperbarui!');
     }
 
     /**
@@ -90,6 +90,6 @@ class CategoryController extends Controller
         Gate::authorize('delete', $category);
 
         $category->delete();
-        return redirect()->route('admin.categories.index')->with('success', 'Kategori berita berhasil dihapus!');
+        return redirect()->route('admin.categories.index')->with('success', 'Kategori informasi berhasil dihapus!');
     }
 }

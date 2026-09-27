@@ -5,7 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        @php
+            $appName = $settings['app_name'] ?? 'PPID IAIN Bone';
+            $pageName = null;
+            if (isset($header) && preg_match('/<h2[^>]*>(.*?)<\/h2>/s', (string) $header, $matches)) {
+                $pageName = trim(preg_replace('/\s+/', ' ', strip_tags($matches[1])));
+            }
+        @endphp
+        <title>{{ $pageName ? $pageName . ' - ' . $appName : $appName }}</title>
         <link rel="icon" type="image/png" href="{{ asset('storage/' . $settings['app_favicon']) }}">
 
         <!-- Fonts -->

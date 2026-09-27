@@ -9,9 +9,7 @@
     title="Laporan & Statistik" 
     icon="target"
     :breadcrumbs="[
-        ['label' => 'Beranda', 'url' => url('/')],
-        ['label' => 'Informasi Publik (PPID)', 'url' => route('informasi-publik.index')],
-        ['label' => 'Laporan & Statistik']
+        ['label' => 'Beranda', 'url' => url('/')]
     ]"
 />
 

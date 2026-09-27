@@ -33,7 +33,7 @@
             <form action="{{ route('search') }}" method="GET" class="flex">
                 <input type="search" name="q" 
                        class="flex-1 px-4 py-3 rounded-l-xl border border-gray-300 border-r-0 text-sm placeholder-gray-400 focus:ring-2 focus:ring-hijau-500 focus:border-hijau-500 outline-none transition" 
-                       placeholder="Cari berita, dokumen, atau informasi lainnya..." 
+                       placeholder="Cari informasi, dokumen, atau lainnya..."
                        value="{{ $query }}" aria-label="Cari Ulang">
                 <button class="px-6 py-3 bg-hijau-600 hover:bg-hijau-700 text-white rounded-r-xl transition-colors" type="submit">
                     <i class="bi bi-search"></i>

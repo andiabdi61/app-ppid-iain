@@ -2,7 +2,7 @@
 return [
     'home' => 'Home',
     'about' => 'About Us',
-    'ppid_profile' => 'PPID Profile',
+    'ppid_profile' => 'Profile',
     'visi_misi' => 'Vision & Mission',
     'tugas_fungsi' => 'Tasks & Functions',
     'profil_pejabat' => 'Officials Profile',
@@ -16,6 +16,7 @@ return [
     'excluded' => 'Excluded Information',
     'goods_services' => 'Goods & Services',
     'publications' => 'Documents',
+    'informasi' => 'Information',
     
     'news' => 'News',
     'services' => 'Services',
@@ -24,6 +25,7 @@ return [
     'request_form' => 'Information Request Form',
     'objection' => 'Objection',
     'objection_flow' => 'Objection Flow',
+    'sop' => 'Service SOP',
     'objection_form' => 'Objection Form',
     
     'report' => 'Reports & Statistics',

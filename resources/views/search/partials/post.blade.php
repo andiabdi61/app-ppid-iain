@@ -9,7 +9,7 @@
         {{-- Meta: Kategori & Tanggal --}}
         <div class="flex items-center gap-2 mb-3">
             @if($item->category)
-                <span class="px-2.5 py-0.5 text-xs font-medium rounded-full {{ str_replace('bg-', 'bg-', str_replace('text-', 'text-', $item->category->frontend_badge_class ?? 'bg-gray-100 text-gray-600')) }}">
+                <span class="px-2.5 py-0.5 text-xs font-medium rounded-full {{ $item->category->badge_class ?? 'bg-gray-100 text-gray-600' }}">
                     {{ $item->category->name }}
                 </span>
             @endif

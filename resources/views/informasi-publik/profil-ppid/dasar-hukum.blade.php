@@ -13,7 +13,7 @@
     :breadcrumbs="[
         ['label' => 'Beranda', 'url' => url('/')],
         ['label' => 'Informasi Publik', 'url' => route('informasi-publik.index')],
-        ['label' => 'Profil PPID', 'url' => route('informasi-publik.profil-ppid.index')],
+        ['label' => 'Profil', 'url' => route('informasi-publik.profil-ppid.index')],
         ['label' => 'Dasar Hukum']
     ]" 
 />

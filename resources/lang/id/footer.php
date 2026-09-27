@@ -6,7 +6,7 @@ return [
     'info' => 'Informasi',
     'info_pub' => 'Informasi Publik',
     'pub_docs' => 'Publikasi & Dokumen',
-    'latest_news' => 'Berita Terbaru',
+    'latest_news' => 'Informasi Terbaru',
     'services' => 'Layanan & Pengaduan',
     'contact' => 'Kontak Kami',
     'contact_us' => 'Kontak Umum',

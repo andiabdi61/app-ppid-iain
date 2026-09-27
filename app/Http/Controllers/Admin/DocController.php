@@ -21,7 +21,7 @@ class DocController extends Controller
         Gate::authorize('viewAny', Dokumen::class);
 
         $categories = DokumenCategory::orderBy('nama')->get();
-        $query = Dokumen::with('category')->orderBy('tanggal_publikasi', 'desc');
+        $query = Dokumen::with('category')->orderBy('tanggal_publikasi', 'desc')->orderByDesc('id');
 
         if ($request->filled('q')) {
             $search = $request->q;

@@ -162,7 +162,7 @@
         {{-- COPYRIGHT --}}
         {{-- ============================================ --}}
         <div class="border-t border-hijau-800/50 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-hijau-200/40 gap-2">
-            <p>&copy; {{ date('Y') }} {{ config('app.name', 'PPID IAIN BONE') }}. {{ __('footer.copyright')}}</p>
+            <p>&copy; {{ date('Y') }} {{ $settings['app_name'] ?? 'PPID IAIN Bone' }}. {{ __('footer.copyright')}}</p>
             <p class="flex items-center gap-1.5">
                 {{ __('footer.dev_with_love') }}  <i class="fas fa-heart text-red-500/70 text-[10px]"></i>{{ __('footer.dev_team') }}
             </p>

@@ -3,10 +3,17 @@
 @section('title', 'Formulir Permohonan Informasi')
 
 @section('content')
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    
 
-    <h2 class="text-2xl font-bold text-gray-900 text-center mb-8">Formulir Permohonan Informasi Publik</h2>
+<x-page-hero 
+    title="Formulir Permohonan Informasi" 
+    icon="doc"
+    :breadcrumbs="[
+        ['label' => 'Beranda', 'url' => url('/')],
+        ['label' => 'Layanan']
+    ]"
+/>
+
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-5 md:p-8">

@@ -18,12 +18,14 @@ class DokumenController extends Controller
             $dokumen = Dokumen::where('is_active', true)
                 ->whereHas('category', fn($q) => $q->where('slug', $request->kategori))
                 ->orderBy('tanggal_publikasi', 'desc')
+                ->orderByDesc('id')
                 ->with('category')
                 ->paginate(10);
         } else {
             $dokumen = Dokumen::where('is_active', true)
                 ->whereHas('category', fn($q) => $q->directDisplay())
                 ->orderBy('tanggal_publikasi', 'desc')
+                ->orderByDesc('id')
                 ->with('category')
                 ->paginate(10);
         }

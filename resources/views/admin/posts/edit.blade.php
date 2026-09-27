@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Artikel Berita: ' . Str::limit($post->title, 50)) }}
+            {{ __('Edit Artikel Informasi: ' . Str::limit($post->title, 50)) }}
         </h2>
     </x-slot>
 
@@ -58,7 +58,7 @@
                             </div>
 
                             <div>
-                                <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul Berita</label>
+                                <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul Informasi</label>
                                 <input type="text" name="title" id="title" value="{{ old('title', $post->getRawOriginal('title') ?: $post->title) }}" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                             </div>
 
@@ -90,7 +90,7 @@
                             </div>
 
                             <div>
-                                <label for="content_html" class="block text-sm font-medium text-gray-700 mb-1">Konten Berita Utama</label>
+                                <label for="content_html" class="block text-sm font-medium text-gray-700 mb-1">Konten Informasi Utama</label>
                                 <textarea name="content_html" id="content_html" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 tinymce-editor" rows="10">{{ old('content_html', $post->getRawOriginal('content_html') ?: $post->content_html) }}</textarea>
                             </div>
                         </div>
@@ -144,20 +144,46 @@
 
                             <div>
                                 <label for="featured_image" class="block text-sm font-medium text-gray-700 mb-1">Gambar Unggulan</label>
-                                <p class="text-xs text-gray-500 mb-2">Opsional, kosongkan jika tidak ingin mengubah. Format: JPG, PNG, GIF, SVG, WebP. Maks 2MB.</p>
-                                
-                                <input type="file" name="featured_image" id="featured_image" 
+                                <p class="text-xs text-gray-500 mb-2">Opsional, kosongkan jika tidak ingin mengubah. Format: JPG, PNG, GIF, SVG, WebP. Maks 5MB.</p>
+
+                                <input type="file" name="featured_image" id="featured_image"
                                     class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
-                                    accept="image/*"> 
-                                
+                                    accept="image/*">
+
                                 @error('featured_image')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
 
-                                @if($post->universal_thumb_url)
+                                @if($post->universal_preview_url)
                                     <div class="mt-4 p-3 bg-gray-50 rounded-lg inline-block">
                                         <p class="text-sm font-medium text-gray-700 mb-1">Gambar Saat Ini:</p>
                                         <img src="{{ $post->universal_thumb_url }}" alt="Current Featured Image" class="w-48 h-auto rounded-md shadow-sm border">
+                                    </div>
+                                @endif
+                            </div>
+
+                            <div>
+                                <label for="attachment" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Lampiran Dokumen <span class="text-gray-400 font-normal text-xs">(Opsional)</span>
+                                </label>
+                                <p class="text-xs text-gray-500 mb-2">Kosongkan jika tidak ingin mengubah. Format PDF, Maks 10MB. Akan tampil sebagai tombol unduh di halaman detail.</p>
+
+                                <input type="file" name="attachment" id="attachment"
+                                    class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                                    accept="application/pdf">
+
+                                @error('attachment')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+
+                                @if($post->attachment_url)
+                                    <div class="mt-3 flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 w-fit">
+                                        <i class="bi bi-file-earmark-pdf text-xl text-red-500"></i>
+                                        <a href="{{ $post->attachment_url }}" target="_blank" class="text-sm font-medium text-indigo-600 hover:underline truncate max-w-xs">{{ $post->attachment_name }}</a>
+                                        <label class="flex items-center gap-1.5 text-xs text-red-600 cursor-pointer ml-2">
+                                            <input type="checkbox" name="remove_attachment" value="1" class="rounded border-gray-300 text-red-600 focus:ring-red-500">
+                                            Hapus
+                                        </label>
                                     </div>
                                 @endif
                             </div>
@@ -183,7 +209,7 @@
                                 Batal
                             </a>
                             <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition shadow-sm">
-                                Update Berita
+                                Update Informasi
                             </button>
                         </div>
                     </form>
@@ -239,7 +265,7 @@
             const contentId = getEditorContent('content_html');
 
             if (!titleId && !excerptId && !contentId) {
-                alert('Isi setidaknya Judul, Ringkasan, atau Konten berita dalam Bahasa Indonesia terlebih dahulu.');
+                alert('Isi setidaknya Judul, Ringkasan, atau Konten informasi dalam Bahasa Indonesia terlebih dahulu.');
                 return;
             }
 

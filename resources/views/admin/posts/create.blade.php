@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Tambah Artikel Berita Baru') }}
+            {{ __('Tambah Artikel Informasi Baru') }}
         </h2>
     </x-slot>
 
@@ -58,7 +58,7 @@
                             </div>
 
                             <div>
-                                <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul Berita</label>
+                                <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Judul Informasi</label>
                                 <input type="text" name="title" id="title" value="{{ old('title') }}" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
                             </div>
 
@@ -90,7 +90,7 @@
                             </div>
 
                             <div>
-                                <label for="content_html" class="block text-sm font-medium text-gray-700 mb-1">Konten Berita Utama</label>
+                                <label for="content_html" class="block text-sm font-medium text-gray-700 mb-1">Konten Informasi Utama</label>
                                 <textarea name="content_html" id="content_html" class="w-full rounded-lg border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 tinymce-editor" rows="10">{{ old('content_html') }}</textarea>
                             </div>
                         </div>
@@ -147,11 +147,24 @@
 
                             <div>
                                 <label for="featured_image" class="block text-sm font-medium text-gray-700 mb-1">Gambar Unggulan</label>
-                                <input type="file" name="featured_image" id="featured_image" 
-                                    class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100" 
+                                <input type="file" name="featured_image" id="featured_image"
+                                    class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
                                     accept="image/*">
-                                <p class="mt-1 text-xs text-gray-500">JPG, PNG, atau WebP (Maks 2MB)</p>
+                                <p class="mt-1 text-xs text-gray-500">JPG, PNG, atau WebP (Maks 5MB)</p>
                                 @error('featured_image')
+                                    <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                                @enderror
+                            </div>
+
+                            <div>
+                                <label for="attachment" class="block text-sm font-medium text-gray-700 mb-1">
+                                    Lampiran Dokumen <span class="text-gray-400 font-normal text-xs">(Opsional)</span>
+                                </label>
+                                <input type="file" name="attachment" id="attachment"
+                                    class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                                    accept="application/pdf">
+                                <p class="mt-1 text-xs text-gray-500">PDF (Maks 10MB), akan tampil sebagai tombol unduh di halaman detail.</p>
+                                @error('attachment')
                                     <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -185,7 +198,7 @@
                                 Batal
                             </a>
                             <button type="submit" class="px-6 py-2.5 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition shadow-sm">
-                                Simpan Berita
+                                Simpan Informasi
                             </button>
                         </div>
                     </form>
@@ -242,7 +255,7 @@
             const contentId = getEditorContent('content_html');
 
             if (!titleId && !excerptId && !contentId) {
-                alert('Isi setidaknya Judul, Ringkasan, atau Konten berita dalam Bahasa Indonesia terlebih dahulu.');
+                alert('Isi setidaknya Judul, Ringkasan, atau Konten informasi dalam Bahasa Indonesia terlebih dahulu.');
                 return;
             }
 

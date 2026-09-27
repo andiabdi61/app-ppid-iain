@@ -22,9 +22,9 @@ return [
     // Berita & Publikasi
     'latest' => 'Terbaru',
     'info_publications' => 'Informasi & Publikasi',
-    'latest_news' => 'Berita Terbaru',
+    'latest_news' => 'Informasi Terbaru',
     'view_all' => 'Lihat Semua',
-    'no_news' => 'Belum ada berita terbaru.',
+    'no_news' => 'Belum ada informasi terbaru.',
     'official_publications' => 'Publikasi Resmi',
     'no_publications' => 'Belum ada publikasi terbaru.',
 

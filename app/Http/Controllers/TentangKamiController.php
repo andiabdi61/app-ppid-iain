@@ -59,6 +59,8 @@ class TentangKamiController extends Controller
 
 public function profilPejabat()
 {
+    abort_unless(config('fitur.profil_pejabat'), 404);
+
     // Mengambil semua pejabat yang aktif, diurutkan berdasarkan kolom 'urutan'
     // Jika kamu tidak punya kolom 'urutan', ganti 'urutan' jadi 'id' atau 'nama'
     $pejabat = Pejabat::where('is_active', true)
@@ -70,6 +72,8 @@ public function profilPejabat()
 
     public function detailPejabat($id)
     {
+        abort_unless(config('fitur.profil_pejabat'), 404);
+
         // Halaman detail profil pejabat berdasarkan ID
         $pejabat = Pejabat::where('is_active', true)->findOrFail($id); // Temukan pejabat berdasarkan ID, atau tampilkan 404 jika tidak ditemukan
         return view('tentang-kami.profil-pejabat.show', compact('pejabat'));

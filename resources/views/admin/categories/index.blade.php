@@ -2,7 +2,7 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                {{ __('Manajemen Kategori Berita') }}
+                {{ __('Manajemen Kategori Informasi') }}
             </h2>
             <a href="{{ route('admin.categories.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
                 <i class="bi bi-plus-lg mr-2"></i> Tambah Kategori Baru
@@ -26,7 +26,7 @@
                                 <tr>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nama Kategori</th>
                                     <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
-                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Berita</th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Jumlah Informasi</th>
                                     <th scope="col" class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
                                 </tr>
                             </thead>
@@ -46,7 +46,7 @@
                                         <a href="{{ route('admin.categories.edit', $category) }}" class="text-indigo-600 hover:text-indigo-900" title="Edit">
                                             <i class="bi bi-pencil-square text-lg"></i>
                                         </a>
-                                        <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin hapus kategori ini? Berita dalam kategori ini tidak akan terhapus, tetapi akan menjadi tanpa kategori.');">
+                                        <form action="{{ route('admin.categories.destroy', $category) }}" method="POST" class="inline-block" onsubmit="return confirm('Yakin hapus kategori ini? Informasi dalam kategori ini tidak akan terhapus, tetapi akan menjadi tanpa kategori.');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="text-red-600 hover:text-red-900" title="Hapus">
@@ -58,7 +58,7 @@
                                 @empty
                                 <tr>
                                     <td colspan="4" class="px-6 py-4 text-center text-sm text-gray-500">
-                                        Tidak ada kategori berita yang ditemukan.
+                                        Tidak ada kategori informasi yang ditemukan.
                                     </td>
                                 </tr>
                                 @endforelse

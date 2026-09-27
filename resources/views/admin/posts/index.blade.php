@@ -2,11 +2,11 @@
     <x-slot name="header">
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center">
             <h2 class="font-semibold text-xl text-gray-800 leading-tight mb-4 sm:mb-0">
-                {{ __('Manajemen Berita') }}
+                {{ __('Manajemen Informasi') }}
             </h2>
             @can('create', App\Models\Post::class)
             <a href="{{ route('admin.posts.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700">
-                <i class="bi bi-plus-lg mr-2"></i> Tulis Berita Baru
+                <i class="bi bi-plus-lg mr-2"></i> Tulis Informasi Baru
             </a>
             @endcan
         </div>
@@ -68,7 +68,7 @@
                                     <td class="px-6 py-4">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-12 w-20">
-                                                @if($post->universal_thumb_url)
+                                                @if($post->universal_preview_url)
                                                     <img class="h-12 w-20 rounded-md object-cover" src="{{ $post->universal_thumb_url }}" alt="">
                                                 @else
                                                     <div class="h-12 w-20 rounded-md bg-gray-100 flex items-center justify-center">
@@ -127,7 +127,7 @@
                                 @empty
                                 <tr>
                                     <td colspan="5" class="px-6 py-4 text-center text-sm text-gray-500">
-                                        Tidak ada artikel berita yang ditemukan.
+                                        Tidak ada artikel informasi yang ditemukan.
                                     </td>
                                 </tr>
                                 @endforelse

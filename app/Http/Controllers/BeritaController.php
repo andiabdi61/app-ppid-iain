@@ -16,7 +16,7 @@ class BeritaController extends Controller
         });
 
         $search = $request->q;
-        $title = 'Berita Terbaru';
+        $title = 'Informasi';
 
         if ($search) {
             // --- PERBAIKAN LOGIKA PENCARIAN SCOUT ---
@@ -43,7 +43,7 @@ class BeritaController extends Controller
                 });
                 $currentCategory = $categories->firstWhere('slug', $slug);
                 if ($currentCategory) {
-                    $title = 'Berita Kategori: ' . $currentCategory->name;
+                    $title = 'Informasi Kategori: ' . $currentCategory->name;
                 }
             }
             $posts = $query->latest()->paginate(9)->withQueryString();

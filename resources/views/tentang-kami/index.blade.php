@@ -64,6 +64,7 @@
             </div>
         </a>
 
+        @if(config('fitur.profil_pejabat'))
         {{-- Card 4: Profil Pejabat --}}
         <a href="{{ route('tentang-kami.profil-pejabat') }}" class="group bg-white rounded-2xl border border-gray-200 p-6 hover:border-hijau-500 hover:shadow-lg transition-all duration-300 flex flex-col">
             <div class="w-14 h-14 bg-purple-100 group-hover:bg-purple-600 rounded-2xl flex items-center justify-center mb-5 transition-colors duration-300">
@@ -75,6 +76,7 @@
                 Lihat Detail <i class="bi bi-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
             </div>
         </a>
+        @endif
 
     </div>
 </div>

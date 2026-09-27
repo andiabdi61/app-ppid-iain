@@ -13,6 +13,8 @@
         <ol class="flex items-center gap-2 text-sm text-gray-500 mb-8">
             <li><a href="{{ url('/') }}" class="hover:text-hijau-700 transition">Beranda</a></li>
             <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
+            <li>Tentang Kami</li>
+            <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
             <li><a href="{{ route('tentang-kami.profil-pejabat') }}" class="hover:text-hijau-700 transition">Profil Pejabat</a></li>
             <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
             <li class="text-hijau-800 font-medium">{{ $pejabat->nama }}</li>

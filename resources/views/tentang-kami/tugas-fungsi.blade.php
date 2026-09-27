@@ -1,101 +1,146 @@
 @extends('layouts.public_app')
 
-@section('title', 'Tugas & Fungsi')
+@section('title', 'Tugas dan Fungsi')
 
 @section('content')
 
 {{-- ============================================ --}}
-{{-- HERO SECTION & BREADCRUMB --}}
+{{-- HERO DINAMIS --}}
 {{-- ============================================ --}}
-@extends('layouts.public_app')
-
-@section('title', 'Tugas Pokok & Fungsi')
-
-@section('content')
-
-{{-- ============================================ --}}
-{{-- HERO DINAMIS (Panggil Komponen 1 Baris Ini Saja) --}}
-{{-- ============================================ --}}
-@extends('layouts.public_app')
-
-@section('title', 'Tugas Pokok & Fungsi')
-
-@section('content')
-
-{{-- ============================================ --}}
-{{-- HERO DINAMIS (Panggil Komponen 1 Baris Ini Saja) --}}
-{{-- ============================================ --}}
-<x-page-hero 
-    title="Tugas Pokok & Fungsi" 
+<x-page-hero
+    title="Tugas dan Fungsi"
     icon="building"
     :breadcrumbs="[
         ['label' => 'Beranda', 'url' => url('/')],
-        ['label' => 'Tentang Kami', 'url' => url('/#tentang-kami')],
-        ['label' => 'Tugas & Fungsi']
-    ]" 
+        ['label' => 'Tentang Kami']
+    ]"
 />
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
     <div class="max-w-4xl mx-auto">
+
+        {{-- ============================================ --}}
+        {{-- JUDUL & DASAR HUKUM --}}
+        {{-- ============================================ --}}
+        <div class="text-center mb-10">
+            <h2 class="text-xl md:text-2xl font-bold text-hijau-800 mb-2">Tugas dan Wewenang Pejabat Pengelola Informasi dan Dokumentasi</h2>
+            <p class="text-sm text-gray-500 italic">Peraturan Komisi Informasi Republik Indonesia Nomor 1 Tahun 2021 Tentang Standar Layanan Informasi Publik</p>
+        </div>
+
         <div class="flex flex-col gap-8">
-            
-            {{-- ============================================ --}}
-            {{-- CARD 1: TUGAS POKOK --}}
-            {{-- ============================================ --}}
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                @php
-                    $imagePath = 'storage/images/tugas-pokok-bg.webp';
-                    $placeholderUrl = 'https://placehold.co/1200x600/E5E7EB/6B7280?text=Gambar+Tugas+Pokok';
-                @endphp
 
-                @if(file_exists(public_path($imagePath)))
-                    <img src="{{ asset($imagePath) }}" alt="Ilustrasi Tugas Pokok" class="w-full h-64 md:h-80 object-cover">
-                @else
-                    <img src="{{ $placeholderUrl }}" alt="Placeholder Tugas Pokok" class="w-full h-64 md:h-80 object-cover">
-                @endif                    
-
-                <div class="p-6 md:p-8 text-center">
-                    <div class="flex items-center justify-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-hijau-100 rounded-xl flex items-center justify-center">
-                            <i class="bi bi-bullseye text-hijau-700 text-xl"></i>
-                        </div>
-                        <h2 class="text-2xl md:text-3xl font-bold text-hijau-800">Tugas Pokok</h2>
-                    </div>
-                    
-                    {{-- GANTI TEKS INI DENGAN TUGAS POKOK RESMI KAMU --}}
-                    <p class="text-sm text-gray-500 italic mb-4">
-                        Sesuai dengan regulasi dan pedoman pelaksanaan PPID di lingkungan IAIN Bone.
-                    </p>
-                    <p class="text-gray-700 leading-relaxed text-justify max-w-3xl mx-auto">
-                        PPID IAIN Bone mempunyai tugas memberikan pelayanan informasi publik secara cepat, tepat waktu, biaya yang terjangkau/proposal, serta cara dan sarana yang mudah diakses oleh masyarakat, sesuai dengan peraturan perundang-undangan yang berlaku.
-                    </p>
-                </div>
-            </div>
-            
             {{-- ============================================ --}}
-            {{-- CARD 2: FUNGSI --}}
+            {{-- ATASAN PPID --}}
             {{-- ============================================ --}}
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
-                <div class="flex items-center gap-3 mb-8">
-                    <div class="w-10 h-10 bg-hijau-100 rounded-xl flex items-center justify-center">
-                        <i class="bi bi-gear-wide-connected text-hijau-700 text-xl"></i>
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-hijau-100 rounded-xl flex items-center justify-center shrink-0">
+                        <i class="bi bi-person-badge text-hijau-700 text-xl"></i>
                     </div>
-                    <h2 class="text-2xl md:text-3xl font-bold text-hijau-800">Fungsi</h2>
+                    <h3 class="text-xl md:text-2xl font-bold text-hijau-800">Tugas dan Wewenang Atasan PPID</h3>
                 </div>
-                
-                {{-- GANTI ISI LIST INI DENGAN FUNGSI RESMI KAMU --}}
-                <ol class="space-y-4 list-decimal list-inside text-gray-700 leading-relaxed marker:text-hijau-600 marker:font-bold">
-                    <li>Penyediaan, penerbitan, dan pendistribusian informasi publik yang dihasilkan oleh IAIN Bone.</li>
-                    <li>Pemberian akses terhadap informasi publik bagi pemohon informasi publik sesuai dengan ketentuan peraturan perundang-undangan.</li>
-                    <li>Pelaksanaan uji konsekuensi atas publikasi informasi yang bersifat terbuka dan tertutup.</li>
-                    <li>Penyusunan dan pemeliharaan Daftar Informasi Publik (DIP) di lingkungan IAIN Bone.</li>
-                    <li>Pelaporan pelaksanaan pelayanan informasi publik kepada Kementerian/Lembaga yang berwenang.</li>
-                    <li>Pelaksanaan tugas kedinasan lainnya yang diberikan oleh atasan sesuai dengan bidang tugasnya.</li>
-                </ol>
+
+                <div class="mb-6">
+                    <h4 class="font-bold text-gray-800 mb-3">Atasan PPID Bertugas:</h4>
+                    <ul class="space-y-2 list-disc list-outside pl-5 text-gray-700 leading-relaxed marker:text-hijau-600">
+                        <li>Menunjuk PPID dan PPID Pelaksana;</li>
+                        <li>Menyusun arah kebijakan layanan Informasi Publik di Badan Publik;</li>
+                        <li>Menyelesaikan keberatan atas Permintaan Informasi Publik;</li>
+                        <li>Mewakili Badan Publik di dalam proses penyelesaian sengketa di Komisi Informasi dan/atau di Pengadilan;</li>
+                        <li>Melakukan pembinaan, pengawasan, evaluasi, dan monitoring atas pelaksanaan kebijakan Informasi Publik yang dilakukan oleh PPID dan PPID Pelaksana.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-3">Atasan PPID Berwenang:</h4>
+                    <ul class="space-y-2 list-disc list-outside pl-5 text-gray-700 leading-relaxed marker:text-hijau-600">
+                        <li>Menetapkan dan mengangkat PPID dan PPID Pelaksana;</li>
+                        <li>Menetapkan arah kebijakan layanan informasi publik di badan publik;</li>
+                        <li>Memberikan tanggapan atas keberatan yang diajukan oleh pemohon informasi publik untuk ditindaklanjuti oleh PPID;</li>
+                        <li>Menunjuk PPID untuk mewakili Badan Publik di dalam proses penyelesaian sengketa di Komisi Informasi dan/atau di Pengadilan;</li>
+                        <li>Menetapkan strategi dan metode pembinaan, pengawasan, evaluasi, dan monitoring atas pelaksanaan kebijakan Informasi Publik yang dilakukan oleh PPID Pelaksana, Pejabat Fungsional dan/atau Petugas Pelayanan Informasi.</li>
+                    </ul>
+                </div>
+            </div>
+
+            {{-- ============================================ --}}
+            {{-- PPID --}}
+            {{-- ============================================ --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-hijau-100 rounded-xl flex items-center justify-center shrink-0">
+                        <i class="bi bi-diagram-3 text-hijau-700 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-bold text-hijau-800">Tugas dan Wewenang PPID</h3>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="font-bold text-gray-800 mb-3">PPID Bertugas:</h4>
+                    <ul class="space-y-2 list-disc list-outside pl-5 text-gray-700 leading-relaxed marker:text-hijau-600">
+                        <li>Menyusun dan melaksanakan kebijakan layanan Informasi Publik;</li>
+                        <li>Menyusun laporan pelaksanaan kebijakan layanan Informasi Publik;</li>
+                        <li>Mengoordinasikan dan mengonsolidasikan proses penyimpanan, pendokumentasian, penyediaan, dan pelayanan Informasi Publik;</li>
+                        <li>Mengoordinasikan dan mengonsolidasikan pengumpulan dokumen Informasi Publik dari PPID Pelaksana dan/atau Petugas Pelayanan Informasi di Badan Publik;</li>
+                        <li>Melakukan verifikasi dokumen Informasi Publik;</li>
+                        <li>Menentukan Informasi Publik yang dapat diakses publik dan layak untuk dipublikasikan;</li>
+                        <li>Melakukan pengujian tentang konsekuensi atas Informasi Publik yang akan dikecualikan;</li>
+                        <li>Melakukan pengelolaan, pemeliharaan, dan pemutakhiran Daftar Informasi Publik;</li>
+                        <li>Menyediakan Informasi Publik secara efektif dan efisien agar mudah diakses oleh publik;</li>
+                        <li>Melakukan pembinaan, pengawasan, evaluasi, dan monitoring atas pelaksanaan kebijakan teknis Informasi Publik yang dilakukan oleh PPID Pelaksana dan/atau Petugas Pelayanan Informasi.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-3">PPID Berwenang:</h4>
+                    <ul class="space-y-2 list-disc list-outside pl-5 text-gray-700 leading-relaxed marker:text-hijau-600">
+                        <li>Menetapkan kebijakan layanan Informasi Publik;</li>
+                        <li>Menetapkan laporan pelaksanaan kebijakan layanan Informasi Publik;</li>
+                        <li>Melaksanakan rapat koordinasi dan rapat kerja secara berkala dan/atau sesuai dengan kebutuhan dalam melaksanakan pelayanan Informasi Publik;</li>
+                        <li>Meminta klarifikasi kepada PPID Pelaksana dan/atau Petugas Pelayanan Informasi dalam melaksanakan pelayanan Informasi Publik;</li>
+                        <li>Menetapkan dan memutuskan suatu Informasi Publik dapat diakses publik atau tidak berdasarkan pengujian tentang konsekuensi atas Informasi Publik yang akan dikecualikan, dengan persetujuan Atasan PPID;</li>
+                        <li>Menolak permintaan Informasi Publik dengan menyampaikan pertimbangan secara tertulis apabila Informasi Publik yang dimohon termasuk Informasi yang dikecualikan atau rahasia, dengan persetujuan Atasan PPID;</li>
+                        <li>Menugaskan PPID Pelaksana dan/atau Petugas Pelayanan Informasi untuk membuat, mengelola, memelihara, dan/atau memutakhirkan Daftar Informasi Publik;</li>
+                        <li>Menetapkan strategi dan metode pembinaan, pengawasan, evaluasi, dan monitoring atas pelaksanaan kebijakan teknis Informasi Publik yang dilakukan oleh PPID Pelaksana dan/atau Petugas Pelayanan Informasi.</li>
+                    </ul>
+                </div>
+            </div>
+
+            {{-- ============================================ --}}
+            {{-- PPID PELAKSANA --}}
+            {{-- ============================================ --}}
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="w-10 h-10 bg-hijau-100 rounded-xl flex items-center justify-center shrink-0">
+                        <i class="bi bi-people text-hijau-700 text-xl"></i>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-bold text-hijau-800">Tugas dan Wewenang PPID Pelaksana</h3>
+                </div>
+
+                <div class="mb-6">
+                    <h4 class="font-bold text-gray-800 mb-3">PPID Pelaksana Bertugas:</h4>
+                    <ul class="space-y-2 list-disc list-outside pl-5 text-gray-700 leading-relaxed marker:text-hijau-600">
+                        <li>Membantu PPID melaksanakan tanggungjawab, tugas, dan kewenangannya;</li>
+                        <li>Melaksanakan kebijakan teknis layanan Informasi Publik yang telah ditetapkan PPID;</li>
+                        <li>Mengonsolidasikan proses penyimpanan, pendokumentasian, penyediaan dan pelayanan Informasi Publik;</li>
+                        <li>Mengumpulkan dokumen Informasi Publik dari Petugas Pelayanan Informasi di Badan Publik;</li>
+                        <li>Membantu PPID melakukan verifikasi dokumen Informasi Publik;</li>
+                        <li>Membantu membuat, mengelola, memelihara, dan memutakhirkan Daftar Informasi Publik;</li>
+                        <li>Menjamin ketersediaan dan akselerasi layanan Informasi Publik agar mudah diakses oleh publik.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-gray-800 mb-3">PPID Pelaksana Berwenang:</h4>
+                    <ul class="space-y-2 list-disc list-outside pl-5 text-gray-700 leading-relaxed marker:text-hijau-600">
+                        <li>Meminta dokumen Informasi Publik dari Petugas Pelayanan Informasi di Badan Publik;</li>
+                        <li>Meminta klarifikasi kepada Petugas Pelayanan Informasi di Badan Publik dalam melaksanakan pelayanan Informasi Publik;</li>
+                        <li>Menugaskan Petugas Pelayanan Informasi untuk menyiapkan dokumen untuk membantu PPID dalam melaksanakan pengujian konsekuensi atas Informasi Publik yang akan dikecualikan atau pembuatan pertimbangan tertulis dalam hal suatu Informasi Publik dikecualikan atau Permintaan Informasi Publik ditolak.</li>
+                    </ul>
+                </div>
             </div>
 
         </div>
-        
+
         {{-- ============================================ --}}
         {{-- TOMBOL NAVIGASI BAWAH --}}
         {{-- ============================================ --}}

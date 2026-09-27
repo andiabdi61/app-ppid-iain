@@ -7,7 +7,7 @@
 {{-- ============================================ --}}
 {{-- HERO SECTION (Super Kompak Dinamis) --}}
 {{-- ============================================ --}}
-<section class="relative bg-gradient-to-br from-hijau-900 via-emerald-900 to-gray-900 py-3 md:py-5 overflow-hidden">
+<section class="relative bg-gradient-to-br from-hijau-900 via-emerald-900 to-gray-900 py-6 md:py-9 overflow-hidden">
     {{-- Background Blur Dekor --}}
     <div class="absolute inset-0 opacity-10">
         <div class="absolute top-10 left-10 w-72 h-72 bg-hijau-400 rounded-full blur-3xl"></div>
@@ -16,9 +16,9 @@
     
     <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {{-- Breadcrumb (Hidden di Mobile) --}}
+        {{-- Breadcrumb --}}
         @if($breadcrumbs)
-        <nav aria-label="breadcrumb" class="mb-3 md:mb-2 hidden md:block">
+        <nav aria-label="breadcrumb" class="mb-3 md:mb-4">
             <ol class="flex items-center gap-2 text-xs flex-wrap">
                 @foreach($breadcrumbs as $item)
                     @if(isset($item['url']))
@@ -30,11 +30,13 @@
                                 {{ $item['label'] }}
                             </a>
                         </li>
-                    @else
+                    @elseif($loop->last)
                         <li class="text-white font-medium">{{ $item['label'] }}</li>
+                    @else
+                        <li class="text-hijau-300">{{ $item['label'] }}</li>
                     @endif
                     
-                    @if(!$loop->last && isset($item['url']))
+                    @if(!$loop->last)
                     <li>
                         <svg class="w-3 h-3 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     </li>

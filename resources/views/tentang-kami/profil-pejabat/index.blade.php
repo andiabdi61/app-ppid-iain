@@ -12,21 +12,18 @@
     {{-- ============================================ --}}
     {{-- HERO SECTION & BREADCRUMB --}}
     {{-- ============================================ --}}
-    <div class="bg-putih-100 border-b border-gray-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-            <nav aria-label="breadcrumb">
-                <ol class="flex items-center gap-2 text-sm text-gray-500 mb-3">
-                    <li><a href="{{ url('/') }}" class="hover:text-hijau-700 transition">Beranda</a></li>
-                    <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
-                    <li class="text-hijau-800 font-medium">Profil Pejabat</li>
-                </ol>
-            </nav>
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Profil Pejabat</h1>
-            <p class="text-gray-600 mt-2">Mengenal para pejabat pengelola informasi dan dokumentasi di lingkungan PPID IAIN Bone.</p>
-        </div>
-    </div>
+<x-page-hero 
+        title="Profil Pejabat" 
+        icon="building"
+        :breadcrumbs="[
+            ['label' => 'Beranda', 'url' => url('/')],
+            ['label' => 'Tentang Kami']
+        ]" 
+    />
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <p class="text-gray-600 text-center max-w-3xl mx-auto mb-10">Mengenal para pejabat pengelola informasi dan dokumentasi di lingkungan PPID IAIN Bone.</p>
+
         
         {{-- ============================================ --}}
         {{-- GRID PEJABAT --}}

@@ -21,6 +21,7 @@ use App\Http\Controllers\Admin\CategoryController; // CRUD Kategori Berita
 use App\Http\Controllers\Admin\PostController; // CRUD Berita
 use App\Http\Controllers\Admin\DokumenCategoryController; // CRUD Kategori Dokumen
 use App\Http\Controllers\Admin\DocController; // CRUD Dokumen
+use App\Http\Controllers\Admin\SopLayananController;
 use App\Http\Controllers\Admin\InformasiPublikCategoryController; // CRUD Kategori Info Publik
 use App\Http\Controllers\Admin\InformasiPublikController as AdminInformasiPublikController; // CRUD Informasi Publik Item (NEW!)
 use App\Http\Controllers\Admin\AlbumController; // CRUD Album Foto
@@ -69,7 +70,13 @@ Route::get('/lang/{locale}', function ($locale) {
 // --- Rute MODUL PUBLIK ---
 // Route::get('/kinerja', [KinerjaPublikController::class, 'index'])->name('kinerja.publik');
 // Modul Tentang Kami
-Route::prefix('tentang-kami')->name('tentang-kami.')->group(function () {
+// Alamat lama (tentang-kami/...) dialihkan permanen ke alamat baru
+foreach (['visi-misi', 'struktur-organisasi', 'tugas-fungsi', 'profil-pejabat'] as $halaman) {
+    Route::redirect('/tentang-kami/' . $halaman, '/' . $halaman, 301);
+}
+Route::get('/tentang-kami/profil-pejabat/{id}', fn ($id) => redirect('/profil-pejabat/' . $id, 301));
+
+Route::name('tentang-kami.')->group(function () {
     // Route::get('/', [TentangKamiController::class, 'index'])->name('index');
     Route::get('/visi-misi', [TentangKamiController::class, 'visiMisi'])->name('visi-misi');
     Route::get('/struktur-organisasi', [TentangKamiController::class, 'strukturOrganisasi'])->name('struktur-organisasi');
@@ -105,7 +112,7 @@ Route::prefix('publikasi')->name('publikasi.')->group(function () {
 });
 
 // Modul Berita & Media
-Route::prefix('berita')->name('berita.')->group(function () {
+Route::prefix('informasi')->name('berita.')->group(function () {
     Route::get('/', [BeritaController::class, 'index'])->name('index');
     Route::get('/{slug}', [BeritaController::class, 'show'])->name('show');
     Route::post('/{post}/share-count', [BeritaController::class, 'incrementShareCount'])->name('share.count');
@@ -122,17 +129,23 @@ Route::prefix('galeri')->name('galeri.')->group(function () {
     Route::get('/video/{slug}', [GaleriController::class, 'showVideo'])->name('video');
 });
 
+// Modul Profil PPID
+Route::prefix('profil')->name('informasi-publik.profil-ppid.')->group(function () {
+    Route::get('/', [ProfilPpidController::class, 'index'])->name('index');
+    Route::get('/visi-misi-maklumat', [ProfilPpidController::class, 'visiMisiMaklumat'])->name('visi-misi-maklumat');
+    Route::get('/struktur-organisasi', [ProfilPpidController::class, 'strukturOrganisasiPpid'])->name('struktur-organisasi');
+    Route::get('/dasar-hukum', [ProfilPpidController::class, 'dasarHukumPpid'])->name('dasar-hukum');
+    Route::get('/tugas-fungsi', [ProfilPpidController::class, 'tugasFungsiPpid'])->name('tugas-fungsi');
+});
+
+// Alamat lama (informasi-publik/profil-ppid/...) dialihkan permanen ke alamat baru
+Route::redirect('/informasi-publik/profil-ppid', '/profil', 301);
+foreach (['visi-misi-maklumat', 'struktur-organisasi', 'dasar-hukum', 'tugas-fungsi'] as $halaman) {
+    Route::redirect('/informasi-publik/profil-ppid/' . $halaman, '/profil/' . $halaman, 301);
+}
+
 // Modul Informasi Publik (PPID)
 Route::prefix('informasi-publik')->name('informasi-publik.')->group(function () {
-    // Rute Profil PPID
-    Route::prefix('profil-ppid')->name('profil-ppid.')->group(function () {
-        Route::get('/', [ProfilPpidController::class, 'index'])->name('index');
-        Route::get('/visi-misi-maklumat', [ProfilPpidController::class, 'visiMisiMaklumat'])->name('visi-misi-maklumat');
-        Route::get('/struktur-organisasi', [ProfilPpidController::class, 'strukturOrganisasiPpid'])->name('struktur-organisasi');
-        Route::get('/dasar-hukum', [ProfilPpidController::class, 'dasarHukumPpid'])->name('dasar-hukum');
-        Route::get('/tugas-fungsi', [ProfilPpidController::class, 'tugasFungsiPpid'])->name('tugas-fungsi');
-    });
-
     // Rute untuk Laporan & Statistik PPID
     Route::get('/laporan-statistik', [LaporanStatistikController::class, 'index'])->name('laporan-statistik');
 
@@ -157,6 +170,10 @@ Route::prefix('informasi-publik')->name('informasi-publik.')->group(function () 
 
         Route::get('/sukses', [LayananInformasiController::class, 'showKeberatanSukses'])->name('sukses');
     });
+
+    // Rute SOP Pelayanan Informasi
+    Route::get('/sop', [LayananInformasiController::class, 'showSop'])->name('sop');
+    Route::get('/sop/{sopLayanan:slug}', [LayananInformasiController::class, 'showSopDetail'])->name('sop.show');
 
     // Rute Kontak PPID
     // Route::get('/kontak', [ProfilPpidController::class, 'kontakPpid'])->name('kontak-ppid');
@@ -257,6 +274,11 @@ Route::middleware('auth')->group(function () {
         // CRUD Dokumen
         Route::resource('dokumen', DocController::class)->parameters([
             'dokumen' => 'dokuman',
+        ]);
+
+        // CRUD SOP Layanan
+        Route::resource('sop-layanan', SopLayananController::class)->except('show')->parameters([
+            'sop-layanan' => 'sop_layanan',
         ]);
 
         // CRUD Kategori Informasi Publik

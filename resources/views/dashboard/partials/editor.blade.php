@@ -4,11 +4,11 @@
 {{-- Grid untuk Kartu Statistik & Aktivitas --}}
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-    <!-- Kartu Total Berita -->
+    <!-- Kartu Total Informasi -->
     <div class="bg-white p-6 rounded-lg shadow-lg border-l-4 border-blue-500">
         <div class="flex items-center justify-between">
             <div>
-                <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Berita</p>
+                <p class="text-sm font-medium text-gray-500 uppercase tracking-wider">Total Informasi</p>
                 <p class="text-3xl font-extrabold text-gray-900">{{ $totalPosts ?? 0 }}</p>
             </div>
             <div class="bg-blue-100 p-3 rounded-full">
@@ -31,7 +31,7 @@
     <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
         <!-- Sub-kolom Berita Terpopuler -->
         <div class="bg-white p-6 rounded-lg shadow-lg">
-            <h4 class="font-bold text-lg mb-4 flex items-center"><i class="bi bi-graph-up-arrow mr-2"></i>5 Berita Terpopuler</h4>
+            <h4 class="font-bold text-lg mb-4 flex items-center"><i class="bi bi-graph-up-arrow mr-2"></i>5 Informasi Terpopuler</h4>
             <ul class="space-y-3">
                 @forelse($popularPosts as $post)
                     <li class="flex items-center justify-between text-sm">
@@ -41,7 +41,7 @@
                         <span class="flex-shrink-0 font-bold text-gray-600 bg-gray-100 px-2 py-1 rounded-full text-xs">{{ $post->hits }} views</span>
                     </li>
                 @empty
-                    <li class="text-sm text-gray-500">Tidak ada data berita.</li>
+                    <li class="text-sm text-gray-500">Tidak ada data informasi.</li>
                 @endforelse
             </ul>
         </div>
