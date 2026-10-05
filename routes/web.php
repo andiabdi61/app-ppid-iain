@@ -74,7 +74,7 @@ Route::get('/lang/{locale}', function ($locale) {
 foreach (['visi-misi', 'struktur-organisasi', 'tugas-fungsi', 'profil-pejabat'] as $halaman) {
     Route::redirect('/tentang-kami/' . $halaman, '/' . $halaman, 301);
 }
-Route::get('/tentang-kami/profil-pejabat/{id}', fn ($id) => redirect('/profil-pejabat/' . $id, 301));
+Route::get('/tentang-kami/profil-pejabat/{id}', fn($id) => redirect('/profil-pejabat/' . $id, 301));
 
 Route::name('tentang-kami.')->group(function () {
     // Route::get('/', [TentangKamiController::class, 'index'])->name('index');
@@ -144,44 +144,60 @@ foreach (['visi-misi-maklumat', 'struktur-organisasi', 'dasar-hukum', 'tugas-fun
     Route::redirect('/informasi-publik/profil-ppid/' . $halaman, '/profil/' . $halaman, 301);
 }
 
+// Laporan & Statistik PPID
+Route::get('/laporan-statistik', [InformasiPublikController::class, 'laporanStatistik'])->name('informasi-publik.laporan-statistik');
+Route::redirect('/informasi-publik/laporan-statistik', '/laporan-statistik', 301);
+
+// SOP Layanan
+Route::get('/sop', [LayananInformasiController::class, 'showSop'])->name('informasi-publik.sop');
+Route::get('/sop/{sopLayanan:slug}', [LayananInformasiController::class, 'showSopDetail'])->name('informasi-publik.sop.show');
+Route::redirect('/informasi-publik/sop', '/sop', 301);
+Route::get('/informasi-publik/sop/{slug}', fn($slug) => redirect('/sop/' . $slug, 301));
+
+// Tata Cara Layanan
+Route::get('/tata-cara', [LayananInformasiController::class, 'showTataCaraLayanan'])->name('informasi-publik.tata-cara-layanan');
+Route::redirect('/tata-cara-layanan', '/tata-cara', 301);
+
+// Layanan Informasi: Permohonan
+Route::prefix('permohonan-informasi')->name('informasi-publik.permohonan.')->group(function () {
+    // Rute yang dilindungi: hanya untuk pengguna yang sudah login
+    Route::get('/formulir', [LayananInformasiController::class, 'showFormPermohonan'])->middleware('auth')->name('form');
+    Route::post('/store', [LayananInformasiController::class, 'storePermohonan'])->middleware('auth')->name('store');
+
+    Route::get('/sukses', [LayananInformasiController::class, 'showPermohonanSukses'])->name('sukses');
+});
+
+// Layanan Informasi: Pengajuan Keberatan
+Route::prefix('pengajuan-keberatan')->name('informasi-publik.keberatan.')->group(function () {
+    // Rute yang dilindungi: hanya untuk pengguna yang sudah login
+    Route::get('/formulir', [LayananInformasiController::class, 'showFormKeberatan'])->middleware('auth')->name('form');
+    Route::post('/store', [LayananInformasiController::class, 'storeKeberatan'])->middleware('auth')->name('store');
+
+    Route::get('/sukses', [LayananInformasiController::class, 'showKeberatanSukses'])->name('sukses');
+});
+
+// Halaman Alur Permohonan/Keberatan (prosedur) sudah digabung ke Tata Cara Layanan
+foreach (['permohonan-informasi', 'pengajuan-keberatan', 'permohonan', 'keberatan'] as $prefix) {
+    Route::redirect('/' . $prefix . '/prosedur', '/tata-cara', 301);
+    Route::redirect('/informasi-publik/' . $prefix . '/prosedur', '/tata-cara', 301);
+}
+
+// Alamat lama dialihkan permanen ke alamat baru
+foreach (['permohonan' => 'permohonan-informasi', 'keberatan' => 'pengajuan-keberatan'] as $lama => $baru) {
+    foreach (['form' => 'formulir', 'sukses' => 'sukses'] as $halamanLama => $halamanBaru) {
+        Route::redirect('/' . $lama . '/' . $halamanLama, '/' . $baru . '/' . $halamanBaru, 301);
+        Route::redirect('/informasi-publik/' . $lama . '/' . $halamanLama, '/' . $baru . '/' . $halamanBaru, 301);
+    }
+}
+
 // Modul Informasi Publik (PPID)
 Route::prefix('informasi-publik')->name('informasi-publik.')->group(function () {
-    // Rute untuk Laporan & Statistik PPID
-    Route::get('/laporan-statistik', [LaporanStatistikController::class, 'index'])->name('laporan-statistik');
-
-    // Rute Prosedur Pelayanan Informasi (Permohonan)
-    Route::prefix('permohonan')->name('permohonan.')->group(function () {
-        Route::get('/prosedur', [LayananInformasiController::class, 'showProsedurPermohonan'])->name('prosedur');
-        
-        // Rute yang dilindungi: hanya untuk pengguna yang sudah login
-        Route::get('/form', [LayananInformasiController::class, 'showFormPermohonan'])->middleware('auth')->name('form');
-        Route::post('/store', [LayananInformasiController::class, 'storePermohonan'])->middleware('auth')->name('store');
-        
-        Route::get('/sukses', [LayananInformasiController::class, 'showPermohonanSukses'])->name('sukses');
-    });
-
-    // Rute Prosedur Pelayanan Informasi (Keberatan)
-    Route::prefix('keberatan')->name('keberatan.')->group(function () {
-        Route::get('/prosedur', [LayananInformasiController::class, 'showProsedurKeberatan'])->name('prosedur');
-
-        // Rute yang dilindungi: hanya untuk pengguna yang sudah login
-        Route::get('/form', [LayananInformasiController::class, 'showFormKeberatan'])->middleware('auth')->name('form');
-        Route::post('/store', [LayananInformasiController::class, 'storeKeberatan'])->middleware('auth')->name('store');
-
-        Route::get('/sukses', [LayananInformasiController::class, 'showKeberatanSukses'])->name('sukses');
-    });
-
-    // Rute SOP Pelayanan Informasi
-    Route::get('/sop', [LayananInformasiController::class, 'showSop'])->name('sop');
-    Route::get('/sop/{sopLayanan:slug}', [LayananInformasiController::class, 'showSopDetail'])->name('sop.show');
-
     // Rute Kontak PPID
     // Route::get('/kontak', [ProfilPpidController::class, 'kontakPpid'])->name('kontak-ppid');
 
     // Rute Daftar Informasi Publik (DIP) - khusus index
     Route::get('/', [InformasiPublikController::class, 'index'])->name('index');
-    Route::get('/laporan-statistik', [InformasiPublikController::class, 'laporanStatistik'])->name('laporan-statistik');
-    
+
     // Rute paling umum dengan {slug} untuk detail informasi publik (HARUS DI PALING BAWAH)
     Route::get('/{slug}', [InformasiPublikController::class, 'show'])->name('show');
 });
@@ -230,13 +246,13 @@ Route::middleware('auth')->group(function () {
     // --- RUTE BARU UNTUK DASBOR PENGGUNA ---
     Route::get('/dasbor/permohonan/{permohonan}', [UserDashboardController::class, 'showPermohonan'])
         ->name('user-dashboard.permohonan.show');
-        
+
     Route::get('/dasbor/keberatan/{keberatan}', [UserDashboardController::class, 'showKeberatan'])
         ->name('user-dashboard.keberatan.show');
 
     // --- Rute ADMIN / BACKEND (CRUD) ---
     Route::prefix('admin')->name('admin.')->group(function () {
-        
+
         // LETAKKAN ROUTE TRANSLATE DI SINI (PALING ATAS DALAM GRUP ADMIN)
         Route::post('/translate-library', [\App\Http\Controllers\TranslateController::class, 'translate'])->name('translate.library');
 
@@ -259,7 +275,7 @@ Route::middleware('auth')->group(function () {
 
         Route::get('activity-log', [ActivityLogController::class, 'index'])->name('activity-log.index');
         Route::delete('activity-log/clear', [ActivityLogController::class, 'clearLog'])->name('activity-log.clear');
-        
+
         // CRUD Kategori Berita
         Route::resource('categories', CategoryController::class);
 
@@ -288,41 +304,41 @@ Route::middleware('auth')->group(function () {
 
         // CRUD Informasi Publik (Item)
         // CRUD Informasi Publik (Item)
-// =============================================
-// INFORMASI PUBLIK - JUDUL UTAMA + SUB MENU
-// =============================================
+        // =============================================
+        // INFORMASI PUBLIK - JUDUL UTAMA + SUB MENU
+        // =============================================
 
-// CRUD Informasi Publik (Item)
-Route::resource('informasi-publik', AdminInformasiPublikController::class)->parameters([
-    'informasi-publik' => 'informasi_publik_item',
-]);
+        // CRUD Informasi Publik (Item)
+        Route::resource('informasi-publik', AdminInformasiPublikController::class)->parameters([
+            'informasi-publik' => 'informasi_publik_item',
+        ]);
 
-Route::post('informasi-publik/add-children', [AdminInformasiPublikController::class, 'addChildren'])->name('informasi-publik.add-children');
+        Route::post('informasi-publik/add-children', [AdminInformasiPublikController::class, 'addChildren'])->name('informasi-publik.add-children');
 
-// Route sementara untuk halaman Sub-menu (akan kita lengkapi nanti)
-Route::get('informasi-publik/{informasi_publik_item}/sub-menu', [AdminInformasiPublikController::class, 'subMenuIndex'])
-    ->name('informasi-publik.sub-menu.index');
+        // Route sementara untuk halaman Sub-menu (akan kita lengkapi nanti)
+        Route::get('informasi-publik/{informasi_publik_item}/sub-menu', [AdminInformasiPublikController::class, 'subMenuIndex'])
+            ->name('informasi-publik.sub-menu.index');
 
-// ==========================================
-// ROUTE SUB-MENU (NAKED/TERPISAH)
-// ==========================================
-Route::get('informasi-publik/{informasi_publik_item}/sub-menu', [AdminInformasiPublikController::class, 'subMenuIndex'])
-    ->name('informasi-publik.sub-menu.index');
+        // ==========================================
+        // ROUTE SUB-MENU (NAKED/TERPISAH)
+        // ==========================================
+        Route::get('informasi-publik/{informasi_publik_item}/sub-menu', [AdminInformasiPublikController::class, 'subMenuIndex'])
+            ->name('informasi-publik.sub-menu.index');
 
-Route::get('informasi-publik/{informasi_publik_item}/sub-menu/create', [AdminInformasiPublikController::class, 'subMenuCreate'])
-    ->name('informasi-publik.sub-menu.create');
+        Route::get('informasi-publik/{informasi_publik_item}/sub-menu/create', [AdminInformasiPublikController::class, 'subMenuCreate'])
+            ->name('informasi-publik.sub-menu.create');
 
-Route::post('informasi-publik/{informasi_publik_item}/sub-menu', [AdminInformasiPublikController::class, 'subMenuStore'])
-    ->name('informasi-publik.sub-menu.store');
+        Route::post('informasi-publik/{informasi_publik_item}/sub-menu', [AdminInformasiPublikController::class, 'subMenuStore'])
+            ->name('informasi-publik.sub-menu.store');
 
-Route::get('informasi-publik/{informasi_publik_item}/sub-menu/{subMenu}/edit', [AdminInformasiPublikController::class, 'subMenuEdit'])
-    ->name('informasi-publik.sub-menu.edit');
+        Route::get('informasi-publik/{informasi_publik_item}/sub-menu/{subMenu}/edit', [AdminInformasiPublikController::class, 'subMenuEdit'])
+            ->name('informasi-publik.sub-menu.edit');
 
-Route::put('informasi-publik/{informasi_publik_item}/sub-menu/{subMenu}', [AdminInformasiPublikController::class, 'subMenuUpdate'])
-    ->name('informasi-publik.sub-menu.update');
+        Route::put('informasi-publik/{informasi_publik_item}/sub-menu/{subMenu}', [AdminInformasiPublikController::class, 'subMenuUpdate'])
+            ->name('informasi-publik.sub-menu.update');
 
-Route::delete('informasi-publik/{informasi_publik_item}/sub-menu/{subMenu}', [AdminInformasiPublikController::class, 'subMenuDestroy'])
-    ->name('informasi-publik.sub-menu.destroy');
+        Route::delete('informasi-publik/{informasi_publik_item}/sub-menu/{subMenu}', [AdminInformasiPublikController::class, 'subMenuDestroy'])
+            ->name('informasi-publik.sub-menu.destroy');
 
         // CRUD Album Foto
         Route::resource('albums', AlbumController::class);
@@ -396,11 +412,12 @@ Route::delete('informasi-publik/{informasi_publik_item}/sub-menu/{subMenu}', [Ad
         Route::get('kinerja', [KinerjaController::class, 'index'])->name('kinerja.index');
         Route::post('kinerja', [KinerjaController::class, 'storeOrUpdate'])->name('kinerja.storeOrUpdate');
     });
-
 });
 
 // Halaman PPID Pelaksana
 // Halaman PPID Pelaksana
 Route::view('/ppid-pelaksana', 'ppid.ppid-pelaksana')->name('ppid-pelaksana');
 
-require __DIR__.'/auth.php'; // Memasukkan rute autentikasi dari auth.php
+Route::view('/sistem-elektronik-pengadaan-barang-dan-jasa', 'ppid.se-barjas')->name('se-barjas');
+
+require __DIR__ . '/auth.php'; // Memasukkan rute autentikasi dari auth.php

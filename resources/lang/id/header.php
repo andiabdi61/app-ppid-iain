@@ -26,6 +26,7 @@ return [
     'objection' => 'Pengajuan Keberatan',
     'objection_flow' => 'Alur Pengajuan Keberatan',
     'sop' => 'SOP Layanan',
+    'tata_cara' => 'Tata Cara Layanan',
     'objection_form' => 'Formulir Pengajuan Keberatan',
     
     'report' => 'Laporan & Statistik',

@@ -14,11 +14,6 @@ class LayananInformasiController extends Controller
 {
     // --- Permohonan Informasi ---
 
-    public function showProsedurPermohonan()
-    {
-        return view('informasi-publik.prosedur-permohonan');
-    }
-
     public function showSop()
     {
         $sopList = SopLayanan::orderBy('judul')->get();
@@ -29,6 +24,11 @@ class LayananInformasiController extends Controller
     public function showSopDetail(SopLayanan $sopLayanan)
     {
         return view('informasi-publik.sop-detail', ['sop' => $sopLayanan]);
+    }
+
+    public function showTataCaraLayanan()
+    {
+        return view('informasi-publik.tata-cara-layanan');
     }
 
     public function showFormPermohonan()
@@ -81,11 +81,6 @@ class LayananInformasiController extends Controller
     }
 
     // --- Pengajuan Keberatan ---
-
-    public function showProsedurKeberatan()
-    {
-        return view('informasi-publik.prosedur-keberatan');
-    }
 
     public function showFormKeberatan()
     {

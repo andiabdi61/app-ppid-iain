@@ -183,21 +183,10 @@
                              x-transition:leave-end="opacity-0 scale-95"
                              :class="isMobile ? 'bg-gray-50 rounded-xl p-3 mt-1 border border-gray-100 space-y-1' : 'lg:absolute {{ $ddAlign }} lg:top-full lg:mt-1 lg:w-72 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50'">
                             
-                            <p class="px-3 py-1 text-xs font-bold text-hijau-800 uppercase tracking-wider">{{ __('header.info_service') }}</p>
-                            
-                            <a href="{{ route('informasi-publik.permohonan.prosedur') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.request_flow') }}</a>
-                            <a href="{{ route('informasi-publik.permohonan.form') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.request_form') }}</a>
-                            
-                            <div class="my-1 border-t border-gray-200"></div>
-                            
-                            <p class="px-3 py-1 text-xs font-bold text-hijau-800 uppercase tracking-wider">{{ __('header.objection') }}</p>
-                            
-                            <a href="{{ route('informasi-publik.keberatan.prosedur') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.objection_flow') }}</a>
-                            <a href="{{ route('informasi-publik.keberatan.form') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.objection_form') }}</a>
-
-                            <div class="my-1 border-t border-gray-200"></div>
-
                             <a href="{{ route('informasi-publik.sop') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.sop') }}</a>
+                            <a href="{{ route('informasi-publik.tata-cara-layanan') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.tata_cara') }}</a>
+                            <a href="{{ route('informasi-publik.permohonan.form') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.request_form') }}</a>
+                            <a href="{{ route('informasi-publik.keberatan.form') }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.objection_form') }}</a>
                         </div>
                     </div>
 

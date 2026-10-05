@@ -21,7 +21,8 @@
                 {{ ($post->published_at ?? $post->created_at) ? ($post->published_at ?? $post->created_at)->translatedFormat('d F Y') : '-' }}
             </span>
             @if($post->category)
-                <span class="inline-block w-fit px-2.5 py-1 rounded-full text-[11px] font-bold shrink-0 {{ $post->category->badge_class ?? 'bg-hijau-100 text-hijau-800' }}">
+                @php $badgeColor = $post->category->badge_color ?? 'gray'; @endphp
+                <span class="inline-block w-fit px-3 py-0.5 text-xs font-medium rounded-md border shrink-0 bg-{{ $badgeColor }}-50 text-{{ $badgeColor }}-700 border-{{ $badgeColor }}-200">
                     {{ $post->category->name }}
                 </span>
             @endif
