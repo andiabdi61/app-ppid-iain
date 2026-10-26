@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
+use App\Models\Comment;
 use App\Models\Dokumen;
 use App\Models\InformasiPublik;
-use App\Models\PermohonanInformasi;
 use App\Models\PengajuanKeberatan;
-use App\Models\Comment;
-use App\Models\User;
+use App\Models\PermohonanInformasi;
+use App\Models\Post;
 use App\Models\Setting;
-use Illuminate\Http\Request;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -27,15 +26,15 @@ class DashboardController extends Controller
             // Menggabungkan 2 query COUNT menjadi 2 query sederhana
             $data['totalPermohonan'] = PermohonanInformasi::count();
             $data['totalKeberatan'] = PengajuanKeberatan::count();
-            
+
             // Query ini sudah cukup efisien, biarkan
             $data['permohonanStatus'] = PermohonanInformasi::select('status', DB::raw('count(*) as total'))->groupBy('status')->pluck('total', 'status');
             $data['keberatanStatus'] = PengajuanKeberatan::select('status', DB::raw('count(*) as total'))->groupBy('status')->pluck('total', 'status');
 
             // PERBAIKAN N+1: Eager load 'user'
             $data['recentPermohonan'] = PermohonanInformasi::with('user')->latest()->take(5)->get();
-            $data['recentKeberatan'] = PengajuanKeberatan::with('user')->latest()->take(5)->get();
-            
+            $data['recentKeberatan'] = PengajuanKeberatan::with(['user', 'permohonanInformasi.user'])->latest()->take(5)->get();
+
             $data['totalInformasiPublik'] = InformasiPublik::count();
             // Logika kategori info publik tetap sama, karena sudah efisien
             $data['infoPublikCategories'] = DB::table('informasi_publik_categories')
@@ -54,7 +53,7 @@ class DashboardController extends Controller
             $data['totalPosts'] = Post::count();
             $data['totalDokumen'] = Dokumen::count();
             $data['totalCommentsPending'] = Comment::where('status', 'pending')->count();
-            
+
             // Logika kategori post tetap sama, karena sudah efisien
             $data['postCategories'] = DB::table('categories')
                 ->join('posts', 'categories.id', '=', 'posts.category_id')
@@ -71,7 +70,7 @@ class DashboardController extends Controller
 
             // PERBAIKAN N+1: Eager load 'post'
             $data['recentComments'] = Comment::where('status', 'pending')->with('post')->latest()->take(5)->get();
-            
+
             // Query ini sudah efisien, biarkan
             $data['popularPosts'] = Post::orderByDesc('hits')->take(5)->get();
             $data['popularDokumen'] = Dokumen::orderByDesc('hits')->take(5)->get();

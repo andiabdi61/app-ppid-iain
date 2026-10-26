@@ -101,26 +101,6 @@
                     </div>
                     @endif
 
-                    {{-- DROPDOWN: OPD (Super Admin) --}}
-                    @if(Auth::user()->role === 'super_admin')
-                    <div class="relative" x-data="{ open: false }" @click.away="open = false">
-                        <button @click="open = !open" 
-                                class="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors duration-200">
-                            Struktur Organisasi
-                            <svg class="w-4 h-4 transition-transform" :class="{ 'rotate-180': open }" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-                        </button>
-                        <div x-show="open" x-transition class="absolute left-0 top-full mt-1 w-56 bg-white rounded-xl shadow-lg border border-gray-100 py-2 z-50">
-                            <a href="{{ route('admin.pejabat.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Manajemen Pejabat</a>
-                            <a href="{{ route('admin.bidang.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Manajemen Bidang</a>
-                            <div class="my-1 border-t border-gray-100"></div>
-                            <p class="px-4 py-1 text-xs font-semibold text-gray-400 uppercase tracking-wider">Kinerja</p>
-                            <a href="{{ route('admin.sasaran-strategis.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Sasaran Strategis</a>
-                            <a href="{{ route('admin.indikator-kinerja.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Indikator Kinerja</a>
-                            <a href="{{ route('admin.kinerja.index') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition">Capaian Kinerja</a>
-                        </div>
-                    </div>
-                    @endif
-
                 </div>
             </div>
 
@@ -227,17 +207,6 @@
                 <a href="{{ route('admin.informasi-publik.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Informasi Publik</a>
                 <a href="{{ route('admin.permohonan.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Permohonan Informasi</a>
                 <a href="{{ route('admin.keberatan.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Pengajuan Keberatan</a>
-            </div>
-            @endif
-
-            @if(Auth::user()->role === 'super_admin')
-            <div class="pt-2 border-t border-gray-100">
-                <p class="px-3 py-1 text-xs font-bold text-gray-400 uppercase">OPD</p>
-                <a href="{{ route('admin.pejabat.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Manajemen Pejabat</a>
-                <a href="{{ route('admin.bidang.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Manajemen Bidang</a>
-                <a href="{{ route('admin.sasaran-strategis.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Sasaran Strategis</a>
-                <a href="{{ route('admin.indikator-kinerja.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Indikator Kinerja</a>
-                <a href="{{ route('admin.kinerja.index') }}" class="block px-3 py-2.5 rounded-lg text-sm text-gray-700 hover:bg-gray-50 transition">Capaian Kinerja</a>
             </div>
             @endif
 

@@ -67,8 +67,13 @@
                                 @forelse ($keberatan as $item)
                                 <tr>
                                     <td class="px-6 py-4">
-                                        <div class="text-sm font-medium text-gray-900">{{ $item->user->name ?? '[Pengguna Dihapus]' }}</div>
-                                        <div class="text-sm text-gray-500">{{ $item->user->email ?? 'N/A' }}</div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm font-medium text-gray-900">{{ $item->nama_pemohon_display ?? '[Pengguna Dihapus]' }}</span>
+                                            @if(! $item->user_id)
+                                                <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-600">Tamu</span>
+                                            @endif
+                                        </div>
+                                        <div class="text-sm text-gray-500">{{ $item->email_pemohon_display ?? 'N/A' }}</div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-700">
                                         {{ $item->nomor_registrasi_permohonan }}

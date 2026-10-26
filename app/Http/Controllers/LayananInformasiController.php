@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\SopLayanan;
-use App\Models\PermohonanInformasi;
+use App\Http\Requests\StorePengajuanKeberatanRequest;
+use App\Http\Requests\StorePermohonanInformasiRequest;
 use App\Models\PengajuanKeberatan;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-// Tidak perlu 'use' untuk helper 'activity()', ia tersedia secara global.
+use App\Models\PermohonanInformasi;
+use App\Models\SopLayanan;
 
 class LayananInformasiController extends Controller
 {
@@ -36,17 +34,10 @@ class LayananInformasiController extends Controller
         return view('informasi-publik.form-permohonan');
     }
 
-    public function storePermohonan(Request $request)
+    public function storePermohonan(StorePermohonanInformasiRequest $request)
     {
-        $request->validate([
-            'pekerjaan_pemohon' => 'nullable|string|max:255',
-            'identitas_pemohon' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
-            'jenis_pemohon' => 'required|string|in:Perorangan,Badan Hukum,Kelompok Masyarakat',
-            'tujuan_penggunaan_informasi' => 'nullable|string',
-            'rincian_informasi' => 'required|string',
-            'cara_mendapatkan_informasi' => 'required|string|in:Melihat,Membaca,Mendengar,Mendapatkan Salinan Softcopy,Mendapatkan Salinan Hardcopy',
-            'cara_mendapatkan_salinan' => 'nullable|string|in:Mengambil Langsung,Pos,Email,Fax',
-        ]);
+        $validated = $request->validated();
+        $user = $request->user();
 
         $identitasPath = null;
         if ($request->hasFile('identitas_pemohon')) {
@@ -54,21 +45,24 @@ class LayananInformasiController extends Controller
         }
 
         $permohonan = PermohonanInformasi::create([
-            'user_id' => Auth::id(), // Selalu dari pengguna yang login
-            'jenis_pemohon' => $request->jenis_pemohon,
-            'pekerjaan_pemohon' => $request->pekerjaan_pemohon,
+            'user_id' => $user?->id,
+            'nama_pemohon' => $user?->name ?? $validated['nama_pemohon'] ?? null,
+            'email_pemohon' => $user?->email ?? $validated['email_pemohon'] ?? null,
+            'telp_pemohon' => $user?->telp ?? $validated['telp_pemohon'] ?? null,
+            'alamat_pemohon' => $user?->alamat ?? $validated['alamat_pemohon'] ?? null,
+            'jenis_pemohon' => $validated['jenis_pemohon'],
+            'pekerjaan_pemohon' => $validated['pekerjaan_pemohon'] ?? null,
             'identitas_pemohon' => $identitasPath,
-            'rincian_informasi' => $request->rincian_informasi,
-            'tujuan_penggunaan_informasi' => $request->tujuan_penggunaan_informasi,
-            'cara_mendapatkan_informasi' => $request->cara_mendapatkan_informasi,
-            'cara_mendapatkan_salinan' => $request->cara_mendapatkan_salinan,
+            'rincian_informasi' => $validated['rincian_informasi'],
+            'tujuan_penggunaan_informasi' => $validated['tujuan_penggunaan_informasi'] ?? null,
+            'cara_mendapatkan_informasi' => $validated['cara_mendapatkan_informasi'],
+            'cara_mendapatkan_salinan' => $validated['cara_mendapatkan_salinan'] ?? null,
             'tanggal_permohonan' => now(),
             'status' => 'Menunggu Diproses',
         ]);
 
-        // --- LOG KUSTOM DI SINI ---
         activity()
-            ->causedBy(Auth::user())
+            ->causedBy($user)
             ->performedOn($permohonan)
             ->log('Mengajukan permohonan informasi baru');
 
@@ -92,32 +86,28 @@ class LayananInformasiController extends Controller
         return view('informasi-publik.form-keberatan');
     }
 
-    public function storeKeberatan(Request $request)
+    public function storeKeberatan(StorePengajuanKeberatanRequest $request)
     {
-        $request->validate([
-            'nomor_registrasi_permohonan' => 'required|string|max:255|exists:permohonan_informasi,nomor_registrasi',
-            'alasan_keberatan' => 'required|string',
-            'jenis_keberatan' => 'required|string|in:Info Ditolak,Info Tidak Disediakan,Info Tidak Ditanggapi,Info Tidak Sesuai,Biaya Tidak Wajar,Info Terlambat',
-            'kasus_posisi' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
+        $user = $request->user();
 
         $keberatan = PengajuanKeberatan::create([
-            'user_id' => Auth::id(), // Selalu dari pengguna yang login
-            'nomor_registrasi_permohonan' => $request->nomor_registrasi_permohonan,
-            'alasan_keberatan' => $request->alasan_keberatan,
-            'jenis_keberatan' => $request->jenis_keberatan,
-            'kasus_posisi' => $request->kasus_posisi,
+            'user_id' => $user?->id,
+            'nomor_registrasi_permohonan' => $validated['nomor_registrasi_permohonan'],
+            'alasan_keberatan' => $validated['alasan_keberatan'],
+            'jenis_keberatan' => $validated['jenis_keberatan'],
+            'kasus_posisi' => $validated['kasus_posisi'] ?? null,
             'tanggal_pengajuan' => now(),
             'status' => 'Menunggu Diproses',
         ]);
 
-        // --- LOG KUSTOM DI SINI ---
         activity()
-            ->causedBy(Auth::user())
+            ->causedBy($user)
             ->performedOn($keberatan)
-            ->log('Mengajukan keberatan informasi'); // Deskripsi diubah sedikit agar lebih spesifik
+            ->log('Mengajukan keberatan informasi');
 
-        return redirect()->route('informasi-publik.keberatan.sukses');
+        return redirect()->route('informasi-publik.keberatan.sukses')
+            ->with('nomor_registrasi_permohonan', $keberatan->nomor_registrasi_permohonan);
     }
 
     public function showKeberatanSukses()

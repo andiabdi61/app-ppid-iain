@@ -8,11 +8,13 @@
     <title>@yield('title') - {{ $settings['app_name'] ?? 'PPID IAIN BONE' }}</title>
 
     {{-- Favicon --}}
-    @if(isset($settings['app_favicon']) && Storage::disk('public')->exists($settings['app_favicon']))
-        <link rel="icon" type="image/png" href="{{ asset('storage/' . $settings['app_favicon']) }}">
-    @else
-        <link rel="icon" type="image/png" href="{{ asset('images/favicon.ico') }}">
-    @endif
+    @php
+        $appFavicon = $settings['app_favicon'] ?? null;
+        $faviconUrl = $appFavicon && Storage::disk('public')->exists($appFavicon)
+            ? asset('storage/' . $appFavicon)
+            : asset('favicon.ico');
+    @endphp
+    <link rel="icon" href="{{ $faviconUrl }}">
 
     {{-- Fonts: Figtree (sesuai tailwind.config.js kamu) --}}
     {{-- Fonts: Plus Jakarta Sans --}}

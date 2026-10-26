@@ -21,15 +21,35 @@
                         <p class="text-gray-500 leading-relaxed max-w-md mx-auto">
                             Terima kasih, pengajuan keberatan Anda telah berhasil kami terima dan akan segera ditindaklanjuti oleh atasan PPID.
                         </p>
-                        
+
+                        @if(session('nomor_registrasi_permohonan'))
+                            <div class="mt-8 bg-yellow-50 border border-yellow-200 rounded-xl p-6 max-w-sm mx-auto">
+                                <p class="text-sm text-yellow-700 mb-1">Nomor Registrasi Permohonan:</p>
+                                <p class="text-2xl font-bold font-mono text-yellow-800 select-all tracking-wide">
+                                    {{ session('nomor_registrasi_permohonan') }}
+                                </p>
+                                <p class="text-xs text-yellow-700 mt-3">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Simpan nomor dan email pemohon untuk mengecek status keberatan.
+                                </p>
+                            </div>
+                        @endif
+
                         {{-- Tombol Aksi --}}
                         <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-10">
-                            <a href="{{ route('dashboard') }}" 
+                            @auth
+                                <a href="{{ route('dashboard') }}"
+                                   class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-hijau-600 text-white hover:bg-hijau-700 transition-colors shadow-md shadow-hijau-600/20">
+                                    <i class="bi bi-speedometer2"></i>
+                                    Ke Dasbor Saya
+                                </a>
+                            @endauth
+                            <a href="{{ route('layanan-pengaduan.cek-status', ['no_reg' => session('nomor_registrasi_permohonan')]) }}"
                                class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-semibold bg-hijau-600 text-white hover:bg-hijau-700 transition-colors shadow-md shadow-hijau-600/20">
-                                <i class="bi bi-speedometer2"></i>
-                                Ke Dasbor Saya
+                                <i class="bi bi-search"></i>
+                                Cek Status
                             </a>
-                            <a href="{{ url('/') }}" 
+                            <a href="{{ url('/') }}"
                                class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 transition-colors">
                                 <i class="bi bi-house"></i>
                                 Kembali ke Beranda

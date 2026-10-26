@@ -33,9 +33,16 @@
             @endif
 
             {{-- Alert Info User --}}
-            <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-xl p-4 mb-6 text-sm">
-                Anda mengajukan keberatan sebagai <strong>{{ Auth::user()->name }}</strong>.
-            </div>
+            @auth
+                <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-xl p-4 mb-6 text-sm">
+                    Anda mengajukan keberatan sebagai <strong>{{ auth()->user()->name }}</strong>.
+                </div>
+            @else
+                <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-xl p-4 mb-6 text-sm">
+                    Anda mengajukan keberatan sebagai <strong>tamu</strong>. Tidak perlu membuat akun.
+                    Gunakan email yang sama dengan email pada permohonan informasi yang diajukan.
+                </div>
+            @endauth
 
             <form action="{{ route('informasi-publik.keberatan.store') }}" method="POST" class="mt-6 space-y-8">
                 @csrf
@@ -45,17 +52,32 @@
                 {{-- ============================================ --}}
                 <fieldset class="border border-gray-200 rounded-xl p-5 md:p-6">
                     <legend class="text-base font-bold text-gray-800 px-2">Data Permohonan yang Dikeberatan</legend>
-                    <div class="mt-4">
-                        <label for="nomor_registrasi_permohonan" class="block text-sm font-medium text-gray-700 mb-1.5">
-                            Nomor Registrasi Permohonan Informasi <span class="text-red-500">*</span>
-                        </label>
-                        <input type="text" 
-                               class="w-full px-4 py-2.5 rounded-lg border @error('nomor_registrasi_permohonan') border-red-500 focus:ring-red-500 focus:border-red-500 @else border-gray-300 focus:ring-hijau-500 focus:border-hijau-500 @enderror text-sm outline-none transition font-mono" 
-                               id="nomor_registrasi_permohonan" name="nomor_registrasi_permohonan" 
-                               value="{{ old('nomor_registrasi_permohonan', request('no_reg')) }}" 
-                               placeholder="Contoh: 20250814001" required>
-                        <p class="text-xs text-gray-400 mt-1.5">Masukkan nomor registrasi dari permohonan yang ingin Anda ajukan keberatan. Pastikan permohonan tersebut diajukan oleh akun Anda.</p>
-                        @error('nomor_registrasi_permohonan') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                    <div class="mt-4 space-y-5">
+                        <div>
+                            <label for="nomor_registrasi_permohonan" class="block text-sm font-medium text-gray-700 mb-1.5">
+                                Nomor Registrasi Permohonan Informasi <span class="text-red-500">*</span>
+                            </label>
+                            <input type="text"
+                                   class="w-full px-4 py-2.5 rounded-lg border @error('nomor_registrasi_permohonan') border-red-500 focus:ring-red-500 focus:border-red-500 @else border-gray-300 focus:ring-hijau-500 focus:border-hijau-500 @enderror text-sm outline-none transition font-mono"
+                                   id="nomor_registrasi_permohonan" name="nomor_registrasi_permohonan"
+                                   value="{{ old('nomor_registrasi_permohonan', request('no_reg')) }}"
+                                   placeholder="Contoh: 20250814001" required>
+                            <p class="text-xs text-gray-400 mt-1.5">Masukkan nomor registrasi permohonan yang ingin Anda ajukan keberatan.</p>
+                            @error('nomor_registrasi_permohonan') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
+
+                        <div>
+                            <label for="email_pemohon" class="block text-sm font-medium text-gray-700 mb-1.5">
+                                Email Pemohon <span class="text-red-500">*</span>
+                            </label>
+                            <input type="email"
+                                   class="w-full px-4 py-2.5 rounded-lg border @error('email_pemohon') border-red-500 focus:ring-red-500 focus:border-red-500 @else border-gray-300 focus:ring-hijau-500 focus:border-hijau-500 @enderror text-sm outline-none transition"
+                                   id="email_pemohon" name="email_pemohon"
+                                   value="{{ old('email_pemohon', auth()->user()?->email ?? session('keberatan_email_prefill')) }}"
+                                   maxlength="255" required autocomplete="email">
+                            <p class="text-xs text-gray-400 mt-1.5">Gunakan email yang sama dengan email pada permohonan informasi.</p>
+                            @error('email_pemohon') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                        </div>
                     </div>
                 </fieldset>
 
@@ -112,6 +134,9 @@
                         <i class="bi bi-shield-exclamation"></i>
                         Kirim Pengajuan Keberatan
                     </button>
+                    <p class="text-xs text-center text-gray-500">
+                        Status keberatan dapat dicek menggunakan nomor registrasi permohonan dan email yang sama.
+                    </p>
                 </div>
             </form>
         </div>

@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property int $id
- * @property int $user_id
+ * @property int|null $user_id
  * @property string $nomor_registrasi_permohonan
  * @property string $alasan_keberatan
  * @property string $jenis_keberatan
@@ -21,7 +21,9 @@ use Spatie\Activitylog\LogOptions;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
- * @property-read \App\Models\User $user
+ * @property-read \App\Models\User|null $user
+ * @property-read \App\Models\PermohonanInformasi|null $permohonanInformasi
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|PengajuanKeberatan newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PengajuanKeberatan newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PengajuanKeberatan query()
@@ -36,6 +38,7 @@ use Spatie\Activitylog\LogOptions;
  * @method static \Illuminate\Database\Eloquent\Builder|PengajuanKeberatan whereTanggalPengajuan($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PengajuanKeberatan whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PengajuanKeberatan whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class PengajuanKeberatan extends Model
@@ -77,6 +80,31 @@ class PengajuanKeberatan extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function permohonanInformasi()
+    {
+        return $this->belongsTo(PermohonanInformasi::class, 'nomor_registrasi_permohonan', 'nomor_registrasi');
+    }
+
+    public function getNamaPemohonDisplayAttribute()
+    {
+        return $this->user?->name ?? $this->permohonanInformasi?->nama_pemohon_display;
+    }
+
+    public function getEmailPemohonDisplayAttribute()
+    {
+        return $this->user?->email ?? $this->permohonanInformasi?->email_pemohon_display;
+    }
+
+    public function getTelpPemohonDisplayAttribute()
+    {
+        return $this->user?->telp ?? $this->permohonanInformasi?->telp_pemohon_display;
+    }
+
+    public function getAlamatPemohonDisplayAttribute()
+    {
+        return $this->user?->alamat ?? $this->permohonanInformasi?->alamat_pemohon_display;
+    }
+
     /**
      * The "booted" method of the model.
      */
@@ -98,7 +126,7 @@ class PengajuanKeberatan extends Model
             ->logOnly(['status', 'catatan_admin'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(function(string $eventName) {
+            ->setDescriptionForEvent(function (string $eventName) {
                 $regNum = $this->nomor_registrasi_permohonan ?? 'N/A';
                 if ($eventName === 'updated') {
                     $changes = $this->getChanges();
@@ -108,10 +136,12 @@ class PengajuanKeberatan extends Model
                         $details[] = "status diubah dari '{$oldStatus}' menjadi '{$changes['status']}'";
                     }
                     if (isset($changes['catatan_admin'])) {
-                        $details[] = "catatan admin diperbarui";
+                        $details[] = 'catatan admin diperbarui';
                     }
-                    return "Keberatan untuk #{$regNum} diperbarui: " . implode(', ', $details);
+
+                    return "Keberatan untuk #{$regNum} diperbarui: ".implode(', ', $details);
                 }
+
                 return "Keberatan untuk #{$regNum} telah di-{$eventName}";
             });
     }

@@ -5,12 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon; // <-- Tambahkan ini
-use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 /**
  * @property int $id
- * @property int $user_id
+ * @property int|null $user_id
+ * @property string|null $nama_pemohon
+ * @property string|null $email_pemohon
+ * @property string|null $telp_pemohon
+ * @property string|null $alamat_pemohon
  * @property string $jenis_pemohon
  * @property string|null $pekerjaan_pemohon
  * @property string|null $identitas_pemohon
@@ -26,7 +30,8 @@ use Spatie\Activitylog\LogOptions;
  * @property Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \Spatie\Activitylog\Models\Activity> $activities
  * @property-read int|null $activities_count
- * @property-read \App\Models\User $user
+ * @property-read \App\Models\User|null $user
+ *
  * @method static \Illuminate\Database\Eloquent\Builder|PermohonanInformasi newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PermohonanInformasi newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|PermohonanInformasi query()
@@ -45,6 +50,7 @@ use Spatie\Activitylog\LogOptions;
  * @method static \Illuminate\Database\Eloquent\Builder|PermohonanInformasi whereTujuanPenggunaanInformasi($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PermohonanInformasi whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|PermohonanInformasi whereUserId($value)
+ *
  * @mixin \Eloquent
  */
 class PermohonanInformasi extends Model
@@ -60,10 +66,14 @@ class PermohonanInformasi extends Model
      */
     protected $fillable = [
         'user_id',
+        'nama_pemohon',
+        'email_pemohon',
+        'telp_pemohon',
+        'alamat_pemohon',
         'nomor_registrasi',
-        'jenis_pemohon', // <-- Tambahkan kembali
-        'pekerjaan_pemohon', // <-- Tambahkan kembali
-        'identitas_pemohon', // <-- Tambahkan kembali
+        'jenis_pemohon',
+        'pekerjaan_pemohon',
+        'identitas_pemohon',
         'rincian_informasi',
         'tujuan_penggunaan_informasi',
         'cara_mendapatkan_informasi',
@@ -90,6 +100,26 @@ class PermohonanInformasi extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function getNamaPemohonDisplayAttribute()
+    {
+        return $this->nama_pemohon ?? $this->user?->name;
+    }
+
+    public function getEmailPemohonDisplayAttribute()
+    {
+        return $this->email_pemohon ?? $this->user?->email;
+    }
+
+    public function getTelpPemohonDisplayAttribute()
+    {
+        return $this->telp_pemohon ?? $this->user?->telp;
+    }
+
+    public function getAlamatPemohonDisplayAttribute()
+    {
+        return $this->alamat_pemohon ?? $this->user?->alamat;
+    }
+
     /**
      * The "booted" method of the model.
      */
@@ -113,7 +143,7 @@ class PermohonanInformasi extends Model
 
                 if ($lastPermohonanToday) {
                     // Jika ada, ambil nomor urut terakhir dan tambahkan 1
-                    $lastNumber = (int)substr($lastPermohonanToday->nomor_registrasi, -3);
+                    $lastNumber = (int) substr($lastPermohonanToday->nomor_registrasi, -3);
                     $newNumber = $lastNumber + 1;
                 } else {
                     // Jika ini yang pertama hari ini, mulai dari 1
@@ -123,7 +153,7 @@ class PermohonanInformasi extends Model
                 // Format nomor urut menjadi 3 digit (001, 002, dst.)
                 $sequence = str_pad($newNumber, 3, '0', STR_PAD_LEFT);
 
-                $model->nomor_registrasi = $prefix . $sequence; // Hasil: 20250814001
+                $model->nomor_registrasi = $prefix.$sequence; // Hasil: 20250814001
             }
         });
     }
@@ -134,7 +164,7 @@ class PermohonanInformasi extends Model
             ->logOnly(['status', 'catatan_admin'])
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs()
-            ->setDescriptionForEvent(function(string $eventName) {
+            ->setDescriptionForEvent(function (string $eventName) {
                 $regNum = $this->nomor_registrasi ?? 'N/A';
                 if ($eventName === 'updated') {
                     $changes = $this->getChanges();
@@ -144,10 +174,12 @@ class PermohonanInformasi extends Model
                         $details[] = "status diubah dari '{$oldStatus}' menjadi '{$changes['status']}'";
                     }
                     if (isset($changes['catatan_admin'])) {
-                        $details[] = "catatan admin diperbarui";
+                        $details[] = 'catatan admin diperbarui';
                     }
-                    return "Permohonan #{$regNum} diperbarui: " . implode(', ', $details);
+
+                    return "Permohonan #{$regNum} diperbarui: ".implode(', ', $details);
                 }
+
                 return "Permohonan #{$regNum} telah di-{$eventName}";
             });
     }
