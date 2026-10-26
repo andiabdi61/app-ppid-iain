@@ -14,7 +14,7 @@ class SopLayananController extends Controller
     {
         Gate::authorize('viewAny', SopLayanan::class);
 
-        $sopList = SopLayanan::orderByDesc('tanggal_efektif')->paginate(10);
+        $sopList = SopLayanan::orderByDesc('created_at')->orderByDesc('id')->paginate(10);
 
         return view('admin.sop-layanan.index', compact('sopList'));
     }

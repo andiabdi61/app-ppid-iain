@@ -9,9 +9,18 @@ trait HasColoredBadge
         return Attribute::make(
             get: function () {
                 $baseClasses = 'px-2 inline-flex text-xs leading-5 font-semibold rounded-full';
-                $categoryName = $this->name ?? $this->nama ?? 'default';
-                $color = getUniqueBadgeColor($categoryName); // Panggil helper baru kita
+                $color = $this->badgeColor;
                 return "{$baseClasses} bg-{$color}-100 text-{$color}-800";
+            }
+        );
+    }
+
+    protected function badgeColor(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $categoryName = $this->name ?? $this->nama ?? 'default';
+                return getUniqueBadgeColor($categoryName); // Panggil helper baru kita
             }
         );
     }

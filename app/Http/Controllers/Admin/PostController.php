@@ -37,7 +37,7 @@ class PostController extends Controller
             $query->where('status', $request->status);
         }
 
-        $posts = $query->latest()->paginate(10);
+        $posts = $query->latest()->latest('id')->paginate(10);
 
         return view('admin.posts.index', compact('posts', 'categories'));
     }

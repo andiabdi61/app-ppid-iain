@@ -16,12 +16,6 @@
             <li>Informasi Publik</li>
             <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
             <li><a href="{{ route('berita.index') }}" class="hover:text-hijau-700 transition">Informasi</a></li>
-            @if($post->category)
-                <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
-                <li><a href="{{ route('berita.index', ['kategori' => $post->category->slug]) }}" class="hover:text-hijau-700 transition">{{ $post->category->name }}</a></li>
-            @endif
-            <li><i class="bi bi-chevron-right text-xs text-gray-400"></i></li>
-            <li class="text-hijau-800 font-medium truncate max-w-[200px]">{{ Str::limit($post->title, 30) }}</li>
         </ol>
     </nav>
 
@@ -36,6 +30,11 @@
                 <span class="flex items-center gap-1.5">
                     <i class="bi bi-person-fill text-hijau-600"></i> {{ $post->author->name ?? 'Admin' }}
                 </span>
+                @if($post->category)
+                    <a href="{{ route('berita.index', ['kategori' => $post->category->slug]) }}" class="flex items-center gap-1.5 hover:text-hijau-700 transition">
+                        <i class="bi bi-tag-fill text-hijau-600"></i> {{ $post->category->name }}
+                    </a>
+                @endif
                 <span class="flex items-center gap-1.5">
                     <i class="bi bi-calendar3 text-hijau-600"></i> {{ ($post->published_at ?? $post->created_at) ? ($post->published_at ?? $post->created_at)->translatedFormat('d F Y') : '-' }}
                 </span>

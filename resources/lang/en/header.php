@@ -26,6 +26,7 @@ return [
     'objection' => 'Objection',
     'objection_flow' => 'Objection Flow',
     'sop' => 'Service SOP',
+    'tata_cara' => 'Service Procedures',
     'objection_form' => 'Objection Form',
     
     'report' => 'Reports & Statistics',
