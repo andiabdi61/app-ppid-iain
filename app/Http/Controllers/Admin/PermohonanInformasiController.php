@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Models\PermohonanInformasi;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Storage;
 
 class PermohonanInformasiController extends Controller
 {
@@ -15,16 +15,21 @@ class PermohonanInformasiController extends Controller
     public function index(Request $request)
     {
         Gate::authorize('viewAny', PermohonanInformasi::class);
-        
+
         $statuses = $this->statuses;
         $query = PermohonanInformasi::with('user')->orderBy('tanggal_permohonan', 'desc');
 
         if ($request->filled('q')) {
             $search = $request->q;
-            $query->where('nomor_registrasi', 'like', '%' . $search . '%')
-                  ->orWhereHas('user', function ($q) use ($search) {
-                      $q->where('name', 'like', '%' . $search . '%');
-                  });
+            $query->where(function ($query) use ($search) {
+                $query->where('nomor_registrasi', 'like', '%'.$search.'%')
+                    ->orWhere('nama_pemohon', 'like', '%'.$search.'%')
+                    ->orWhere('email_pemohon', 'like', '%'.$search.'%')
+                    ->orWhereHas('user', function ($query) use ($search) {
+                        $query->where('name', 'like', '%'.$search.'%')
+                            ->orWhere('email', 'like', '%'.$search.'%');
+                    });
+            });
         }
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -39,8 +44,9 @@ class PermohonanInformasiController extends Controller
     {
         $permohonan_informasi = PermohonanInformasi::with('user')->findOrFail($id);
         Gate::authorize('view', $permohonan_informasi);
-        
+
         $statuses = $this->statuses;
+
         return view('admin.permohonan.show', compact('permohonan_informasi', 'statuses'));
     }
 
@@ -50,7 +56,7 @@ class PermohonanInformasiController extends Controller
         Gate::authorize('update', $permohonan_informasi);
 
         $request->validate([
-            'status' => 'required|in:' . implode(',', $this->statuses),
+            'status' => 'required|in:'.implode(',', $this->statuses),
             'catatan_admin' => 'nullable|string',
         ]);
 
@@ -69,6 +75,7 @@ class PermohonanInformasiController extends Controller
         }
 
         $permohonan_informasi->delete();
+
         return redirect()->route('admin.permohonan.index')->with('success', 'Permohonan berhasil dihapus!');
     }
 }

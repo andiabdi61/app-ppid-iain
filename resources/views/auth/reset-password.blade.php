@@ -6,11 +6,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Reset Password - {{ $settings['app_name'] ?? 'PPID IAIN BONE' }}</title>
 
-    @if(isset($settings['app_favicon']) && Storage::disk('public')->exists($settings['app_favicon']))
-        <link rel="icon" type="image/png" href="{{ asset('storage/' . $settings['app_favicon']) }}">
-    @else
-        <link rel="icon" type="image/png" href="{{ asset('images/favicon.ico') }}">
-    @endif
+    @php
+        $appFavicon = $settings['app_favicon'] ?? null;
+        $faviconUrl = $appFavicon && Storage::disk('public')->exists($appFavicon)
+            ? asset('storage/' . $appFavicon)
+            : asset('favicon.ico');
+    @endphp
+    <link rel="icon" href="{{ $faviconUrl }}">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

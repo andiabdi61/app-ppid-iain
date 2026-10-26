@@ -64,7 +64,7 @@
                      x-transition:leave-start="opacity-100 translate-y-0"
                      x-transition:leave-end="opacity-0 -translate-y-2"
                      class="px-6 pb-5 text-sm text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
-                    Anda dapat mengajukan permohonan secara online melalui menu <a href="{{ route('informasi-publik.permohonan.form') }}" class="text-hijau-700 font-medium hover:underline">Formulir Permohonan</a> setelah melakukan login. Pastikan Anda mengisi data identitas dan detail informasi yang dibutuhkan dengan benar.
+                    Anda dapat mengajukan permohonan secara online melalui menu <a href="{{ route('informasi-publik.permohonan.form') }}" class="text-hijau-700 font-medium hover:underline">Formulir Permohonan</a> tanpa perlu membuat akun. Pastikan Anda mengisi data identitas dan detail informasi yang dibutuhkan dengan benar, lalu simpan nomor registrasi untuk mengecek status.
                 </div>
             </div>
 

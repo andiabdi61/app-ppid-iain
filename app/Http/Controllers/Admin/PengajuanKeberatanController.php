@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Models\PengajuanKeberatan;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Gate;
 
 class PengajuanKeberatanController extends Controller
@@ -17,14 +16,26 @@ class PengajuanKeberatanController extends Controller
         Gate::authorize('viewAny', PengajuanKeberatan::class);
 
         $statuses = $this->statuses;
-        $query = PengajuanKeberatan::with('user')->orderBy('tanggal_pengajuan', 'desc');
+        $query = PengajuanKeberatan::with(['user', 'permohonanInformasi.user'])
+            ->orderBy('tanggal_pengajuan', 'desc');
 
         if ($request->filled('q')) {
             $search = $request->q;
-            $query->where('nomor_registrasi_permohonan', 'like', '%' . $search . '%')
-                  ->orWhereHas('user', function ($q) use ($search) {
-                      $q->where('name', 'like', '%' . $search . '%');
-                  });
+            $query->where(function ($query) use ($search) {
+                $query->where('nomor_registrasi_permohonan', 'like', '%'.$search.'%')
+                    ->orWhereHas('user', function ($query) use ($search) {
+                        $query->where('name', 'like', '%'.$search.'%')
+                            ->orWhere('email', 'like', '%'.$search.'%');
+                    })
+                    ->orWhereHas('permohonanInformasi', function ($query) use ($search) {
+                        $query->where('nama_pemohon', 'like', '%'.$search.'%')
+                            ->orWhere('email_pemohon', 'like', '%'.$search.'%');
+                    })
+                    ->orWhereHas('permohonanInformasi.user', function ($query) use ($search) {
+                        $query->where('name', 'like', '%'.$search.'%')
+                            ->orWhere('email', 'like', '%'.$search.'%');
+                    });
+            });
         }
         if ($request->filled('status')) {
             $query->where('status', $request->status);
@@ -37,10 +48,11 @@ class PengajuanKeberatanController extends Controller
 
     public function show($id)
     {
-        $pengajuan_keberatan = PengajuanKeberatan::with('user')->findOrFail($id);
+        $pengajuan_keberatan = PengajuanKeberatan::with(['user', 'permohonanInformasi.user'])->findOrFail($id);
         Gate::authorize('view', $pengajuan_keberatan);
 
         $statuses = $this->statuses;
+
         return view('admin.keberatan.show', compact('pengajuan_keberatan', 'statuses'));
     }
 
@@ -50,7 +62,7 @@ class PengajuanKeberatanController extends Controller
         Gate::authorize('update', $pengajuan_keberatan);
 
         $request->validate([
-            'status' => 'required|in:' . implode(',', $this->statuses),
+            'status' => 'required|in:'.implode(',', $this->statuses),
             'catatan_admin' => 'nullable|string',
         ]);
 
@@ -65,6 +77,7 @@ class PengajuanKeberatanController extends Controller
         Gate::authorize('delete', $pengajuan_keberatan);
 
         $pengajuan_keberatan->delete();
+
         return redirect()->route('admin.keberatan.index')->with('success', 'Pengajuan keberatan berhasil dihapus!');
     }
 }

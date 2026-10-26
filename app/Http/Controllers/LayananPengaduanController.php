@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PengajuanKeberatan;
+use App\Models\PermohonanInformasi;
 use Illuminate\Http\Request;
-use App\Models\PermohonanInformasi; // Import Model PermohonanInformasi
-use App\Models\PengajuanKeberatan;   // Import Model PengajuanKeberatan
-use Carbon\Carbon; // Untuk memformat tanggal di view
 
 class LayananPengaduanController extends Controller
 {
@@ -32,27 +31,21 @@ class LayananPengaduanController extends Controller
     }
     // --- Akhir metode-metode Anda yang sudah ada ---
 
-
     /**
      * Menampilkan form untuk cek status layanan/pengaduan.
      * Metode ini akan menangani tampilan awal (GET) dan juga setelah validasi (jika ada error).
-     * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\View\View
      */
     public function showCekStatus(Request $request)
     {
-        $nomorRegistrasi = '';
-        $result = null; // Ini akan tetap null saat pertama kali form diakses
-
-        if ($request->old('nomor_registrasi')) {
-            $nomorRegistrasi = $request->old('nomor_registrasi');
-        }
-
         return view('layanan-pengaduan.cek-status', [
-            'nomorRegistrasi' => $nomorRegistrasi,
-            'permohonan' => null, // Inisialisasi null
-            'keberatan' => null,   // Inisialisasi null
-            'found' => false,      // Flag untuk menunjukkan apakah ada data ditemukan
+            'nomorRegistrasi' => $request->old('nomor_registrasi', $request->query('no_reg', '')),
+            'email' => $request->old('email', $request->user()?->email ?? ''),
+            'permohonan' => null,
+            'keberatan' => collect(),
+            'found' => false,
+            'errorMessage' => null,
         ]);
     }
 
@@ -60,30 +53,52 @@ class LayananPengaduanController extends Controller
     {
         $request->validate([
             'nomor_registrasi' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
         ], [
             'nomor_registrasi.required' => 'Nomor Registrasi wajib diisi.',
             'nomor_registrasi.string' => 'Nomor Registrasi harus berupa teks.',
             'nomor_registrasi.max' => 'Nomor Registrasi tidak boleh lebih dari :max karakter.',
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
         ]);
 
         $nomorRegistrasi = $request->input('nomor_registrasi');
+        $email = trim((string) $request->input('email'));
 
-        // Cari Permohonan Informasi
-        $permohonan = PermohonanInformasi::where('nomor_registrasi', $nomorRegistrasi)->first();
+        $permohonan = PermohonanInformasi::with('user')
+            ->where('nomor_registrasi', $nomorRegistrasi)
+            ->first();
 
-        // Cari semua Pengajuan Keberatan yang terkait (bisa lebih dari satu)
-        $keberatan = PengajuanKeberatan::where('nomor_registrasi_permohonan', $nomorRegistrasi)->get();
+        $isOwner = $request->user() && $permohonan && $permohonan->user_id === $request->user()->id;
+        $emailPemohon = $permohonan?->email_pemohon_display;
+        $isEmailMatch = $emailPemohon && strcasecmp(trim($emailPemohon), $email) === 0;
 
-        $found = false;
-        if ($permohonan || $keberatan->isNotEmpty()) {
-            $found = true;
+        if (! $permohonan || (! $isOwner && ! $isEmailMatch)) {
+            return view('layanan-pengaduan.cek-status', [
+                'nomorRegistrasi' => $nomorRegistrasi,
+                'email' => $email,
+                'permohonan' => null,
+                'keberatan' => collect(),
+                'found' => false,
+                'errorMessage' => 'Data tidak ditemukan atau email tidak sesuai dengan permohonan.',
+            ]);
         }
+
+        if ($permohonan->status === 'Ditolak') {
+            $request->session()->put('keberatan_email_prefill', $email);
+        }
+
+        $keberatan = PengajuanKeberatan::where('nomor_registrasi_permohonan', $nomorRegistrasi)
+            ->orderBy('tanggal_pengajuan')
+            ->get();
 
         return view('layanan-pengaduan.cek-status', [
             'nomorRegistrasi' => $nomorRegistrasi,
-            'permohonan' => $permohonan, // Kirim objek permohonan (bisa null)
-            'keberatan' => $keberatan,   // Kirim koleksi keberatan (bisa kosong)
-            'found' => $found,           // Kirim status ditemukan
+            'email' => $email,
+            'permohonan' => $permohonan,
+            'keberatan' => $keberatan,
+            'found' => true,
+            'errorMessage' => null,
         ]);
     }
 }

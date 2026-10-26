@@ -33,14 +33,74 @@
             @endif
 
             {{-- Alert Info User --}}
-            <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-xl p-4 mb-6 text-sm">
-                Anda mengajukan permohonan sebagai <strong>{{ Auth::user()->name }}</strong>. 
-                Pastikan data profil Anda (telepon & alamat) sudah lengkap dan benar. 
-                <a href="{{ route('profile.edit.public') }}" class="font-medium underline hover:text-blue-900 transition-colors">Edit Profil di sini</a>.
-            </div>
+            @auth
+                <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-xl p-4 mb-6 text-sm">
+                    Anda mengajukan permohonan sebagai <strong>{{ auth()->user()->name }}</strong>.
+                    Pastikan data profil Anda (telepon & alamat) sudah lengkap dan benar.
+                    <a href="{{ route('profile.edit.public') }}" class="font-medium underline hover:text-blue-900 transition-colors">Edit Profil di sini</a>.
+                </div>
+            @else
+                <div class="bg-blue-50 border border-blue-200 text-blue-800 rounded-xl p-4 mb-6 text-sm">
+                    Anda mengajukan permohonan sebagai <strong>tamu</strong>. Tidak perlu membuat akun.
+                    Lengkapi data pemohon di bawah dengan benar karena data tersebut digunakan untuk menghubungi Anda.
+                </div>
+            @endauth
 
             <form action="{{ route('informasi-publik.permohonan.store') }}" method="POST" enctype="multipart/form-data" class="mt-6 space-y-8">
                 @csrf
+
+                @guest
+                    {{-- ============================================ --}}
+                    {{-- FIELDSET DATA PEMOHON TAMU --}}
+                    {{-- ============================================ --}}
+                    <fieldset class="border border-gray-200 rounded-xl p-5 md:p-6">
+                        <legend class="text-base font-bold text-gray-800 px-2">Data Pemohon</legend>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mt-4">
+                            <div>
+                                <label for="nama_pemohon" class="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Nama Lengkap <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text"
+                                       class="w-full px-4 py-2.5 rounded-lg border @error('nama_pemohon') border-red-500 focus:ring-red-500 focus:border-red-500 @else border-gray-300 focus:ring-hijau-500 focus:border-hijau-500 @enderror text-sm outline-none transition"
+                                       id="nama_pemohon" name="nama_pemohon"
+                                       value="{{ old('nama_pemohon') }}" maxlength="255" required autocomplete="name">
+                                @error('nama_pemohon') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div>
+                                <label for="email_pemohon" class="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Email <span class="text-red-500">*</span>
+                                </label>
+                                <input type="email"
+                                       class="w-full px-4 py-2.5 rounded-lg border @error('email_pemohon') border-red-500 focus:ring-red-500 focus:border-red-500 @else border-gray-300 focus:ring-hijau-500 focus:border-hijau-500 @enderror text-sm outline-none transition"
+                                       id="email_pemohon" name="email_pemohon"
+                                       value="{{ old('email_pemohon') }}" maxlength="255" required autocomplete="email">
+                                <p class="text-xs text-gray-400 mt-1.5">Gunakan email ini untuk mengecek status permohonan.</p>
+                                @error('email_pemohon') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div>
+                                <label for="telp_pemohon" class="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Nomor Telepon/WhatsApp <span class="text-red-500">*</span>
+                                </label>
+                                <input type="text"
+                                       class="w-full px-4 py-2.5 rounded-lg border @error('telp_pemohon') border-red-500 focus:ring-red-500 focus:border-red-500 @else border-gray-300 focus:ring-hijau-500 focus:border-hijau-500 @enderror text-sm outline-none transition"
+                                       id="telp_pemohon" name="telp_pemohon"
+                                       value="{{ old('telp_pemohon') }}" maxlength="30" required autocomplete="tel">
+                                @error('telp_pemohon') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                            </div>
+
+                            <div class="md:col-span-2">
+                                <label for="alamat_pemohon" class="block text-sm font-medium text-gray-700 mb-1.5">
+                                    Alamat <span class="text-red-500">*</span>
+                                </label>
+                                <textarea class="w-full px-4 py-2.5 rounded-lg border @error('alamat_pemohon') border-red-500 focus:ring-red-500 focus:border-red-500 @else border-gray-300 focus:ring-hijau-500 focus:border-hijau-500 @enderror text-sm outline-none transition resize-y"
+                                          id="alamat_pemohon" name="alamat_pemohon" rows="3" maxlength="1000" required autocomplete="street-address">{{ old('alamat_pemohon') }}</textarea>
+                                @error('alamat_pemohon') <p class="text-red-600 text-xs mt-1">{{ $message }}</p> @enderror
+                            </div>
+                        </div>
+                    </fieldset>
+                @endguest
 
                 {{-- ============================================ --}}
                 {{-- FIELDSET 1: DATA TAMBAHAN PEMOHON --}}
@@ -175,6 +235,9 @@
                         <i class="bi bi-send-fill"></i>
                         Kirim Permohonan
                     </button>
+                    <p class="text-xs text-center text-gray-500">
+                        Nomor registrasi akan ditampilkan setelah permohonan dikirim. Simpan nomor tersebut untuk mengecek status.
+                    </p>
                 </div>
             </form>
         </div>

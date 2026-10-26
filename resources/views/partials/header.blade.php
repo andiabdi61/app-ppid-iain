@@ -249,10 +249,6 @@
                                class="block text-center px-4 py-2.5 rounded-lg text-sm font-medium border border-hijau-600 text-hijau-700 hover:bg-hijau-50 transition">
                                 {{ __('header.login') }}
                             </a>
-                            <a href="{{ route('register') }}" 
-                               class="block text-center px-4 py-2.5 rounded-lg text-sm font-medium bg-hijau-600 text-white hover:bg-hijau-700 transition">
-                                {{ __('header.register') }}
-                            </a>
                         </div>
                         
                         {{-- Tombol Login Desktop --}}

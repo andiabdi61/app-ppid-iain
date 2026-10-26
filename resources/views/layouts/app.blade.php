@@ -7,13 +7,17 @@
 
         @php
             $appName = $settings['app_name'] ?? 'PPID IAIN Bone';
+            $appFavicon = $settings['app_favicon'] ?? null;
+            $faviconUrl = $appFavicon && Storage::disk('public')->exists($appFavicon)
+                ? asset('storage/' . $appFavicon)
+                : asset('favicon.ico');
             $pageName = null;
             if (isset($header) && preg_match('/<h2[^>]*>(.*?)<\/h2>/s', (string) $header, $matches)) {
                 $pageName = trim(preg_replace('/\s+/', ' ', strip_tags($matches[1])));
             }
         @endphp
         <title>{{ $pageName ? $pageName . ' - ' . $appName : $appName }}</title>
-        <link rel="icon" type="image/png" href="{{ asset('storage/' . $settings['app_favicon']) }}">
+        <link rel="icon" href="{{ $faviconUrl }}">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">

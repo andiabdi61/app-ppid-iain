@@ -31,16 +31,21 @@
                             <h4 class="font-semibold text-gray-800 border-b pb-2">Data Pemohon</h4>
                             <dl class="grid grid-cols-3 gap-x-4 gap-y-2 text-sm">
                                 <dt class="font-medium text-gray-500 col-span-1">Nama</dt>
-                                <dd class="text-gray-900 col-span-2">{{ $permohonan_informasi->user->name ?? '[Pengguna Dihapus]' }}</dd>
+                                <dd class="text-gray-900 col-span-2">
+                                    {{ $permohonan_informasi->nama_pemohon_display ?? '[Pengguna Dihapus]' }}
+                                    @if(! $permohonan_informasi->user_id)
+                                        <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-gray-100 text-gray-600">Tamu</span>
+                                    @endif
+                                </dd>
 
                                 <dt class="font-medium text-gray-500 col-span-1">Email</dt>
-                                <dd class="text-gray-900 col-span-2">{{ $permohonan_informasi->user->email ?? 'N/A' }}</dd>
+                                <dd class="text-gray-900 col-span-2">{{ $permohonan_informasi->email_pemohon_display ?? 'N/A' }}</dd>
 
                                 <dt class="font-medium text-gray-500 col-span-1">Telepon</dt>
-                                <dd class="text-gray-900 col-span-2">{{ $permohonan_informasi->user->telp ?? '-' }}</dd>
+                                <dd class="text-gray-900 col-span-2">{{ $permohonan_informasi->telp_pemohon_display ?? '-' }}</dd>
 
                                 <dt class="font-medium text-gray-500 col-span-1">Alamat</dt>
-                                <dd class="text-gray-900 col-span-2">{{ $permohonan_informasi->user->alamat ?? '-' }}</dd>
+                                <dd class="text-gray-900 col-span-2">{{ $permohonan_informasi->alamat_pemohon_display ?? '-' }}</dd>
                                 
                                 <dt class="font-medium text-gray-500 col-span-1">Pekerjaan</dt>
                                 <dd class="text-gray-900 col-span-2">{{ $permohonan_informasi->pekerjaan_pemohon ?: '-' }}</dd>

@@ -173,7 +173,7 @@
                         <i class="bi bi-file-earmark-check-fill text-red-500 mr-2"></i> Permohonan Baru
                     </p>
                     {{-- PERBAIKAN DI SINI --}}
-                    <p class="text-xs text-gray-600">Oleh: {{ $permohonan->user->name ?? '[N/A]' }}</p>
+                    <p class="text-xs text-gray-600">Oleh: {{ $permohonan->nama_pemohon_display ?? '[N/A]' }}</p>
                     <p class="text-xs text-gray-400 mt-1">No. Reg: {{ $permohonan->nomor_registrasi }}</p>
                 </a>
             @empty
@@ -187,7 +187,7 @@
                         <i class="bi bi-file-earmark-excel-fill text-gray-500 mr-2"></i> Keberatan Baru
                     </p>
                     {{-- PERBAIKAN DI SINI --}}
-                    <p class="text-xs text-gray-600">Oleh: {{ $keberatan->user->name ?? '[N/A]' }}</p>
+                    <p class="text-xs text-gray-600">Oleh: {{ $keberatan->nama_pemohon_display ?? '[N/A]' }}</p>
                     <p class="text-xs text-gray-400 mt-1">No. Reg Permohonan: {{ $keberatan->nomor_registrasi_permohonan }}</p>
                 </a>
             @empty

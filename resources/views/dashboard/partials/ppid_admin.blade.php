@@ -78,7 +78,7 @@
                 <a href="{{ route('admin.permohonan.show', $permohonan->id) }}" class="block p-3 rounded-md hover:bg-gray-50 transition">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="font-semibold text-sm text-gray-800">{{ $permohonan->user->name ?? '[N/A]' }}</p>
+                            <p class="font-semibold text-sm text-gray-800">{{ $permohonan->nama_pemohon_display ?? '[N/A]' }}</p>
                             <p class="text-xs text-gray-500 mt-1">No. Reg: {{ $permohonan->nomor_registrasi }}</p>
                         </div>
                         <span class="text-xs text-gray-400 flex-shrink-0">{{ $permohonan->created_at->diffForHumans() }}</span>
@@ -101,7 +101,7 @@
                 <a href="{{ route('admin.keberatan.show', $keberatan->id) }}" class="block p-3 rounded-md hover:bg-gray-50 transition">
                     <div class="flex justify-between items-start">
                         <div>
-                            <p class="font-semibold text-sm text-gray-800">{{ $keberatan->user->name ?? '[N/A]' }}</p>
+                            <p class="font-semibold text-sm text-gray-800">{{ $keberatan->nama_pemohon_display ?? '[N/A]' }}</p>
                             <p class="text-xs text-gray-500 mt-1">No. Reg Permohonan: {{ $keberatan->nomor_registrasi_permohonan }}</p>
                         </div>
                         <span class="text-xs text-gray-400 flex-shrink-0">{{ $keberatan->created_at->diffForHumans() }}</span>

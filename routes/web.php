@@ -4,7 +4,6 @@
 use App\Http\Controllers\TentangKamiController;
 use App\Http\Controllers\InformasiPublikController; // Frontend Info Publik
 use App\Http\Controllers\LayananInformasiController;
-use App\Http\Controllers\LaporanStatistikController;
 use App\Http\Controllers\ProfilPpidController;
 use App\Http\Controllers\DokumenController; // Frontend Dokumen
 use App\Http\Controllers\BeritaController; // Frontend Berita
@@ -27,12 +26,9 @@ use App\Http\Controllers\Admin\InformasiPublikController as AdminInformasiPublik
 use App\Http\Controllers\Admin\AlbumController; // CRUD Album Foto
 use App\Http\Controllers\Admin\PhotoController; // CRUD Foto dalam Album
 use App\Http\Controllers\Admin\VideoController; // CRUD Video
-use App\Http\Controllers\Admin\PejabatController;
 use App\Http\Controllers\Admin\PermohonanInformasiController;
 use App\Http\Controllers\Admin\PengajuanKeberatanController;
 use App\Http\Controllers\Admin\StaticPageController;
-use App\Http\Controllers\Admin\BidangController;
-use App\Http\Controllers\Admin\SeksiController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\CommentsController;
 use App\Http\Controllers\Admin\UserController;
@@ -40,9 +36,6 @@ use App\Http\Controllers\DashboardController; // Admin Dashboard
 use App\Http\Controllers\UserDashboardController; // User Dashboard
 use App\Http\Controllers\Admin\ActivityLogController;
 
-use App\Http\Controllers\Admin\SasaranStrategisController;
-use App\Http\Controllers\Admin\IndikatorKinerjaController;
-use App\Http\Controllers\Admin\KinerjaController;
 use App\Http\Controllers\KinerjaPublikController;
 
 use App\Http\Controllers\WelcomeController;
@@ -102,7 +95,7 @@ Route::prefix('layanan-pengaduan')->name('layanan-pengaduan.')->group(function (
     Route::get('/faq-umum', [LayananPengaduanController::class, 'showFaqUmum'])->name('faq-umum');
     Route::get('/daftar-layanan', [LayananPengaduanController::class, 'showDaftarLayanan'])->name('daftar-layanan');
     Route::get('/cek-status', [LayananPengaduanController::class, 'showCekStatus'])->name('cek-status');
-    Route::post('/cek-status', [LayananPengaduanController::class, 'processCekStatus'])->name('cek-status.process');
+    Route::post('/cek-status', [LayananPengaduanController::class, 'processCekStatus'])->middleware('throttle:10,1')->name('cek-status.process');
 });
 
 // Modul Publikasi & Dokumen Resmi
@@ -160,18 +153,16 @@ Route::redirect('/tata-cara-layanan', '/tata-cara', 301);
 
 // Layanan Informasi: Permohonan
 Route::prefix('permohonan-informasi')->name('informasi-publik.permohonan.')->group(function () {
-    // Rute yang dilindungi: hanya untuk pengguna yang sudah login
-    Route::get('/formulir', [LayananInformasiController::class, 'showFormPermohonan'])->middleware('auth')->name('form');
-    Route::post('/store', [LayananInformasiController::class, 'storePermohonan'])->middleware('auth')->name('store');
+    Route::get('/formulir', [LayananInformasiController::class, 'showFormPermohonan'])->name('form');
+    Route::post('/store', [LayananInformasiController::class, 'storePermohonan'])->middleware('throttle:5,1')->name('store');
 
     Route::get('/sukses', [LayananInformasiController::class, 'showPermohonanSukses'])->name('sukses');
 });
 
 // Layanan Informasi: Pengajuan Keberatan
 Route::prefix('pengajuan-keberatan')->name('informasi-publik.keberatan.')->group(function () {
-    // Rute yang dilindungi: hanya untuk pengguna yang sudah login
-    Route::get('/formulir', [LayananInformasiController::class, 'showFormKeberatan'])->middleware('auth')->name('form');
-    Route::post('/store', [LayananInformasiController::class, 'storeKeberatan'])->middleware('auth')->name('store');
+    Route::get('/formulir', [LayananInformasiController::class, 'showFormKeberatan'])->name('form');
+    Route::post('/store', [LayananInformasiController::class, 'storeKeberatan'])->middleware('throttle:5,1')->name('store');
 
     Route::get('/sukses', [LayananInformasiController::class, 'showKeberatanSukses'])->name('sukses');
 });
@@ -351,9 +342,6 @@ Route::middleware('auth')->group(function () {
         // CRUD Video
         Route::resource('videos', VideoController::class);
 
-        // CRUD Pejabat Dinas
-        Route::resource('pejabat', PejabatController::class);
-
         // CRUD Permohonan Informasi
         Route::resource('permohonan', PermohonanInformasiController::class)->only(['index', 'show', 'update', 'destroy'])->parameters([
             'permohonan' => 'permohonan_item',
@@ -364,33 +352,6 @@ Route::middleware('auth')->group(function () {
             'keberatan' => 'keberatan_item',
         ]);
 
-        // =========================================================================
-        // RUTE BARU: PENGELOLAAN BIDANG (BACKEND ADMIN)
-        // =========================================================================
-        Route::resource('bidang', BidangController::class)->names([
-            'index' => 'bidang.index',
-            'create' => 'bidang.create',
-            'store' => 'bidang.store',
-            'edit' => 'bidang.edit',
-            'update' => 'bidang.update',
-            'destroy' => 'bidang.destroy',
-            'show' => 'bidang.show_preview',
-        ]);
-
-        // =========================================================================
-        // RUTE BARU: PENGELOLAAN SEKSI (BACKEND ADMIN)
-        // =========================================================================
-        Route::resource('bidang/{bidang}/seksi', SeksiController::class)->names([
-            'index' => 'bidang.seksi.index',
-            'create' => 'bidang.seksi.create',
-            'store' => 'bidang.seksi.store',
-            'edit' => 'bidang.seksi.edit',
-            'update' => 'bidang.seksi.update',
-            'destroy' => 'bidang.seksi.destroy',
-            'show' => 'bidang.seksi.show_preview',
-        ]);
-
-        // ... di dalam grup rute admin
         Route::get('comments', [CommentsController::class, 'index'])->name('comments.index');
         Route::patch('comments/{comment}/approve', [CommentsController::class, 'approve'])->name('comments.approve');
         Route::patch('comments/{comment}/reject', [CommentsController::class, 'reject'])->name('comments.reject');
@@ -403,14 +364,6 @@ Route::middleware('auth')->group(function () {
         Route::post('settings', [SettingController::class, 'update'])->name('settings.update');
         Route::post('settings/reset-counter', [SettingController::class, 'resetCounter'])->name('settings.reset-counter');
 
-        // Rute untuk Sasaran Strategis
-        Route::resource('sasaran-strategis', SasaranStrategisController::class);
-        Route::resource('indikator-kinerja', IndikatorKinerjaController::class)->parameters([
-            'indikator-kinerja' => 'indikatorKinerja' // Menyesuaikan nama parameter
-        ]);
-        // Rute untuk Kinerja
-        Route::get('kinerja', [KinerjaController::class, 'index'])->name('kinerja.index');
-        Route::post('kinerja', [KinerjaController::class, 'storeOrUpdate'])->name('kinerja.storeOrUpdate');
     });
 });
 

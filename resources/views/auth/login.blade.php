@@ -7,11 +7,13 @@
     <title>Masuk - {{ $settings['app_name'] ?? 'PPID IAIN BONE' }}</title>
 
     {{-- Favicon --}}
-    @if(isset($settings['app_favicon']) && Storage::disk('public')->exists($settings['app_favicon']))
-        <link rel="icon" type="image/png" href="{{ asset('storage/' . $settings['app_favicon']) }}">
-    @else
-        <link rel="icon" type="image/png" href="{{ asset('images/favicon.ico') }}">
-    @endif
+    @php
+        $appFavicon = $settings['app_favicon'] ?? null;
+        $faviconUrl = $appFavicon && Storage::disk('public')->exists($appFavicon)
+            ? asset('storage/' . $appFavicon)
+            : asset('favicon.ico');
+    @endphp
+    <link rel="icon" href="{{ $faviconUrl }}">
 
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -206,27 +208,6 @@
                         <i class="fas fa-arrow-right text-sm"></i>
                     </button>
                 </form>
-
-                <!-- Divider -->
-                <div class="relative my-8">
-                    <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t border-gray-200"></div>
-                    </div>
-                    <div class="relative flex justify-center text-sm">
-                        <span class="px-4 bg-gray-50 text-gray-400">atau</span>
-                    </div>
-                </div>
-
-                <!-- Register Link -->
-                <div class="text-center">
-                    <p class="text-sm text-gray-600">
-                        Belum punya akun? 
-                        <a href="{{ route('register') }}" 
-                           class="font-semibold text-hijau-600 hover:text-hijau-700 transition-colors">
-                            Daftar sekarang
-                        </a>
-                    </p>
-                </div>
 
                 <!-- Back to Home -->
                 <div class="text-center mt-6">
