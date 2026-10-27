@@ -11,3 +11,49 @@
 [x-cloak] {
     display: none !important;
 }
+
+/* Force table borders inside prose content */
+.prose table,
+.prose thead,
+.prose tbody,
+.prose tr,
+.prose th,
+.prose td {
+    border-color: #6b7280 !important;
+}
+
+.prose table {
+    border-collapse: collapse !important;
+    width: 100% !important;
+    margin: 1.5rem 0 !important;
+    display: table !important;
+}
+
+.prose thead {
+    background-color: #f3f4f6 !important;
+}
+
+.prose th {
+    border: 1px solid #6b7280 !important;
+    padding: 0.5rem 0.75rem !important;
+    text-align: left !important;
+    font-weight: 600 !important;
+    color: #111827 !important;
+    background-color: #f3f4f6 !important;
+}
+
+.prose td {
+    border: 1px solid #6b7280 !important;
+    padding: 0.5rem 0.75rem !important;
+    vertical-align: top !important;
+    color: #374151 !important;
+}
+
+.prose tbody tr:nth-child(even) {
+    background-color: #f9fafb !important;
+}
+
+.prose tr {
+    border-width: 1px !important;
+    border-style: solid !important;
+}

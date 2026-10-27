@@ -58,11 +58,13 @@
         {{-- ============================================ --}}
         {{-- KONTEN ARTIKEL --}}
         {{-- ============================================ --}}
-        <div class="prose prose-sm sm:prose-base max-w-none text-gray-700 
-                    prose-headings:font-bold prose-headings:text-gray-900 
-                    prose-a:text-hijau-700 prose-a:no-underline hover:prose-a:underline  
-                    prose-img:rounded-xl prose-img:shadow-md mb-10">
-            {!! $post->content_html !!}
+        <div class="mb-10 overflow-x-auto">
+            <div class="prose prose-sm sm:prose-base max-w-none text-gray-700 
+                        prose-headings:font-bold prose-headings:text-gray-900 
+                        prose-a:text-hijau-700 prose-a:no-underline hover:prose-a:underline  
+                        prose-img:rounded-xl prose-img:shadow-md">
+                {!! $post->content_html !!}
+            </div>
         </div>
 
         {{-- ============================================ --}}

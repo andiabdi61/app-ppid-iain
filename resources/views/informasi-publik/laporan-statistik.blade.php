@@ -16,6 +16,17 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-12">
 
     {{-- ============================================ --}}
+    {{-- LAPORAN LAYANAN INFORMASI PUBLIK --}}
+    {{-- ============================================ --}}
+    <div class="bg-hijau-600 text-white rounded-2xl px-4 sm:px-6 py-3 sm:py-4 mb-6 flex items-center justify-between gap-3">
+        <h5 class="text-sm sm:text-base font-semibold">Laporan Layanan Informasi Publik</h5>
+        <a href="https://ppid.iain-bone.ac.id/informasi/laporan-layanan-publik" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium bg-white text-hijau-700 hover:bg-hijau-50 transition shrink-0 whitespace-nowrap">
+            <i class="bi bi-file-earmark-text"></i>
+            Laporan Layanan Informasi Publik
+        </a>
+    </div>
+
+    {{-- ============================================ --}}
     {{-- STATISTIK RINGKASAN (3 Kartu) --}}
     {{-- ============================================ --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">

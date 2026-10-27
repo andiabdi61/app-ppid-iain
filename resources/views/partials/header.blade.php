@@ -243,19 +243,6 @@
                                 </form>
                             </div>
                         </div>
-                    @else
-                        <div class="lg:hidden flex flex-col gap-2">
-                            <a href="{{ route('login') }}" 
-                               class="block text-center px-4 py-2.5 rounded-lg text-sm font-medium border border-hijau-600 text-hijau-700 hover:bg-hijau-50 transition">
-                                {{ __('header.login') }}
-                            </a>
-                        </div>
-                        
-                        {{-- Tombol Login Desktop --}}
-                        <a href="{{ route('login') }}" 
-                           class="hidden lg:flex items-center gap-2 ml-2 px-4 py-2 rounded-lg text-sm font-medium border border-hijau-600 text-hijau-700 hover:bg-hijau-50 transition">
-                            <i class="bi bi-box-arrow-in-right"></i> {{ __('header.login') }}
-                        </a>
                     @endguest
 
                     {{-- Language Selector Desktop --}}
