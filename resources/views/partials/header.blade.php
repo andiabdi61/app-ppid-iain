@@ -123,7 +123,7 @@
                             <a href="{{ route('informasi-publik.index', ['kategori' => 'informasi-wajib-diumumkan-serta-merta']) }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.immediate') }}</a>
                             <a href="{{ route('informasi-publik.index', ['kategori' => 'informasi-wajib-tersedia-setiap-saat']) }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.available') }}</a>
                             <a href="{{ route('informasi-publik.index', ['kategori' => 'informasi-dikecualikan']) }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.excluded') }}</a>
-                            <a href="{{ route('informasi-publik.index', ['kategori' => 'barang-dan-jasa']) }}" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.goods_services') }}</a>
+                            <a href="https://ppid.iain-bone.ac.id/informasi/informasi-pengadaan-barang-dan-jasa" class="block px-3 py-2 text-sm text-gray-700 hover:bg-hijau-50 hover:text-hijau-700 rounded-lg transition">{{ __('header.goods_services') }}</a>
                             
                             <div class="my-1 border-t border-gray-200"></div>
                             
